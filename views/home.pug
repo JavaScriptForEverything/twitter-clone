@@ -1,0 +1,17 @@
+doctype html
+html
+	head
+		title #{pageTitle} Page
+		//- title `${pageTitle} Page`
+
+
+	body
+		p it is a #{pageTitle} page
+
+		- const name = 'riajul islam'
+		//- h2 #{name} 
+		h2= name
+		h2 #{pageTitle} page
+		//- h2= `${pageTitle} Page`
+
+		- console.log(`${pageTitle} there`)

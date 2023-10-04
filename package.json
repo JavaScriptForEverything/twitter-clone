@@ -1,0 +1,18 @@
+{
+ "name": "socket.io-twitter-clone",
+ "version": "1.0.0",
+ "main": "app.js",
+ "license": "MIT",
+ "scripts": {
+  "dev": "PORT=5000 NODE_ENV=development nodemon . --ext pug --ignore public"
+ },
+ "dependencies": {
+  "express": "^4.18.2",
+  "pug": "^3.0.2"
+ },
+ "devDependencies": {
+  "connect-livereload": "^0.6.1",
+  "livereload": "^0.9.3",
+  "nodemon": "^3.0.1"
+ }
+}
