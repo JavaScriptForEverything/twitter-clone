@@ -2,9 +2,16 @@ const path = require('path')
 const express = require('express')
 const livereload = require('livereload') 									// for reload browser
 const connectLivereload = require('connect-livereload') 	// for reload browser
+// const session = require('express-session')
+
+
+const pageRouter = require('./routes/pageRoutes')
+// const userRoute = require('./routes/userRoute')
+
 
 const publicDirectory = path.join(process.cwd(), 'public')
 
+// for LiveReload
 const livereloadServer = livereload.createServer() 				// for reload browser
 livereloadServer.watch(publicDirectory)
 livereloadServer.server.once('connection', () => {
@@ -12,23 +19,34 @@ livereloadServer.server.once('connection', () => {
 })
 
 
+
+
+
 const app = express()
-app.use(connectLivereload()) 															// for reload browser
+app.set('view engine', 'pug') 												// Setup pug as Templete 
+// app.set('views', 'views') 													// (default) lockings views to folder /views
+
+app.use(connectLivereload()) 													// for reload browser
 app.use(express.static(publicDirectory))
+app.use(express.json({ limit: '10mb' })) 							// To capture json data by: req.body
+app.use(express.urlencoded({ extended: false })) 			// To capture key=value data send by html form by: req.body
 
-app.set('view engine', 'pug')
-// app.set('views', 'views') 						// (default) lockings views to folder /views
+// app.use(session({
+// 	secret: process.env.SESSION_SECRET,
+// 	resave: true,
+// 	saveUninitialized: false
+// }))
 
-app.get('/', (req, res, next) => {
 
-	const payload = {
-		pageTitle: 'Home'
-	}
 
-	res.render('home', payload)
-})
+// -----[ routes ]-----
+app.use('/', pageRouter)
+// app.use('/api/users', userRoute)
 
-const PORT = process.env.PORT || 5000
-app.listen(PORT, () => {
-	console.log(`server running on http://localhost:${PORT} - ${process.env.NODE_ENV}`)
-})
+
+
+
+
+
+module.exports = app
+

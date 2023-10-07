@@ -1,0 +1,13 @@
+extends layout/mainLayout
+block content
+
+	.h-screen.flex.justify-center.items-center
+		.w-96.bg-slate-100.m-auto.px-4.py-3.shadow-md.rounded
+			h1.mb-8.text-center.text-blue-600 Login Page
+			form.flex.flex-col.gap-3.mb-4(method="post") 
+				input.p-2(type="email", name="email" placeholder='username' value=email required='')
+				input.p-2(type="password", name="password" placeholder='your password' value=password required='')
+				button.p-2.bg-blue-500.text-white(type="submit") Login
+			
+			.text-center
+				a.text-blue-500.underline.decoration-dotted(href="/register") Need an account ? Register here 
