@@ -1,0 +1,6 @@
+
+mixin listUser(users)
+	ul
+		- users.forEach(({ id, name, age, profession }, index) => {
+			li= `${id}: ${name} (${age}) - ${profession}`
+		- })

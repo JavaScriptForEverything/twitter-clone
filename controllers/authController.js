@@ -1,12 +1,5 @@
-exports.requireLogin = (req, res, next) => {
+exports.protect = (req, res, next) => {
+	if(req.session.user ) return next()
 
-	console.log(req.session.user)
-	next()
-
-	// if(req.session && req.session.user ) {
-	// 	return next()
-	// } else {
-	// 	return res.redirect('login')
-	// }
-
+	res.redirect('login')
 }

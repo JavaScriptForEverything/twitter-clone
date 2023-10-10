@@ -5,11 +5,10 @@ const authController = require('./authController')
 // GET /
 // exports.homePage = authController.requireLogin, (req, res, next) => {
 exports.homePage = (req, res, next) => {
+
 	const payload = {
 		pageTitle: 'Home'
 	}
-
-	// console.log(req.session.user)
 
 	res.render('home', payload)
 }
@@ -29,7 +28,7 @@ exports.registerPageHandler = async (req, res) => {
 	try {
 		// throw new Error('do not have avatar')
 		const user = await User.create( req.body )
-		console.log(user)
+		if(!user) throw new Error(`user nor found`)
 
 		res.redirect('login')
 
@@ -60,15 +59,13 @@ exports.loginPage = (req, res) => {
 // POST /login
 exports.loginPageHandler = async (req, res) => {
 	try {
-		const payload = {
-			pageTitle: 'Login',
-		}
-		const user = await User.findOne({ email: req.body.email })
-		if(!user) throw new Error(`user not found, please register first`)
+		const { email, password } = req.body
+
+		const user = await User.findOne({ email })
+		if(!user) throw new Error(`you are not registerted user, please register first`)
+		if(user.password !== password) throw new Error(`Your password is incorrect`)
 
 		req.session.user = user
-		// console.log(user)
-
 		res.redirect('/')
 
 	} catch (err) {
@@ -81,4 +78,16 @@ exports.loginPageHandler = async (req, res) => {
 		res.render('login', payload)
 		
 	}
+}
+
+
+exports.logout = (req, res) => {
+	req.session.destroy(err => {
+		if(err) return console.log(`error: ${err.message}`)
+	})
+
+	const payload = {
+		pageTitle: 'Login',
+	}
+	res.render('login', payload)
 }
