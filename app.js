@@ -4,9 +4,9 @@ const livereload = require('livereload') 									// for reload browser
 const connectLivereload = require('connect-livereload') 	// for reload browser
 const session = require('express-session')
 
-
+const errorController = require('./controllers/errorController')
 const pageRouter = require('./routes/pageRoutes')
-// const userRoute = require('./routes/userRoute')
+const tweetRoute = require('./routes/tweetRoute')
 
 
 const publicDirectory = path.join(process.cwd(), 'public')
@@ -19,8 +19,8 @@ livereloadServer.server.once('connection', () => {
 })
 
 const app = express()
-app.use(express.json({ limit: '10mb' })) 							// To capture json data by: req.body
 app.use(express.urlencoded({ extended: false })) 			// To capture key=value data send by html form by: req.body
+app.use(express.json({ limit: '10mb' })) 							// To capture json data by: req.body
 app.use(express.static(publicDirectory))
 app.use(connectLivereload()) 													// for reload browser
 
@@ -41,8 +41,12 @@ app.set('view engine', 'pug') 												// Setup pug as Templete
 
 // -----[ routes ]-----
 app.use('/', pageRouter)
-// app.use('/api/users', userRoute)
+app.use('/api/tweets', tweetRoute)
 
+
+
+app.all('*', errorController.pageNotFound)
+app.use(errorController.errorHandler)
 
 module.exports = app
 

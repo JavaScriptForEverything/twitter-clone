@@ -6,6 +6,7 @@
 - Configure express-session
 
 
+#### Tailwind With Express (pug templete)
 ```
 $ yarn add -D tailwindcss postcss autoprefixer
 $ yarn tailwindcss init

@@ -1,0 +1,32 @@
+include mui/@index
+
+
+mixin Tweet(props = {})
+	- 
+		const {
+			postedBy= 'Username',
+			avatar= '/images/users/default.jpg',
+			fullName= 'Riajul Islam',
+			username= 'riajulislam',
+			date= '2 month ago',
+			message= 'Your message goes here',
+		} = props
+
+	hr(class='mb-4')
+	h2(class='mb-1 text-slate-600 px-3') Repoted by: #{postedBy}
+	div(class='p-2 text-slate-700 flex gap-4')
+		+Avatar({ src: avatar })
+		div(class='[&>button]:mt-2 flex-1')
+			div(class='flex gap-2 mb-2')
+				+Typography({ 
+					color: 'text-slate-900',
+					text: fullName,
+					wrap: 'whitespace-nowrap'
+				})
+				+Typography({ text: `@${username}` })
+				+Typography({ text: date , wrap: 'whitespace-nowrap' })
+
+			+Typography({ text: message , size: 'text-sm' })
+
+			div(class='mt-3')
+				+TweetReply()

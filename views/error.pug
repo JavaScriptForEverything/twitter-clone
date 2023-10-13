@@ -1,0 +1,10 @@
+extends layout/mainLayout
+block content
+
+	main(class='flex h-screen justify-center items-center') 
+		section(class='flex gap-4 items-center')
+			//- p(class='border-r border-slate-500 py-2 pr-4 text-xl ') 404
+			//- p(class='text-sm text-slate-800') this page could not be found
+
+			p #{errorMessage}
+

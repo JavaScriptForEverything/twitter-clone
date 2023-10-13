@@ -63,7 +63,9 @@ exports.loginPageHandler = async (req, res) => {
 
 		const user = await User.findOne({ email })
 		if(!user) throw new Error(`you are not registerted user, please register first`)
-		if(user.password !== password) throw new Error(`Your password is incorrect`)
+
+		const isPasswordValid = await user.isPasswordValid(password, user.password)
+		if(!isPasswordValid) throw new Error(`Your password is incorrect`)
 
 		req.session.user = user
 		res.redirect('/')
@@ -91,3 +93,6 @@ exports.logout = (req, res) => {
 	}
 	res.render('login', payload)
 }
+
+
+

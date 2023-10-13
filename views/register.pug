@@ -4,7 +4,7 @@ block content
 	.h-screen.flex.justify-center.items-center
 		.w-96.bg-slate-100.m-auto.px-4.py-3.shadow-md.rounded
 			h1.mb-8.text-center.text-blue-600 Register
-			form.flex.flex-col.gap-3.mb-4(method='post')
+			form.flex.flex-col.gap-3.mb-4(action='/register' method='post')
 
 				h2.text-red-500.text-center.capitalize #{errorMessage}
 
