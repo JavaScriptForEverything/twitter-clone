@@ -4,9 +4,16 @@ html(lang="en")
 		meta(charset="UTF-8")
 		meta(name="viewport", content="width=device-width, initial-scale=1.0")
 		title #{pageTitle} Page
-		link(rel="stylesheet", href="/style.css")
-		script(src="/utils.js") 
+		//- link(rel="stylesheet", href="/css/style.css")
+		script(src="/js/utils.js") 
+		script(src="/js/tailwind_cdn.js") 
+		include ../components/@index.pug
+		include ../components/mui/@index.pug
 	body  
 		.container.m-auto
 			block content
 		
+
+
+
+		script(src="/js/client.js") 

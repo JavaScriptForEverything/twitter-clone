@@ -4,6 +4,7 @@
 - Creating Project with browser reload
 - MongoDB Database wiht mongoose
 - Configure express-session
+- Creating Components similer as `Material-UI` by `tailwind CSS`
 
 
 #### Tailwind With Express (pug templete)

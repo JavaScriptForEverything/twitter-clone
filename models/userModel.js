@@ -8,6 +8,20 @@ const { Schema, models, model } = require('mongoose');
 // avatar
 
 const userSchema = new Schema({
+	firstName: {
+		type: String,
+		requied: true,
+		trim: true,
+		minlength: 3,
+		maxlength: 30
+	},
+	lastName: {
+		type: String,
+		requied: true,
+		trim: true,
+		minlength: 3,
+		maxlength: 30
+	},
 	username: {
 		type: String,
 		requied: true,
@@ -27,7 +41,8 @@ const userSchema = new Schema({
 		type: String,
 		requied: true,
 		minlength: 4,
-		maxlength: 30
+		maxlength: 30,
+		select: false
 	},
 	confirmPassword: {
 		type: String,
@@ -56,6 +71,11 @@ userSchema.pre('save', async function(next) {
 userSchema.methods.isPasswordValid = async (password, hashedPassword) => {
 	return await bcrypt.compare(password, hashedPassword)
 }
+
+// userSchema.post('find*', (next) => {
+// 	this.fullName = `${this.firstName} ${this.lastName}`
+// 	next()
+// })
 
 const User = models.User || model('User', userSchema)
 module.exports = User

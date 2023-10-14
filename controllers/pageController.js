@@ -25,9 +25,15 @@ exports.registerPage = (req, res) => {
 
 // POST /register
 exports.registerPageHandler = async (req, res) => {
+
+	// console.log(req.body)
+	// return	res.render('register', { pageTitle: 'register' })
+		
+
+
 	try {
 		// throw new Error('do not have avatar')
-		const user = await User.create( req.body )
+		const user = await User.create( req.body ).select('password')
 		if(!user) throw new Error(`user nor found`)
 
 		res.redirect('login')
@@ -60,12 +66,14 @@ exports.loginPage = (req, res) => {
 exports.loginPageHandler = async (req, res) => {
 	try {
 		const { email, password } = req.body
+		if(!email || !password) throw new Error(`Requried email and password`)
 
-		const user = await User.findOne({ email })
+		const user = await User.findOne({ email }).select('+password')
 		if(!user) throw new Error(`you are not registerted user, please register first`)
-
+		
 		const isPasswordValid = await user.isPasswordValid(password, user.password)
 		if(!isPasswordValid) throw new Error(`Your password is incorrect`)
+		user.password = undefined 		// Don't send password to user
 
 		req.session.user = user
 		res.redirect('/')

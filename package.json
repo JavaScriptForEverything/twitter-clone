@@ -4,10 +4,11 @@
  "main": "server.js",
  "license": "MIT",
  "scripts": {
-  "tailwind": "tailwindcss --input tailwind.css --output public/style.css --watch",
+  "tailwind": "tailwindcss --input tailwind.css --output public/css/style.css --watch",
   "start": "PORT=5000 NODE_ENV=production node .",
   "watch": "PORT=5000 NODE_ENV=development nodemon . --ext js,pug --ignore public",
-  "dev": "concurrently --kill-others \"yarn watch\" \"yarn tailwind\""
+  "dev:old": "concurrently --kill-others \"yarn watch\" \"yarn tailwind\"",
+  "dev": "yarn watch"
  },
  "dependencies": {
   "bcryptjs": "^2.4.3",

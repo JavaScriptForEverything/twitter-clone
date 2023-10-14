@@ -22,14 +22,15 @@ block content
 					+Textarea({ name: 'tween' })
 					+Button({ value: 'Tween', disabled: false })
 
-			+Tweet({
-				postedBy: 'Username',
-				avatar: '/images/users/default.jpg',
-				fullName: 'Riajul Islam',
-				username: 'riajulislam',
-				date: '2 month ago',
-				message: 'Your message goes here',
-			})
+			#tweet-container
+			//- +Tweet({
+			//- 	postedBy: 'Username',
+			//- 	avatar: '/images/users/default.jpg',
+			//- 	fullName: 'Riajul Islam',
+			//- 	username: 'riajulislam',
+			//- 	date: '2 month ago',
+			//- 	message: 'Your message goes here',
+			//- })
 
 
 
@@ -42,7 +43,6 @@ block content
 		const textarea = $('textarea')
 
 		if(!textarea.value.trim()) button.disabled = true
-
 		textarea.addEventListener('input', (evt) => {
 			if(!textarea.value.trim()) button.disabled = true
 			if(textarea.value.trim()) button.disabled = false
@@ -50,40 +50,74 @@ block content
 
 		// Tweet click handler
 		button.addEventListener('click', async(evt) => {
-			
-			//- console.log({ tweet: textarea.value.trim() })
-			//- return
-			
-			const res = await fetch('/api/tweets', {
-				method: 'post',
-				body: JSON.stringify({ tweet: textarea.value.trim() }),
-				headers: {
-					'content-type': 'application/json'
-				}
-			})
+			//- const res = await fetch('/api/tweets', {
+			//- 	method: 'post',
+			//- 	body: JSON.stringify({ tweet: textarea.value.trim() }),
+			//- 	headers: {
+			//- 		'content-type': 'application/json'
+			//- 	}
+			//- })
 
-			const data = await res.json()
-			console.log(data)
+			//- const data = await res.json()
+			//- console.log(data)
+
+
+			//- div.innerHTML = createTweet()
+			//- div.insertAdjacentHTML( 'beforeend', str );
+			//- document.querySelector('#tweet-container')
+			$('#tweet-container').insertAdjacentHTML('afterbegin', createTweet())
 		})
 
+		const fetchTweets = async () => {
+			try {
+
+				const res = await fetch('/api/tweets', {
+					method: 'get',
+					headers: {
+						'content-type': 'application/json'
+					}
+				})
+
+				const data = await res.json()
+				data.data?.forEach((tweet) => {
+					console.log(tweet)
+					$('#tweet-container').insertAdjacentHTML('beforeend', createTweet({
+						postedBy: '@username',
+						avatar: '/images/users/default.jpg',
+						fullName: 'Riajul Islam',
+						username: 'riajulislam',
+						date: '2 month ago',
+						message: 'Your message goes here',
+						numberOfMessage: 1,
+						numberOfRetweet: 0,
+						numberOfHeart: 2,
+					}))
+				})
+
+
+			} catch (err) {
+				console.log(err.message)
+			}
+		}
+		fetchTweets();
 
 
 		// Chat click handler
-		$('#chat').addEventListener('click', (evt) => {
+		$('#chat')?.addEventListener('click', (evt) => {
 			evt.preventDefault()
 
 			console.log(evt.target)
 		})
 
-		// loop click handler
-		$('#loop').addEventListener('click', (evt) => {
+		// retweet click handler
+		$('#retweet')?.addEventListener('click', (evt) => {
 			evt.preventDefault()
 
 			console.log(evt.target)
 		})
 
 		// heart click handler
-		$('#heart').addEventListener('click', (evt) => {
+		$('#heart')?.addEventListener('click', (evt) => {
 			evt.preventDefault()
 
 			console.log(evt.target)

@@ -2,17 +2,67 @@ extends layout/mainLayout
 block content
 
 	.h-screen.flex.justify-center.items-center
-		.w-96.bg-slate-100.m-auto.px-4.py-3.shadow-md.rounded
-			h1.mb-8.text-center.text-blue-600 Register
-			form.flex.flex-col.gap-3.mb-4(action='/register' method='post')
+		.w-96.bg-slate-100.m-auto.px-4.py-3.shadow-md.rounded.border.border-slate-200
+			h1(class='text-blue-500 text-2xl text-center mb-6') Register
 
-				h2.text-red-500.text-center.capitalize #{errorMessage}
+			form.flex.flex-col.gap-3.mb-2(action='/register' method='post')
 
-				input.p-2(type="text", name="username" placeholder='username' value=username required=true)
-				input.p-2(type="email", name="email" placeholder='abc@gmail.com' value=email required=true)
-				input.p-2(type="password", name="password" placeholder='your password' value=password required=true)
-				input.p-2(type="password", name="confirmPassword" placeholder='your confirm password' value=confirmPassword required=true)
-				button.p-2.bg-blue-500.text-white(type="submit") Register
+				h2#error.text-red-500.text-center.capitalize #{errorMessage}
+
+				div(class='flex gap-3')
+					+TextField({
+						label: 'Name',
+						name: 'firstName',
+						placeholder: 'First Name',
+						value: firstName || '',
+					})
+					+TextField({
+						label: 'Tribe',
+						name: 'lastName',
+						placeholder: 'Last Name',
+						value: lastName || '',
+					})
+
+				+TextField({
+					label: 'Username',
+					name: 'username',
+					placeholder: 'username',
+					value: username || '',
+				})
+				+TextField({
+					label: 'Your Email',
+					name: 'email',
+					type: 'email',
+					placeholder: 'abc@gmail.com',
+					value: email || '',
+					helperText: 'email address is invalied'
+				})
+				+TextField({
+					label: 'Your Password',
+					name: 'password',
+					type: 'password',
+					placeholder: 'yourPa$$w0rd',
+					value: password || '',
+					helperText: 'password is too short'
+				})
+				+TextField({
+					label: 'Confirm Password',
+					name: 'confirmPassword',
+					id: 'confirmPassword',
+					type: 'password',
+					placeholder: 're-type your password again',
+					value: confirmPassword || '',
+					helperText: 'password not matched'
+				})
+
+				//- small Error message
+
+				+Button({
+					value: 'Register',
+					type: 'submit',
+					size: 'py-2',
+					variant: 'contained'
+				})
 			
 			.text-center
 				a.text-blue-500.underline.decoration-dotted(href="/login") Already have an account ? login here
@@ -24,15 +74,26 @@ block content
 			const formData = new FormData(evt.target)
 			const fields = Object.fromEntries( formData )
 
+
 			if( fields.password !== fields.confirmPassword ) {
-				$('[name=confirmPassword]').style.border = '1px solid red'
+				$('#confirmPassword').style.border = '1px solid red'
+				$('#confirmPassword legend').style.color = 'red'
+
 				return
 			}
-
-			$('[name=confirmPassword]').style.border = ''
+			$('#confirmPassword').style.border = ''
+			$('#confirmPassword legend').style.color = ''
 
 			/* it will submit the form by the: 	<form method='post'>
 			** No need `fetch('/register', { method: 'post' , ...})`
 			*/ 
+
+			if( !isFormValidated(fields) ) {
+				console.log('Invalid form')
+				$('#error').innerHTML = 'Form Validation fialed'
+
+				//- console.log(fields)
+				return 
+			}
 			evt.target.submit() 	// form.submit()
 		})

@@ -1,22 +1,29 @@
 const Tweet = require('../models/tweetModel')
+const { Types } = require('mongoose')
 
 
 exports.createTweet = async (req, res, next) => {
 	const body = { 
 		...req.body,
-		user: '23433f23453432234134234'
+		user: new Types.ObjectId("652580ce2ae5847a00eef5a6"),
 	} 
 
-	// const tweet = await Tweet.create(body)
+	const tweet = await Tweet.create(body)
 	// const populatedUser = await User.populate(tweet, { path: 'user' }) 
-
-
-	console.log(req.body)
 
 	res.status(200).json({
 		status: 'success',
-		// data: tweet
-		data: req.body
+		data: tweet
 	})
 }
 
+
+exports.getTweets = async (req, res) => {
+
+	const tweets = await Tweet.find().populate('user')
+
+	res.status(200).json({
+		status: 'success',
+		data: tweets
+	})
+}

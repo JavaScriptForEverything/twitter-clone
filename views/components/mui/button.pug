@@ -1,18 +1,53 @@
+//-
+	+Button({
+		value: 'Register',
+		type: 'submit',
+		size: 'py-2',
+		variant: 'contained'
+	})
+
+
 mixin Button( props = {})
 	-
 		const {
+			id='',
+			name='',
 			value='Button',
 			type='button',
-
+			size='py-1',
 			uppercase=true,
 			disabled=false,
-
+			variant='outlined',
+			color='',
+			startIcon = '',
+			endIcon = '',
+			justify = 'center'
 		} = props
+
 	button(
 		type=type
-		class='border border-blue-300 px-3 py-1 shadow-sm rounded text-blue-500'
-		class='hover:bg-blue-50 active:bg-blue-200 active:text-blue-600 border-blue-400' 
-		class=uppercase ? 'uppercase' : 'normalcase'
+		id=id
+		name=name
+
+		class=size
+		class='border border-blue-300 px-3 shadow-sm rounded text-blue-500'
+		class='hover:bg-blue-50 active:bg-blue-600 active:text-white border-blue-600' 
+		class= uppercase ? 'uppercase' : 'normalcase'
 		class='disabled:text-slate-400 disabled:border-slate-400' 
+		class= variant==='contained' ? 'bg-blue-500 text-white hover:bg-blue-600 hover:text-white' : ''
+
+		class=color ? `bg-${color}-500 hover:bg-${color}-600 border-${color}-500` : ''
+		class=color ? `active:bg-${color}-700` : ''
 		disabled=disabled
-	)= value
+	)
+
+		div(
+			class='flex items-center justify-center'
+			class='[&>svg]:w-6 [&>svg]:h-6 fill-white'
+			class=startIcon || endIcon ? 'gap-2' : ''
+		)
+			span(class= startIcon ? 'order-1' : 'order-0')= value
+			if( startIcon )
+				#{startIcon}
+			if( endIcon )
+				#{endIcon}

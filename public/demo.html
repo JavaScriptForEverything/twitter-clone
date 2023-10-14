@@ -6,15 +6,35 @@
 	<title>Demo</title>
 	<link rel="stylesheet" href="/style.css">
 </head>
-<body>
+	<script>
 
-	<!-- <section class="w-screen h-screen flex justify-center items-center bg-slate-100">
-		<div class="w-96 h-96 bg-slate-300">
-			<h2>Hi there</h2>
-		</div>
-	</section> -->
-	
-	<textarea placeholder="something" autofocus></textarea>
+		let color='text-slate-700',
+				size='text-md',
+				text='',
+				weight='font-normal',
+				wrap=''
+
+	</script>
+<body>
+	<br>
+	<br>
+
+<div> 
+	<lable id="email" class="text-slate-600 font-medium 
+			after:content-['*'] after:text-red-500 after:ml-0.5">Email</lable> 	
+	<input for="email" type="email" placeholder="your-email.com" class="peer w-full mt-1 px-3 py-2
+		placeholder:italic placeholder:text-slate-400 
+		border border-slate-300 rounded-md 
+		focus:border-sky-500 outline-none 
+		invalid:border-pink-500 invalid:text-pink-700
+		invalid:focus:border-pink-500 invalid:focus:ring-pink-500
+		focus:ring-1 focus:ring-sky-500 
+		disabled:text-slate-500 disabled:border-slate-300 
+	"> 
+	<small class="text-red-600 mb-2 hidden peer-invalid:block">sorry email in-correct</small>
+</div> 
+
+
 
 </body>
 </html>
