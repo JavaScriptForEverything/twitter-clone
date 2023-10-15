@@ -62,7 +62,7 @@ const isFormValidated = (obj) => {
 					<div class='flex gap-2 mb-2'>
 						<p class='text-slate-700 whitespace-nowrap'> ${fullName} </p> 
 						<p class='text-slate-700'> @${username} </p> 
-						<p class='text-slate-700 whitespace-nowrap'>${date}</p> 
+						<p class='text-slate-700 w-20 truncate'>${date}</p> 
 					</div>
 
 					<p class='text-slate-700 text-sm'> ${message}</p> 

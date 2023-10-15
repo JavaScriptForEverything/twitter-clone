@@ -50,21 +50,17 @@ block content
 
 		// Tweet click handler
 		button.addEventListener('click', async(evt) => {
-			//- const res = await fetch('/api/tweets', {
-			//- 	method: 'post',
-			//- 	body: JSON.stringify({ tweet: textarea.value.trim() }),
-			//- 	headers: {
-			//- 		'content-type': 'application/json'
-			//- 	}
-			//- })
+			const res = await fetch('/api/tweets', {
+				method: 'post',
+				body: JSON.stringify({ tweet: textarea.value.trim() }),
+				headers: {
+					'content-type': 'application/json'
+				}
+			})
 
-			//- const data = await res.json()
-			//- console.log(data)
+			const data = await res.json()
+			console.log(data)
 
-
-			//- div.innerHTML = createTweet()
-			//- div.insertAdjacentHTML( 'beforeend', str );
-			//- document.querySelector('#tweet-container')
 			$('#tweet-container').insertAdjacentHTML('afterbegin', createTweet())
 		})
 
@@ -79,19 +75,34 @@ block content
 				})
 
 				const data = await res.json()
-				data.data?.forEach((tweet) => {
-					console.log(tweet)
+				data.data?.forEach((tweet, _, tweets) => {
+					//- console.log(tweet)
+
+					//- $('#tweet-container').insertAdjacentHTML('beforeend', createTweet({
+					//- 	postedBy: `@username`,
+					//- 	avatar: '/images/users/default.jpg',
+					//- 	fullName: 'Riajul Islam',
+					//- 	username: 'riajulislam',
+					//- 	date: '2 month ago',
+					//- 	message: 'Your message goes here',
+					//- 	numberOfMessage: 1,
+					//- 	numberOfRetweet: 0,
+					//- 	numberOfHeart: 2,
+					//- }))
+
 					$('#tweet-container').insertAdjacentHTML('beforeend', createTweet({
-						postedBy: '@username',
-						avatar: '/images/users/default.jpg',
-						fullName: 'Riajul Islam',
-						username: 'riajulislam',
-						date: '2 month ago',
-						message: 'Your message goes here',
-						numberOfMessage: 1,
-						numberOfRetweet: 0,
-						numberOfHeart: 2,
+						postedBy: tweet.user.username,
+						avatar: tweet.user.avatar,
+						fullName: `${tweet.user.firstName} ${tweet.user.lastName}`,
+						username: tweet.user.username,
+						date: `${new Date(tweet.createdAt).getDay()}`,
+						date: `${new Date(tweet.createdAt)}`,
+						message: tweet.tweet,
+						numberOfMessage: tweets.length,
+						numberOfRetweet: tweets.length,
+						numberOfHeart: 0,
 					}))
+
 				})
 
 
