@@ -15,6 +15,12 @@ block content
 
 		//- middle-section
 		div(class='col-span-10 md:col-span-7')
+
+			div
+				a(href='/login' class='border border-slate-500 px-3 py-1.5') Login
+				a(href='/register' class='border border-slate-500 px-3 py-1.5') Register 
+				br
+
 			p(class='p-2 border-b border-slate-200') #{pageTitle}
 			div(class='p-2 text-slate-700 flex gap-4 mb-8')
 				+Avatar({ src: '/images/users/default.jpg' })
@@ -59,9 +65,21 @@ block content
 			})
 
 			const data = await res.json()
+			const tweet = data.data
+			textarea.value = ''
 			console.log(data)
 
-			$('#tweet-container').insertAdjacentHTML('afterbegin', createTweet())
+			$('#tweet-container').insertAdjacentHTML('afterbegin', createTweet({
+						postedBy: tweet.user.username,
+						avatar: tweet.user.avatar,
+						fullName: `${tweet.user.firstName} ${tweet.user.lastName}`,
+						username: tweet.user.username,
+						date: `${timeSince(new Date(tweet.createdAt))}`,
+						message: tweet.tweet,
+						numberOfMessage: 0,
+						numberOfRetweet: 0,
+						numberOfHeart: 0,
+			}))
 		})
 
 		const fetchTweets = async () => {
@@ -75,7 +93,7 @@ block content
 				})
 
 				const data = await res.json()
-				data.data?.forEach((tweet, _, tweets) => {
+				data.data?.reverse().forEach((tweet, _, tweets) => {
 					//- console.log(tweet)
 
 					//- $('#tweet-container').insertAdjacentHTML('beforeend', createTweet({
@@ -95,8 +113,7 @@ block content
 						avatar: tweet.user.avatar,
 						fullName: `${tweet.user.firstName} ${tweet.user.lastName}`,
 						username: tweet.user.username,
-						date: `${new Date(tweet.createdAt).getDay()}`,
-						date: `${new Date(tweet.createdAt)}`,
+						date: `${timeSince(new Date(tweet.createdAt))}`,
 						message: tweet.tweet,
 						numberOfMessage: tweets.length,
 						numberOfRetweet: tweets.length,
