@@ -19,6 +19,7 @@ block content
 			div
 				a(href='/login' class='border border-slate-500 px-3 py-1.5') Login
 				a(href='/register' class='border border-slate-500 px-3 py-1.5') Register 
+				a(href='/profile' class='border border-slate-500 px-3 py-1.5') Profile 
 				br
 
 			p(class='p-2 border-b border-slate-200') #{pageTitle}
@@ -28,21 +29,14 @@ block content
 					+Textarea({ name: 'tween' })
 					+Button({ value: 'Tween', disabled: false })
 
-			#tweet-container
-			//- +Tweet({
-			//- 	postedBy: 'Username',
-			//- 	avatar: '/images/users/default.jpg',
-			//- 	fullName: 'Riajul Islam',
-			//- 	username: 'riajulislam',
-			//- 	date: '2 month ago',
-			//- 	message: 'Your message goes here',
-			//- })
+			//- tweets container to show tweets after fetch from backend 
+			#tweets-container
 
 
 
 		//- right-section
 		div(class='hidden md:col-span-3')
-			p right
+			p right section hiddend for now
 
 	script.
 		const button = $('button')
@@ -69,7 +63,7 @@ block content
 			textarea.value = ''
 			console.log(data)
 
-			$('#tweet-container').insertAdjacentHTML('afterbegin', createTweet({
+			$('#tweets-container').insertAdjacentHTML('afterbegin', createTweet({
 						postedBy: tweet.user.username,
 						avatar: tweet.user.avatar,
 						fullName: `${tweet.user.firstName} ${tweet.user.lastName}`,
@@ -96,7 +90,7 @@ block content
 				data.data?.reverse().forEach((tweet, _, tweets) => {
 					//- console.log(tweet)
 
-					//- $('#tweet-container').insertAdjacentHTML('beforeend', createTweet({
+					//- $('#tweets-container').insertAdjacentHTML('beforeend', createTweet({
 					//- 	postedBy: `@username`,
 					//- 	avatar: '/images/users/default.jpg',
 					//- 	fullName: 'Riajul Islam',
@@ -108,7 +102,8 @@ block content
 					//- 	numberOfHeart: 2,
 					//- }))
 
-					$('#tweet-container').insertAdjacentHTML('beforeend', createTweet({
+					$('#tweets-container').insertAdjacentHTML('beforeend', createTweet({
+						id: tweet._id,
 						postedBy: tweet.user.username,
 						avatar: tweet.user.avatar,
 						fullName: `${tweet.user.firstName} ${tweet.user.lastName}`,
@@ -130,33 +125,51 @@ block content
 		fetchTweets();
 
 
-		// Chat click handler
-		$('#chat')?.addEventListener('click', (evt) => {
-			evt.preventDefault()
-
-			console.log(evt.target)
-		})
-
-		// retweet click handler
-		$('#retweet')?.addEventListener('click', (evt) => {
-			evt.preventDefault()
-
-			console.log(evt.target)
-		})
-
-		// heart click handler
-		$('#heart')?.addEventListener('click', (evt) => {
-			evt.preventDefault()
-
-			console.log(evt.target)
-		})
 
 
-	//- p it is a #{pageTitle} page
-	//- p it is a 
+		// Event Delegation: to handle chat retween and heart
+		$('#tweets-container').addEventListener('click', async(evt) => {
+			if(evt.target.tagName !== 'svg') return
 
-	//- br
-	//- br
+			const container = evt.target.closest('.tweet-container')
+			const tweetId = container.id
+			if(!tweetId) return console.log('tweet._id is undefined')
+
+			//- //- const chatEl = document.querySelector(':scope #chat')
+			//- const chatEl = $(':scope #chat')
+			//- console.log(evt.target)
+
+
+			//- -----[ Handle chat button click ]-----
+			if( evt.target.id === 'chat' ) {
+				console.log('handle chat request here')
+			} // End
+
+			//- -----[ Handle retweet button click ]-----
+			if( evt.target.id === 'retweet' ) {
+				console.log('handle retweet request here')
+			} // End
+
+			//- -----[ Handle heart button click ]-----
+			if( evt.target.id === 'heart' ) {
+
+				const { data, error } = await axios({
+					url: `/api/tweets/${tweetId}/like`,
+					method: 'PATCH',
+					data: { tweetId: 1 }
+				})
+
+				if(data) evt.target.style.fill = evt.target.style.fill !== 'red' ? 'red' : ''
+				if(error) console.log('show error in dom instead of log')
+
+				console.log({ data, error })
+
+			} // End
+
+
+			
+		}) 	// Event Delegation block
+
 
 	//- p
 	//- 	a(href="/login") 

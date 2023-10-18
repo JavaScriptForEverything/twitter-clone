@@ -15,7 +15,11 @@ const tweetSchema = new Schema({
 	pinned: {
 		type: Boolean,
 		default: false
-	}
+	},
+	likes: [{ 													// all the users likes the tweet: by clicking the heart of the tweet 
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+	}]
 
 }, { timestamps: true })
 

@@ -53,6 +53,11 @@ const userSchema = new Schema({
 		type: String,
 		default: '/images/users/default.jpg'
 	},
+
+	likes: [{ 													// all the Tweets likes by this user
+		type: Schema.Types.ObjectId,
+		ref: 'Tweet',
+	}]
 }, {
 	timestamps: true
 })

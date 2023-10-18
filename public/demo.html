@@ -4,37 +4,101 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Demo</title>
-	<link rel="stylesheet" href="/style.css">
+	<style>
+		body {
+			/* width: 60vw;
+			height: 60vh;
+			margin: auto;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			border: 1px solid red; */
+		}
+
+		div {
+			background-color: gray;
+			padding: 2rem;
+			width: 300px;
+			height: 300px;
+
+		}
+		span {
+			background-color: orange;
+			padding: 2rem;
+			width: 100px;
+			height: 100px;
+		}
+
+	</style>
 </head>
 	<script>
-
-		let color='text-slate-700',
-				size='text-md',
-				text='',
-				weight='font-normal',
-				wrap=''
-
 	</script>
 <body>
-	<br>
-	<br>
 
-<div> 
-	<lable id="email" class="text-slate-600 font-medium 
-			after:content-['*'] after:text-red-500 after:ml-0.5">Email</lable> 	
-	<input for="email" type="email" placeholder="your-email.com" class="peer w-full mt-1 px-3 py-2
-		placeholder:italic placeholder:text-slate-400 
-		border border-slate-300 rounded-md 
-		focus:border-sky-500 outline-none 
-		invalid:border-pink-500 invalid:text-pink-700
-		invalid:focus:border-pink-500 invalid:focus:ring-pink-500
-		focus:ring-1 focus:ring-sky-500 
-		disabled:text-slate-500 disabled:border-slate-300 
-	"> 
-	<small class="text-red-600 mb-2 hidden peer-invalid:block">sorry email in-correct</small>
-</div> 
+	<div>
+			<button>button 1</button>
+	</div>
+
+<script>
+
+	// // Only works with first button other will not work
+	// document.querySelector('button')?.addEventListener('click', (evt) => {
+	// 	console.log(evt.target.innerText)
+	// })
 
 
+	// Only works with first button other will not work
+	document.querySelectorAll('button').forEach(child => {
+
+		child.addEventListener('click', (evt) => {
+			console.log(evt.target.innerText)
+		})
+	})
+
+
+	// document.querySelector('div').addEventListener('click', (evt) => {
+
+	// 	if(evt.target.classList.contains('button')) {
+	// 		console.log(evt.target.innerText)
+	// 	}
+
+	// })
+
+	const button2 = document.createElement('button')
+				button2.innerText = 'button 2'
+				button2.classList.add('button')
+				document.querySelector('div').appendChild(button2)
+
+	const button3Value = 'button 3'
+	const button3 = ` <button class='button'>${button3Value}</button>`
+				document.querySelector('div')
+					.insertAdjacentHTML('beforeend', button3)
+
+
+
+
+
+	// // Target parent which static (not dynamiclly generated)
+	// document.querySelector('div').addEventListener('click', (evt) => {
+	// 	// console.log(evt.target.innerText)
+
+	// 	// if(evt.target.tagName === 'BUTTON') {
+	// 	// 	console.log(evt.target.innerText)
+	// 	// }
+
+	// 	if(evt.target.classList.contains('button')) {
+	// 		console.log(evt.target.innerText)
+	// 	}
+
+	// })
+
+
+
+
+
+</script>
 
 </body>
 </html>

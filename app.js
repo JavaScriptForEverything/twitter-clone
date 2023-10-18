@@ -19,8 +19,8 @@ livereloadServer.server.once('connection', () => {
 })
 
 const app = express()
-app.use(express.urlencoded({ extended: false })) 			// To capture key=value data send by html form by: req.body
 app.use(express.json({ limit: '10mb' })) 							// To capture json data by: req.body
+app.use(express.urlencoded({ extended: false })) 			// To capture key=value data send by html form by: req.body
 app.use(express.static(publicDirectory))
 app.use(connectLivereload()) 													// for reload browser
 
