@@ -1,14 +1,17 @@
 const User = require('../models/userModel')
 const authController = require('./authController')
+const { timeSince } = require('../utils')
 
 
 // GET /
-// exports.homePage = authController.requireLogin, (req, res, next) => {
 exports.homePage = (req, res, next) => {
 
 	const payload = {
-		pageTitle: 'Home'
+		pageTitle: 'Home',
+		timeSince,
+		user: req.session.user,
 	}
+
 
 	res.render('home', payload)
 }

@@ -8,10 +8,12 @@ router.route('/')
 	.get(tweetController.getTweets)
 	.post(tweetController.createTweet)
 
-router.route('/:id/like')
-	.patch(
-		authController.protect,
-		tweetController.updateTweetLike
-	)
+router
+	.use(authController.protect)
+	.get('/:id', tweetController.getTweetById)
+	// .patch('/:id', tweetController.updateTweetById)
+
+	.patch('/:id/like', tweetController.updateTweetLike)
+	.post('/:id/retweet', tweetController.retweet)
 
 module.exports = router

@@ -1,71 +1,97 @@
 extends ../layout/mainLayout
 block content
 
-	div(class='h-screen flex justify-center items-center border border-slate-400')
+	br
 
-		div.wrapper(class='p-8 w-60 h-60 border border-red-500')
-			div.parent(class='p-8 w-40 h-40 border border-red-500')
-				button.child( type="button"
-					class='border border-blue-500 text-blue-500 px-3 py-1.5 rounded-md'
-					class='active:bg-slate-500 active:text-white'
-				) Button
+
+	button(
+		type='button' 
+		name='open-tweet-dialog'
+		class='border border-blue-500 text-blue-500 px-3 py-1.5 rounded-md'
+
+	) Retweet
+
+	#my-dialog
+
+
+
 
 
 	script.
+		$('#my-dialog').insertAdjacentHTML('beforeend', getReplyDialogHTML({
+			fullName: 'Riajul Islam',
+			username: 'riajulislam',
+			createdAt: Date.now(),
+			avatar: '/images/users/default.jpg',
+			replyAvatar: '/images/users/default.jpg',
+			tweet: 'hi there, it way an awesome tweets',
+			numberOfHeart: 5,
+			numberOfRetweet: 5,
+		}))
 
-		$('.wrapper').addEventListener('click', (evt) => {
-			console.log('1: wrapper')
-		}, false)
-		$('.parent').addEventListener('click', (evt) => {
-			console.log('2: parent')
-		}, false)
-		$('.child').addEventListener('click', (evt) => {
-			console.log('3: child')
-		}, false)
+		const openTweetDialogBtn = $('[name=open-tweet-dialog]')
+		const dialogEl = $('[name=reply-dialog]')
+		const dialogCloseButton = $('[name=dialog-close-button]')
+		const dialogCancelButton = $('[name=dialog-cancel-button]')
+		const dialogSubmitButton = $('[name=dialog-submit-button]')
+		const dialogTweetInput = $('[name=dialog-tweet-input]')
 
+		const dialogChatButton = $('[name=dialog-chat-button]')
+		const dialogRetweetButton = $('[name=dialog-retweet-button]')
+		const dialogHeartButton = $('[name=dialog-heart-button]')
 
+		// disabled submit button at first time
+		if( !dialogTweetInput.value.trim() ) dialogSubmitButton.disabled = true
 
-		//- const button2 = `
-		//- 	<button type="button"
-		//- 		class="border border-blue-500 text-blue-500 px-3 py-1.5 rounded-md active:bg-slate-500 active:text-white"
-		//- 	> Button 2 </button>
-		//- `
-
-		//- document.querySelectorAll('.border').forEach( (child) => {
-
-		//- 	child.addEventListener('click', (evt) => {
-		//- 		console.log(evt.target.innerHTML) 	
-		//- 	})
-
-		//- })
-
-
-		//- document.querySelector('div').addEventListener('click', (evt) => {
-		//- 	evt.preventDefault()
-
-		//- 	if(evt.target.tagName === 'BUTTON' && evt.target.innerText === 'Button 2') {
-
-		//- 		console.log(evt.target.innerText)
-		//- 	}
-		//- })
+		// toggle submit on input change
+		dialogTweetInput.addEventListener('input', (evt) => {
+			dialogSubmitButton.disabled = !evt.target.value.trim() 
+		})
 
 
+		openTweetDialogBtn.addEventListener('click', (evt) => {
+			dialogEl.showModal()
+		})
 
-		// Step-2: Try to add Event before button2 exists
-		//- document.querySelectorAll('div').forEach( (staticParentEl) => {
+		dialogCloseButton.addEventListener('click', (evt) => {
+			dialogEl.close()
+		})
+		dialogCancelButton.addEventListener('click', (evt) => {
+			dialogEl.close()
+			dialogTweetInput.value = '' 	// empty value
+		})
+		dialogSubmitButton.addEventListener('click', (evt) => {
+			dialogEl.close()
+			const value = dialogTweetInput.value
 
-		//- 	staticParentEl.addEventListener('click', (evt) => {
-		//- 		const dynamicEl = evt.target.closest('.border')
-		//- 		if(!dynamicEl ) return
+			if( !value.trim() ) dialogCancelButton.disabled = true
 
-		//- 		console.log(dynamicEl.innerHTML) 										// => OK
-		//- 		//- console.log(evt.target.innerHTML) 							// => OK
-		//- 		//- console.log(evt.currentTarget.innerHTML) 		// It return entire target
-		//- 	})
-		//- })
+			console.log({ value })
+
+			dialogTweetInput.value = '' 	// empty value
+		})
 
 
 
-		//- // Step-1: Add button later (mimic as Dynamic Element)
-		//- const div = document.querySelector('div')
-		//- div.insertAdjacentHTML('beforeend', button2)
+		const toggleIcon = (evt, props = {}) => {
+			const { activeColor='red', inactiveColor='gray', isValue = true, } = props
+
+			const childSVG = evt.target.children[0]
+			const childSpan = evt.target.children[1]
+			if(childSVG.tagName !== 'svg') return console.log(`Selector: '${childSVG}' is not svg `)
+			if(childSpan.tagName !== 'SPAN') return console.log(`Selector: '${childSpan}' is not span`)
+
+			childSVG.style.color = childSVG.style.color === activeColor ? inactiveColor : activeColor
+			//- if( isValue ) childSpan.textContent = childSpan.textContent ? "" : 1
+		}
+
+		dialogChatButton.addEventListener('click', (evt) => {
+			toggleIcon( evt, { isValue: false })
+		})
+		dialogRetweetButton.addEventListener('click', (evt) => {
+			toggleIcon(evt, { activeColor: 'royalblue' })
+
+		})
+		dialogHeartButton.addEventListener('click', (evt) => {
+			toggleIcon(evt)
+		})

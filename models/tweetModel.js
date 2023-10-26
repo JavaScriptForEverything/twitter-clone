@@ -4,7 +4,7 @@ const tweetSchema = new Schema({
 	tweet: {
 		type: String,
 		trim: true,
-		required: true,
+		// required: true,
 		maxlength: 500,
 	},
 	user: {
@@ -19,7 +19,21 @@ const tweetSchema = new Schema({
 	likes: [{ 													// all the users likes the tweet: by clicking the heart of the tweet 
 		type: Schema.Types.ObjectId,
 		ref: 'User',
-	}]
+	}],
+
+	retweetUsers: [{ 										// user._id
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+	}],
+	retweetData: { 										 	// tweet._id
+		type: Schema.Types.ObjectId,
+		ref: 'Tweet',
+	},
+	replyTo: { 										 			// tweet._id
+		type: Schema.Types.ObjectId,
+		ref: 'Tweet',
+	},
+
 
 }, { timestamps: true })
 

@@ -29,8 +29,20 @@ block content
 					+Textarea({ name: 'tween' })
 					+Button({ value: 'Tween', disabled: false })
 
+			section#reply-dialog-container(data-tweet-id='')
+				+RetweetModal({
+					fullName: 'Riajul Islam',
+					username: 'riajulislam',
+					createdAt: timeSince( new Date( ) ),
+					avatar: '/images/users/default.jpg',
+					replyAvatar: '/images/users/default.jpg',
+					tweet: 'hi there, it way an awesome tweets',
+					numberOfHeart: 1,
+					numberOfRetweet: 1,
+				})
+
 			//- tweets container to show tweets after fetch from backend 
-			#tweets-container
+			section#tweets-container
 
 
 
@@ -38,7 +50,49 @@ block content
 		div(class='hidden md:col-span-3')
 			p right section hiddend for now
 
+
+
+
 	script.
+
+		//                                           		// (1) user comes from Server-Side: res.render('/', payload)
+		let logedInUser = !{JSON.stringify( user )} 		// (2) Passing Server-Side variable to Client-Side
+		//- console.log(logedInUser) 										// (3) Now logedInUser is Client-side variable
+
+
+		//- styleOnTweetIconClick({ event: evt, tweet, user: logedInUser, selector: '#heart' })
+		const styleOnTweetIconClick = ({ event, tweet, user, selector='#heart' }) => {
+
+			const isLiked = tweet.likes.includes(user._id)
+			if( isLiked ) {
+				event.target.style.fill = 'red' 
+				//- event.target.classList.add('fill-red-500') 			// use self class TailwindClass not works
+				$(`:scope ${selector} + span`).textContent = tweet?.likes.length
+
+			} else {
+				event.target.style.fill = '' 
+				$(`:scope ${selector} + span`).textContent = tweet?.likes.length
+			}
+		}
+
+		// used into Reply-Dialog icon clicked style
+		const toggleIcon = (evt, props = {}) => {
+			const { activeColor='red', inactiveColor='gray', isValue = true, } = props
+
+			const childSVG = evt.target.children[0]
+			const childSpan = evt.target.children[1]
+			if(childSVG.tagName !== 'svg') return console.log(`Selector: '${childSVG}' is not svg `)
+			if(childSpan.tagName !== 'SPAN') return console.log(`Selector: '${childSpan}' is not span`)
+
+			childSVG.style.color = childSVG.style.color === activeColor ? inactiveColor : activeColor
+			//- if( isValue ) childSpan.textContent = childSpan.textContent ? "" : 1
+		}
+
+
+
+
+
+		// --- [ js Code ]
 		const button = $('button')
 		const textarea = $('textarea')
 
@@ -48,7 +102,7 @@ block content
 			if(textarea.value.trim()) button.disabled = false
 		})
 
-		// Tweet click handler
+		// Add Tweets by clicking Tweet button
 		button.addEventListener('click', async(evt) => {
 			const res = await fetch('/api/tweets', {
 				method: 'post',
@@ -61,24 +115,14 @@ block content
 			const data = await res.json()
 			const tweet = data.data
 			textarea.value = ''
-			console.log(data)
+			//- console.log(data)
 
-			$('#tweets-container').insertAdjacentHTML('afterbegin', createTweet({
-						postedBy: tweet.user.username,
-						avatar: tweet.user.avatar,
-						fullName: `${tweet.user.firstName} ${tweet.user.lastName}`,
-						username: tweet.user.username,
-						date: `${timeSince(new Date(tweet.createdAt))}`,
-						message: tweet.tweet,
-						numberOfMessage: 0,
-						numberOfRetweet: 0,
-						numberOfHeart: 0,
-			}))
+			$('#tweets-container').insertAdjacentHTML('afterbegin', getTweetHTML(tweet))
 		})
 
+		// shows tweets by fetching from backend
 		const fetchTweets = async () => {
 			try {
-
 				const res = await fetch('/api/tweets', {
 					method: 'get',
 					headers: {
@@ -87,35 +131,21 @@ block content
 				})
 
 				const data = await res.json()
+				//- console.log(data.data[data.data.length - 1])
+
 				data.data?.reverse().forEach((tweet, _, tweets) => {
-					//- console.log(tweet)
+					$('#tweets-container').insertAdjacentHTML('beforeend', getTweetHTML(tweet))
 
-					//- $('#tweets-container').insertAdjacentHTML('beforeend', createTweet({
-					//- 	postedBy: `@username`,
-					//- 	avatar: '/images/users/default.jpg',
-					//- 	fullName: 'Riajul Islam',
-					//- 	username: 'riajulislam',
-					//- 	date: '2 month ago',
-					//- 	message: 'Your message goes here',
-					//- 	numberOfMessage: 1,
-					//- 	numberOfRetweet: 0,
-					//- 	numberOfHeart: 2,
-					//- }))
+					//- // Why not bellow show effect, though it adding styles
+					//- const isLikedByUser = tweet?.likes.includes( logedInUser._id )
+					//- const heartEl = $(':scope #heart')
+					//- if( isLikedByUser ) heartEl.style.fill = 'red' 
+					//- else heartEl.style.fill = '' 
+					
 
-					$('#tweets-container').insertAdjacentHTML('beforeend', createTweet({
-						id: tweet._id,
-						postedBy: tweet.user.username,
-						avatar: tweet.user.avatar,
-						fullName: `${tweet.user.firstName} ${tweet.user.lastName}`,
-						username: tweet.user.username,
-						date: `${timeSince(new Date(tweet.createdAt))}`,
-						message: tweet.tweet,
-						numberOfMessage: tweets.length,
-						numberOfRetweet: tweets.length,
-						numberOfHeart: 0,
-					}))
 
-				})
+
+				}) // End of getTweets loop
 
 
 			} catch (err) {
@@ -127,9 +157,10 @@ block content
 
 
 
-		// Event Delegation: to handle chat retween and heart
+		// ------ Problem-1: Page not updated ? 
+		// Adding Tweets immediately before existing tweets: Event Delegation: to handle chat retween and heart
 		$('#tweets-container').addEventListener('click', async(evt) => {
-			if(evt.target.tagName !== 'svg') return
+			//- if(evt.target.tagName !== 'svg') return
 
 			const container = evt.target.closest('.tweet-container')
 			const tweetId = container.id
@@ -142,12 +173,36 @@ block content
 
 			//- -----[ Handle chat button click ]-----
 			if( evt.target.id === 'chat' ) {
-				console.log('handle chat request here')
-			} // End
+
+				const { data, error } = await axios({
+					url: `/api/tweets/${tweetId}`,
+					method: 'get',
+				})
+
+				if(error) return console.log(error)
+
+				dialogEl.showModal()
+				dialogEl.dataset.tweetId = tweetId
+				tweetContainer.innerHTML = getTweetHTML(data.data, { isModal: true })
+
+
+			} // End of Chat button
+
 
 			//- -----[ Handle retweet button click ]-----
 			if( evt.target.id === 'retweet' ) {
-				console.log('handle retweet request here')
+				const tweetId = evt.target.closest('.tweet-container').id
+
+				const { data, error } = await axios({
+					url: `/api/tweets/${tweetId}/retweet`,
+					method: 'post',
+					data: { tweetId }
+				})
+
+				if(error) return console.log(error.message)
+
+				$(`:scope ${evt.target.tagName} > span`).textContent = data?.data.likes.length
+
 			} // End
 
 			//- -----[ Handle heart button click ]-----
@@ -159,27 +214,94 @@ block content
 					data: { tweetId: 1 }
 				})
 
-				if(data) evt.target.style.fill = evt.target.style.fill !== 'red' ? 'red' : ''
+				// Show error in UI
 				if(error) console.log('show error in dom instead of log')
 
-				console.log({ data, error })
+
+				const tweet = data?.data
+				const isLogedInUserLiked = tweet?.likes.includes(logedInUser._id)
+
+				if( isLogedInUserLiked ) {
+					toggleIcon(evt)
+					$(`:scope ${evt.target.tagName} > span`).textContent = tweet.likes.length
+
+				} else {
+					toggleIcon(evt, { activeColor: 'gray' })
+					$(`:scope ${evt.target.tagName} > span`).textContent = tweet.likes.length
+				}
 
 			} // End
-
 
 			
 		}) 	// Event Delegation block
 
 
-	//- p
-	//- 	a(href="/login") 
-	//- 		button(type="button") Login
+		//- -------------------[ Start of Reply-Dialog ]-------------------------
 
-	//- p
-	//- 	a(href="/logout") 
-	//- 		button(type="submit") Logout
-	//- p
-	//- 	a(href="/user/profile") 
-	//- 		button(type="submit") Profile
-	
+
+		const dialogEl = $('[name=reply-dialog]')
+		const tweetContainer = $('[name=reply-dialog] [name=tweet-container]')
+
+		const dialogCloseButton = $('[name=dialog-close-button]')
+		const dialogCancelButton = $('[name=dialog-cancel-button]')
+		const dialogSubmitButton = $('[name=dialog-submit-button]')
+		const dialogTweetInput = $('[name=dialog-tweet-input]')
+
+
+
+
+		// disabled submit button at first time
+		if( !dialogTweetInput.value.trim() ) dialogSubmitButton.disabled = true
+
+		// toggle submit on input change
+		dialogTweetInput.addEventListener('input', (evt) => {
+			dialogSubmitButton.disabled = !evt.target.value.trim() 
+		})
+
+		const closeModal = () => {
+			dialogEl.close()
+
+			/* When we open modal data fetch from server, which may take some time to get
+					in the min-time if any one open another modal he will see the old data, so
+					reset the rold data when modal closes */ 
+			tweetContainer.innerHTML = '' 	
+		}
+		
+
+		dialogCloseButton.addEventListener('click', (evt) => {
+			closeModal()
+		})
+		dialogCancelButton.addEventListener('click', (evt) => {
+			closeModal()
+			dialogTweetInput.value = '' 	// empty value
+		})
+
+		dialogSubmitButton.addEventListener('click', async (evt) => {
+
+			const value = dialogTweetInput.value
+			if( !value.trim() ) dialogCancelButton.disabled = true
+
+			const tweetId =	dialogEl.dataset.tweetId 
+
+			const { data, error } = await axios({
+				url: `/api/tweets`,
+				method: 'POST',
+				data: { 
+					tweet: value,  					// message
+					replyTo: tweetId  			// tweet id
+				} 			
+			})
+
+			if(error) return console.log(error)
+
+			console.log(data.data)
+
+				const tweet = data.data
+			$('#tweets-container').insertAdjacentHTML('afterbegin', getTweetHTML(tweet))
+
+			// clear value after form submition successfull
+			closeModal()
+			dialogTweetInput.value = '' 	// empty value
+		})
+
 

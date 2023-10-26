@@ -3,102 +3,29 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Demo</title>
-	<style>
-		body {
-			/* width: 60vw;
-			height: 60vh;
-			margin: auto;
-
-			display: flex;
-			justify-content: center;
-			align-items: center;
-
-			border: 1px solid red; */
-		}
-
-		div {
-			background-color: gray;
-			padding: 2rem;
-			width: 300px;
-			height: 300px;
-
-		}
-		span {
-			background-color: orange;
-			padding: 2rem;
-			width: 100px;
-			height: 100px;
-		}
-
-	</style>
+	<title>Document</title>
 </head>
-	<script>
-	</script>
 <body>
 
-	<div>
-			<button>button 1</button>
-	</div>
+	<div id="demo"></div>
 
-<script>
-
-	// // Only works with first button other will not work
-	// document.querySelector('button')?.addEventListener('click', (evt) => {
-	// 	console.log(evt.target.innerText)
-	// })
+	<script>
+		const $ = (selector) => document.querySelector(selector)
 
 
-	// Only works with first button other will not work
-	document.querySelectorAll('button').forEach(child => {
+		const htmlString = `
+		<div>
+			<p>Ok</p>
+			<button>click</button>
+		</div>
+		`
 
-		child.addEventListener('click', (evt) => {
-			console.log(evt.target.innerText)
-		})
-	})
-
-
-	// document.querySelector('div').addEventListener('click', (evt) => {
-
-	// 	if(evt.target.classList.contains('button')) {
-	// 		console.log(evt.target.innerText)
-	// 	}
-
-	// })
-
-	const button2 = document.createElement('button')
-				button2.innerText = 'button 2'
-				button2.classList.add('button')
-				document.querySelector('div').appendChild(button2)
-
-	const button3Value = 'button 3'
-	const button3 = ` <button class='button'>${button3Value}</button>`
-				document.querySelector('div')
-					.insertAdjacentHTML('beforeend', button3)
+		$('#demo').insertAdjacentHTML('beforeend', htmlString)
+		$('#demo').innerHTML = htmlString
 
 
 
-
-
-	// // Target parent which static (not dynamiclly generated)
-	// document.querySelector('div').addEventListener('click', (evt) => {
-	// 	// console.log(evt.target.innerText)
-
-	// 	// if(evt.target.tagName === 'BUTTON') {
-	// 	// 	console.log(evt.target.innerText)
-	// 	// }
-
-	// 	if(evt.target.classList.contains('button')) {
-	// 		console.log(evt.target.innerText)
-	// 	}
-
-	// })
-
-
-
-
-
-</script>
+	</script>
 
 </body>
 </html>

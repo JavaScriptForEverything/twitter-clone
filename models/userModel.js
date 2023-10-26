@@ -57,7 +57,13 @@ const userSchema = new Schema({
 	likes: [{ 													// all the Tweets likes by this user
 		type: Schema.Types.ObjectId,
 		ref: 'Tweet',
-	}]
+	}],
+
+	retweets: [{ 													
+		type: Schema.Types.ObjectId, 			// tweet._id 	those retweets retweeted by this user
+		ref: 'Tweet',
+	}],
+
 }, {
 	timestamps: true
 })

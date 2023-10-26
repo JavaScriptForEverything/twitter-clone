@@ -19,92 +19,6 @@ const isFormValidated = (obj) => {
 }
 
 
-
-/*
-	createTweet({
-		postedBy: '@username',
-		avatar: '/images/users/default.jpg',
-		fullName: 'Riajul Islam',
-		username: 'riajulislam',
-		date: '2 month ago',
-		message: 'Your message goes here',
-		numberOfMessage: 1,
-		numberOfRetweet: 0,
-		numberOfHeart: 2,
-	})
-*/
-const createTweet = (props = {}) => {
-
-	const {
-		id='',
-		postedBy= '@username',
-		avatar= '/images/users/default.jpg',
-		fullName= 'Riajul Islam',
-		username= 'riajulislam',
-		date= '2 month ago',
-		message= 'Your message goes here',
-		numberOfMessage= 1,
-		numberOfRetweet= 0,
-		numberOfHeart= 2,
-	} = props
-
-	return `<div class='tweet-container' id=${id}>
-		<hr class='mb-4' />
-		<h2 class='mb-1 text-slate-600 px-3'>Repoted by: ${postedBy}</h2> 
-		<div class='p-2 text-slate-700 flex gap-4'>
-
-			<img
-				src=${avatar}
-				alt=${avatar}
-				class='w-12 h-12 rounded-full border border-blue-500 shadow-md p-0.5'
-			/>
-
-			<div class='[&>button]:mt-2 flex-1'>
-
-				<div class='flex gap-2 mb-2'>
-					<p class='text-slate-700 whitespace-nowrap'> ${fullName} </p> 
-					<p class='text-slate-700'> @${username} </p> 
-					<p class='text-slate-700 w-20 truncate'>${date}</p> 
-				</div>
-
-				<p class='text-slate-700 text-sm'> ${message}</p> 
-				<div class='mt-3'>
-
-
-					<nav class='flex justify-between items-center'>
-
-						<div
-								class='flex items-center gap-1 [&>svg]:hover:cursor-pointer [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-slate-800'
-								class='p-1 rounded-full hover:text-blue-600 fill-blue-500 hover:[&>svg]:fill-blue-500 hover:bg-blue-100 '
-							>
-							<svg id='chat' class='hover:fill-blue-600' xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 16 16"><path d="M2.678 11.894a1 1 0 0 1 .287.801a10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6c0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7s-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"></path></svg>
-							<span>${numberOfMessage}</span> 
-						</div>
-
-						<div
-								class='flex items-center gap-1 [&>svg]:hover:cursor-pointer [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-slate-800'
-								class='p-1 rounded-full hover:text-blue-600 fill-blue-500 hover:[&>svg]:fill-blue-500 hover:bg-blue-100 '
-							>
-							<svg id='retweet' class='hover:fill-blue-600' xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="m5 7l-5 5h4v13h17l-2-2H6V12h4zm4 0l2 2h13v11h-4l5 5l5-5h-4V7z"></path></svg>
-							<span>${numberOfRetweet}</span> 
-						</div>
-
-						<div 	class='flex items-center gap-1 [&>svg]:hover:cursor-pointer [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-slate-800'
-									class='p-1 rounded-full hover:text-blue-600 fill-blue-500 hover:[&>svg]:fill-blue-500 hover:bg-blue-100 '
-							>
-							<svg id='heart' class='hover:fill-blue-600' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256"><path d="M178 34c-21 0-39.26 9.47-50 25.34C117.26 43.47 99 34 78 34a60.07 60.07 0 0 0-60 60c0 29.2 18.2 59.59 54.1 90.31a334.68 334.68 0 0 0 53.06 37a6 6 0 0 0 5.68 0a334.68 334.68 0 0 0 53.06-37C219.8 153.59 238 123.2 238 94a60.07 60.07 0 0 0-60-60Zm-50 175.11C111.59 199.64 30 149.72 30 94a48.05 48.05 0 0 1 48-48c20.28 0 37.31 10.83 44.45 28.27a6 6 0 0 0 11.1 0C140.69 56.83 157.72 46 178 46a48.05 48.05 0 0 1 48 48c0 55.72-81.59 105.64-98 115.11Z"></path></svg>
-							<span>${numberOfHeart}</span> 
-						</div>
-					</nav>
-				</div>
-			</div>
-		</div>
-	</div>`
-}
-
-
-
-
 // Google: javascript day and time ago
 function timeSince(date) {
   var seconds = Math.floor((new Date() - date) / 1000);
@@ -134,7 +48,16 @@ function timeSince(date) {
 // console.log( timeSince( new Date('2023-10-15T10:05:15.632Z') ) )
 
 
+/*
+const { data, error } = await axios({
+	url: `/api/tweets/${tweetId}/retweet`,
+	method: 'post',
+	data: { tweetId }
+})
+if(error) return console.log(error.message)
 
+console.log(data)
+*/
 const axios = async(option = {}) => {
 	let output = {}
 
@@ -188,3 +111,200 @@ const axios = async(option = {}) => {
 
 	return output
 }
+
+
+
+const getTweetHTML = (tweet, { isModal=false } = {}) => {
+
+	console.log(tweet.replyTo)
+
+	if(!tweet) return console.log('tweet object not found')
+	if(!tweet.user._id) return console.log(`${tweet.user} not populated`)
+
+	return `<div class='tweet-container' id=${tweet._id}>
+		${isModal ? '' : "<hr class='mb-4' />" }
+
+		<h2 class='mb-1 text-slate-600 px-4'>Repoted by: @${tweet.user.username}</h2> 
+		<div class='px-4 py-2 text-slate-700 flex gap-4'>
+
+		${isModal ? `
+			<img
+				src=${tweet.user.avatar}
+				alt=${tweet.user.avatar}
+				class='w-8 h-8 ' 
+			/> ` : `
+			<img
+				src=${tweet.user.avatar}
+				alt=${tweet.user.avatar}
+				class='w-12 h-12 rounded-full border border-blue-500 shadow-md p-0.5' 
+			/>
+		`}
+
+			<div class='[&>button]:mt-2 flex-1'>
+
+				<div class='flex gap-2'>
+					<p class='text-slate-700 whitespace-nowrap'> ${tweet.user.firstName} ${tweet.user.lastName}</p> 
+					<p class='text-slate-700'> @${tweet.user.username} </p> 
+					<p class='text-slate-700 w-20 truncate'>${timeSince(new Date(tweet.createdAt))}</p> 
+				</div>
+
+				${tweet.replyTo ? `
+				<p class='text-xs mb-2'>
+					<span>Repling To</span>
+					<span class='text-blue-700'>@${tweet.replyTo.user.username}</span>
+				</p> ` :''}
+
+				<p class='text-slate-600 text-sm'> ${tweet.tweet || 'no message'}</p> 
+
+				<div class='mt-3'>
+
+					<div id="actions" class="flex justify-between items-center gap-2 mb-1 mt-3 text-slate-600">
+						<button name='dialog-chat-button' class="flex items-center gap-1" type="button" id="chat">
+							<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024"><path fill="currentColor" d="m174.72 855.68l130.048-43.392l23.424 11.392C382.4 849.984 444.352 864 512 864c223.744 0 384-159.872 384-352c0-192.832-159.104-352-384-352S128 319.168 128 512a341.12 341.12 0 0 0 69.248 204.288l21.632 28.8l-44.16 110.528zm-45.248 82.56A32 32 0 0 1 89.6 896l56.512-141.248A405.12 405.12 0 0 1 64 512C64 299.904 235.648 96 512 96s448 203.904 448 416s-173.44 416-448 416c-79.68 0-150.848-17.152-211.712-46.72l-170.88 56.96z"/></svg>
+							<span class="pointer-events-none">${''}</span>
+						</button>
+						<button name='dialog-retweet-button' class="flex items-center gap-1" type="button" id="retweet">
+							<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024"><path fill="currentColor" d="M136 552h63.6c4.4 0 8-3.6 8-8V288.7h528.6v72.6c0 1.9.6 3.7 1.8 5.2a8.3 8.3 0 0 0 11.7 1.4L893 255.4c4.3-5 3.6-10.3 0-13.2L749.7 129.8a8.22 8.22 0 0 0-5.2-1.8c-4.6 0-8.4 3.8-8.4 8.4V209H199.7c-39.5 0-71.7 32.2-71.7 71.8V544c0 4.4 3.6 8 8 8zm752-80h-63.6c-4.4 0-8 3.6-8 8v255.3H287.8v-72.6c0-1.9-.6-3.7-1.8-5.2a8.3 8.3 0 0 0-11.7-1.4L131 768.6c-4.3 5-3.6 10.3 0 13.2l143.3 112.4c1.5 1.2 3.3 1.8 5.2 1.8c4.6 0 8.4-3.8 8.4-8.4V815h536.6c39.5 0 71.7-32.2 71.7-71.8V480c-.2-4.4-3.8-8-8.2-8z"/></svg>
+							<span class="pointer-events-none">${tweet.retweetUsers.length || ""}</span>
+						</button>
+						<button name='dialog-heart-button' class="mr-10 flex items-center gap-1" type="button" id="heart">
+							<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256"><path fill="currentColor" d="M178 32c-20.65 0-38.73 8.88-50 23.89C116.73 40.88 98.65 32 78 32a62.07 62.07 0 0 0-62 62c0 70 103.79 126.66 108.21 129a8 8 0 0 0 7.58 0C136.21 220.66 240 164 240 94a62.07 62.07 0 0 0-62-62Zm-50 174.8C109.74 196.16 32 147.69 32 94a46.06 46.06 0 0 1 46-46c19.45 0 35.78 10.36 42.6 27a8 8 0 0 0 14.8 0c6.82-16.67 23.15-27 42.6-27a46.06 46.06 0 0 1 46 46c0 53.61-77.76 102.15-96 112.8Z"/></svg>
+							<span class="pointer-events-none">${tweet.likes.length || ""}</span>
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>`
+
+}
+
+
+
+// // Backup
+// const getTweetHTML = (props = {}) => {
+
+// 	const {
+// 		id='',
+// 		postedBy= '@username',
+// 		avatar= '/images/users/default.jpg',
+// 		fullName= 'Riajul Islam',
+// 		username= 'riajulislam',
+// 		date= '2 month ago',
+// 		message= 'Your message goes here',
+// 		numberOfMessage= 0,
+// 		numberOfRetweet= 0,
+// 		numberOfHeart= 0,
+// 	} = props
+
+// 	return `<div class='tweet-container' id=${id}>
+// 		<hr class='mb-4' />
+// 		<h2 class='mb-1 text-slate-600 px-3'>Repoted by: ${postedBy}</h2> 
+// 		<div class='p-2 text-slate-700 flex gap-4'>
+
+// 			<img
+// 				src=${avatar}
+// 				alt=${avatar}
+// 				class='w-12 h-12 rounded-full border border-blue-500 shadow-md p-0.5'
+// 			/>
+
+// 			<div class='[&>button]:mt-2 flex-1'>
+
+// 				<div class='flex gap-2 mb-2'>
+// 					<p class='text-slate-700 whitespace-nowrap'> ${fullName} </p> 
+// 					<p class='text-slate-700'> @${username} </p> 
+// 					<p class='text-slate-700 w-20 truncate'>${date}</p> 
+// 				</div>
+
+// 				<p class='text-slate-700 text-sm'> ${message}</p> 
+// 				<div class='mt-3'>
+
+// 					<div id="actions" class="flex justify-between items-center gap-2 mb-1 mt-3 text-slate-600">
+// 						<button name='dialog-chat-button' class="flex items-center gap-1" type="button" id="chat">
+// 							<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024"><path fill="currentColor" d="m174.72 855.68l130.048-43.392l23.424 11.392C382.4 849.984 444.352 864 512 864c223.744 0 384-159.872 384-352c0-192.832-159.104-352-384-352S128 319.168 128 512a341.12 341.12 0 0 0 69.248 204.288l21.632 28.8l-44.16 110.528zm-45.248 82.56A32 32 0 0 1 89.6 896l56.512-141.248A405.12 405.12 0 0 1 64 512C64 299.904 235.648 96 512 96s448 203.904 448 416s-173.44 416-448 416c-79.68 0-150.848-17.152-211.712-46.72l-170.88 56.96z"/></svg>
+// 							<span class="pointer-events-none">${numberOfMessage}</span>
+// 						</button>
+// 						<button name='dialog-retweet-button' class="flex items-center gap-1" type="button" id="retweet">
+// 							<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024"><path fill="currentColor" d="M136 552h63.6c4.4 0 8-3.6 8-8V288.7h528.6v72.6c0 1.9.6 3.7 1.8 5.2a8.3 8.3 0 0 0 11.7 1.4L893 255.4c4.3-5 3.6-10.3 0-13.2L749.7 129.8a8.22 8.22 0 0 0-5.2-1.8c-4.6 0-8.4 3.8-8.4 8.4V209H199.7c-39.5 0-71.7 32.2-71.7 71.8V544c0 4.4 3.6 8 8 8zm752-80h-63.6c-4.4 0-8 3.6-8 8v255.3H287.8v-72.6c0-1.9-.6-3.7-1.8-5.2a8.3 8.3 0 0 0-11.7-1.4L131 768.6c-4.3 5-3.6 10.3 0 13.2l143.3 112.4c1.5 1.2 3.3 1.8 5.2 1.8c4.6 0 8.4-3.8 8.4-8.4V815h536.6c39.5 0 71.7-32.2 71.7-71.8V480c-.2-4.4-3.8-8-8.2-8z"/></svg>
+// 							<span class="pointer-events-none">${numberOfRetweet || ""}</span>
+// 						</button>
+// 						<button name='dialog-heart-button' class="flex items-center gap-1" type="button" id="heart">
+// 							<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256"><path fill="currentColor" d="M178 32c-20.65 0-38.73 8.88-50 23.89C116.73 40.88 98.65 32 78 32a62.07 62.07 0 0 0-62 62c0 70 103.79 126.66 108.21 129a8 8 0 0 0 7.58 0C136.21 220.66 240 164 240 94a62.07 62.07 0 0 0-62-62Zm-50 174.8C109.74 196.16 32 147.69 32 94a46.06 46.06 0 0 1 46-46c19.45 0 35.78 10.36 42.6 27a8 8 0 0 0 14.8 0c6.82-16.67 23.15-27 42.6-27a46.06 46.06 0 0 1 46 46c0 53.61-77.76 102.15-96 112.8Z"/></svg>
+// 							<span class="pointer-events-none">${numberOfHeart || ""}</span>
+// 						</button>
+// 					</div>
+
+// 				</div>
+// 			</div>
+// 		</div>
+// 	</div>`
+// }
+
+
+// // not used, instead used from server side
+// const getReplyDialogHTML = (props = {}) => {
+// 	const {
+// 		fullName = '',
+// 		username = '',
+// 		createdAt = Date.now(),
+// 		avatar = '/images/users/default.jpg',
+// 		replyAvatar = '/images/users/default.jpg',
+// 		tweet = '',
+// 		numberOfHeart=0,
+// 		numberOfRetweet=0,
+// 	} = props
+
+// 	return `
+// 		<dialog name="reply-dialog" class="w-80 text-slate-700 rounded border border-slate-300 shadow ">
+// 			<div class="flex flex-col divide-y">
+// 				<div class="flex justify-between items-center px-4 py-2 " id="header">
+// 					<h1 class="font-semibold text-slate-800">Reply</h1>
+// 					<button name='dialog-close-button' class="p-1 rounded-full" type="button" ">
+// 						<svg class='w-3 h-3 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="M2.93 17.07A10 10 0 1 1 17.07 2.93A10 10 0 0 1 2.93 17.07zM11.4 10l2.83-2.83l-1.41-1.41L10 8.59L7.17 5.76L5.76 7.17L8.59 10l-2.83 2.83l1.41 1.41L10 11.41l2.83 2.83l1.41-1.41L11.41 10z"/></svg></button>
+// 				</div>
+// 				<div class="flex-1 px-4 py-3 divide-y divide-slate-50/50" id="content">
+// 					<div class="flex gap-2 pb-2">
+// 						<img class="w-8 h-8" src="${avatar}" alt="${avatar}">
+// 						<div class="text-sm text-slate-700">
+
+// 							<div class="flex items-center gap-2">
+// 								<h1 class="font-semibold text-slate-800">${fullName}</h1>
+// 								<span>@${username} </span>
+// 								<span>${createdAt}</span>
+// 							</div>
+
+// 							<p class="my-2 text-slate-800">${tweet}</p>
+
+// 							<div id="actions" class="flex justify-between items-center gap-2 mb-1 mt-3 text-slate-600">
+// 								<button name='dialog-chat-button' class="flex items-center gap-1" type="button" id="chat">
+// 									<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024"><path fill="currentColor" d="m174.72 855.68l130.048-43.392l23.424 11.392C382.4 849.984 444.352 864 512 864c223.744 0 384-159.872 384-352c0-192.832-159.104-352-384-352S128 319.168 128 512a341.12 341.12 0 0 0 69.248 204.288l21.632 28.8l-44.16 110.528zm-45.248 82.56A32 32 0 0 1 89.6 896l56.512-141.248A405.12 405.12 0 0 1 64 512C64 299.904 235.648 96 512 96s448 203.904 448 416s-173.44 416-448 416c-79.68 0-150.848-17.152-211.712-46.72l-170.88 56.96z"/></svg>
+// 									<span class="pointer-events-none"></span>
+// 								</button>
+// 								<button name='dialog-retweet-button' class="flex items-center gap-1" type="button" id="retweet">
+// 									<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024"><path fill="currentColor" d="M136 552h63.6c4.4 0 8-3.6 8-8V288.7h528.6v72.6c0 1.9.6 3.7 1.8 5.2a8.3 8.3 0 0 0 11.7 1.4L893 255.4c4.3-5 3.6-10.3 0-13.2L749.7 129.8a8.22 8.22 0 0 0-5.2-1.8c-4.6 0-8.4 3.8-8.4 8.4V209H199.7c-39.5 0-71.7 32.2-71.7 71.8V544c0 4.4 3.6 8 8 8zm752-80h-63.6c-4.4 0-8 3.6-8 8v255.3H287.8v-72.6c0-1.9-.6-3.7-1.8-5.2a8.3 8.3 0 0 0-11.7-1.4L131 768.6c-4.3 5-3.6 10.3 0 13.2l143.3 112.4c1.5 1.2 3.3 1.8 5.2 1.8c4.6 0 8.4-3.8 8.4-8.4V815h536.6c39.5 0 71.7-32.2 71.7-71.8V480c-.2-4.4-3.8-8-8.2-8z"/></svg>
+// 									<span class="pointer-events-none">${numberOfRetweet || ""}</span>
+// 								</button>
+// 								<button name='dialog-heart-button' class="flex items-center gap-1" type="button" id="heart">
+// 									<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256"><path fill="currentColor" d="M178 32c-20.65 0-38.73 8.88-50 23.89C116.73 40.88 98.65 32 78 32a62.07 62.07 0 0 0-62 62c0 70 103.79 126.66 108.21 129a8 8 0 0 0 7.58 0C136.21 220.66 240 164 240 94a62.07 62.07 0 0 0-62-62Zm-50 174.8C109.74 196.16 32 147.69 32 94a46.06 46.06 0 0 1 46-46c19.45 0 35.78 10.36 42.6 27a8 8 0 0 0 14.8 0c6.82-16.67 23.15-27 42.6-27a46.06 46.06 0 0 1 46 46c0 53.61-77.76 102.15-96 112.8Z"/></svg>
+// 									<span class="pointer-events-none">${numberOfHeart || ""}</span>
+// 								</button>
+// 							</div>
+
+// 						</div>
+// 					</div>
+// 					<div class="flex gap-2 pt-3">
+// 						<img class="w-8 h-8" src="${replyAvatar}" alt="${replyAvatar}">
+// 						<div>
+// 							<input name='dialog-tweet-input' class="bg-slate-100/50 border border-slate-300 w-full px-2 py-0.5 rounded placeholder:text-sm outline-none focus:border-blue-500" type="text" placeholder="Type your reply">
+// 						</div>
+// 					</div>
+// 				</div>
+// 				<div class="px-4 py-3 my-1 flex justify-end items-end gap-2" id="footer">
+// 					<button name='dialog-cancel-button' class="disabled:bg-slate-500/50 disabled:text-slate-600 px-2 py-1 bg-slate-500 text-slate-100 rounded-md text-sm border border-slate-500 hover:bg-slate-600 hover:text-white" type="button" ">Cancel</button>
+// 					<button name='dialog-submit-button' class="disabled:bg-slate-500/50 disabled:text-slate-600 disabled:border-slate-500 px-2 py-1 bg-blue-500 text-slate-100 rounded-md text-sm border border-blue-500 hover:bg-blue-600 hover:text-white" type="submit"">Submit</button>
+// 				</div>
+// 			</div>
+// 		</dialog>
+// 	`
+// }
