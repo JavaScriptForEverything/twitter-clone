@@ -1,0 +1,50 @@
+extends ../layout/mainLayout
+block content
+	include ../icon/icons
+	include ../components/mui/@index
+	include ../components/@index
+
+	div(class='grid grid-cols-12 p-2 divide-x')
+		//- left-section
+		div(class='col-span-2')
+			+NavComponent()
+
+
+		//- middle-section
+		div(class='col-span-10 md:col-span-7')
+
+			p(class='p-2 border-b border-slate-200') #{pageTitle}
+
+			div(class='p-2 text-slate-700 flex gap-4 mb-8')
+				//- p tweetId: #{tweetId}
+
+
+				+Tweet({
+					postedBy: 'Username',
+					avatar: '/images/users/default.jpg',
+					fullName: 'Riajul Islam',
+					username: 'riajulislam',
+					date: '2 month ago',
+					message: 'Your message goes here',
+				})
+				- console.log(tweet)
+
+		//- right-section
+		div(class='hidden md:col-span-3')
+			p right section hiddend for now
+	
+
+	script.
+		const tweetId = !{ JSON.stringify(tweetId) } 	// send tweetId from server-side to client-side
+		console.log(tweetId)
+
+
+		//- const fetchTweet = async () => {
+		//- 	const { data, error } = await axios({
+		//- 		url: `/api/tweets/${tweetId}`,
+		//- 		method: 'GET'
+		//- 	})
+			
+		//- 	console.log(data)
+		//- }
+		//- fetchTweet()

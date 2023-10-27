@@ -21,8 +21,9 @@ router.route('/logout')
 	.get(pageController.logout)
 
 router
-	// .use(authController.protect)
 	.get('/profile', authController.userProfilePage)
+	.use(authController.protect)
+	.get('/tweet/:id', authController.tweetDetailsPage)
 
 
 

@@ -8,7 +8,6 @@ block content
 
 
 	div(class='grid grid-cols-12 p-2 divide-x')
-
 		//- left-section
 		div(class='col-span-2')
 			+NavComponent()
@@ -117,6 +116,7 @@ block content
 			textarea.value = ''
 			//- console.log(data)
 
+			// /public/js/utils.js: const getTweetHTML = () => {...}
 			$('#tweets-container').insertAdjacentHTML('afterbegin', getTweetHTML(tweet))
 		})
 
@@ -134,6 +134,8 @@ block content
 				//- console.log(data.data[data.data.length - 1])
 
 				data.data?.reverse().forEach((tweet, _, tweets) => {
+
+					// /public/js/utils.js: const getTweetHTML = () => {...}
 					$('#tweets-container').insertAdjacentHTML('beforeend', getTweetHTML(tweet))
 
 					//- // Why not bellow show effect, though it adding styles
@@ -183,6 +185,8 @@ block content
 
 				dialogEl.showModal()
 				dialogEl.dataset.tweetId = tweetId
+
+				// /public/js/utils.js: const getTweetHTML = () => {...}
 				tweetContainer.innerHTML = getTweetHTML(data.data, { isModal: true })
 
 
@@ -293,8 +297,7 @@ block content
 			})
 
 			if(error) return console.log(error)
-
-			console.log(data.data)
+			//- console.log(data.data)
 
 				const tweet = data.data
 			$('#tweets-container').insertAdjacentHTML('afterbegin', getTweetHTML(tweet))
@@ -305,3 +308,13 @@ block content
 		})
 
 
+
+		// Redirect to tweetDetails Page by clicking on tweet
+		$('#tweets-container').addEventListener('click', (evt) => {
+			const { tagName } = evt.target
+			if(tagName === 'H2' || tagName === 'BUTTON') return
+
+			const tweetContainer = evt.target.closest('.tweet-container')
+			const tweetId = tweetContainer.id
+			location.href = location.href + 'tweet/' + tweetId
+		})
