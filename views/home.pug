@@ -28,7 +28,7 @@ block content
 					+Textarea({ name: 'tween' })
 					+Button({ value: 'Tween', disabled: false })
 
-			section#reply-dialog-container(data-tweet-id='')
+			section#reply-dialog-container
 				+RetweetModal({
 					fullName: 'Riajul Islam',
 					username: 'riajulislam',
@@ -310,11 +310,30 @@ block content
 
 
 		// Redirect to tweetDetails Page by clicking on tweet
-		$('#tweets-container').addEventListener('click', (evt) => {
-			const { tagName } = evt.target
-			if(tagName === 'H2' || tagName === 'BUTTON') return
-
+		$('#tweets-container').addEventListener('click', async (evt) => {
 			const tweetContainer = evt.target.closest('.tweet-container')
 			const tweetId = tweetContainer.id
-			location.href = location.href + 'tweet/' + tweetId
+
+			// -----[ Redirect to Tweet details page ]-----
+			if( evt.target.classList.contains('redirect') ) {
+				//- location.href = location.href + 'tweet/' + tweetId 		// This method has multiple bug.
+				const url = new URL( location.href ) 		// get current url
+				url.pathname = `/tweet/${tweetId}` 			// modify pathname only
+				
+				const encodedUrl = new URL( url ) 			// for auto encoding if id or string not valied url supplored string
+				location.href = encodedUrl.href 				// Finally push to new location
+			}
+
+			// -----[ handle deleting Tweet ]-----
+			if(evt.target.name === 'delete-button') {
+				const { error } = await axios({
+					url: `/api/tweets/${tweetId}`,
+					method: 'DELETE',
+				})
+
+				if(error) return console.log('show error in UI, instead of log')
+
+				// remove current tweet immediately too from UI
+				tweetContainer.remove()
+			}
 		})

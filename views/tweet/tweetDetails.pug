@@ -15,19 +15,13 @@ block content
 
 			p(class='p-2 border-b border-slate-200') #{pageTitle}
 
-			div(class='p-2 text-slate-700 flex gap-4 mb-8')
-				//- p tweetId: #{tweetId}
+			div(class='p-2 text-slate-700 flex flex-col')
+				+Tweet(tweet)
 
+				each retweet in tweet.user.retweets
+					+Tweet(retweet)
+					//- - console.log(retweet)
 
-				+Tweet({
-					postedBy: 'Username',
-					avatar: '/images/users/default.jpg',
-					fullName: 'Riajul Islam',
-					username: 'riajulislam',
-					date: '2 month ago',
-					message: 'Your message goes here',
-				})
-				- console.log(tweet)
 
 		//- right-section
 		div(class='hidden md:col-span-3')
@@ -35,16 +29,7 @@ block content
 	
 
 	script.
-		const tweetId = !{ JSON.stringify(tweetId) } 	// send tweetId from server-side to client-side
-		console.log(tweetId)
+		const tweet = !{ JSON.stringify(tweet) } 	// send tweetId from server-side to client-side
+		//- console.log(tweet)
 
-
-		//- const fetchTweet = async () => {
-		//- 	const { data, error } = await axios({
-		//- 		url: `/api/tweets/${tweetId}`,
-		//- 		method: 'GET'
-		//- 	})
-			
-		//- 	console.log(data)
-		//- }
-		//- fetchTweet()
+		console.log(tweet.user.retweets)

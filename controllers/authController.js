@@ -1,4 +1,5 @@
 const Tweet = require('../models/tweetModel')
+const User = require('../models/userModel')
 const { timeSince } = require('../utils')
 
 exports.protect = (req, res, next) => {
@@ -26,14 +27,16 @@ exports.tweetDetailsPage = async(req, res, next) => {
 		const isValidTweetId = true
 		if(!isValidTweetId) console.log('redirect to 404 page: tweetId is not valied')
 
-		const tweet = await Tweet.findById(tweetId)
+		const tweet = await Tweet.findById(tweetId).populate('replyTo')
 		if(!tweet) throw new Error('Tweet not found')
+		const user = await User.populate(tweet, 'user')
+		await Tweet.populate(user, 'user.retweets')
+
 
 		const payload = {
 			pageTitle: 'Tweet Details',
 			timeSince,
 			user: req.session.user,
-			tweetId,
 			tweet
 		}
 

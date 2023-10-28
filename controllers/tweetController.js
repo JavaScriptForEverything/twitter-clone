@@ -65,6 +65,19 @@ exports.createTweet = catchAsync( async (req, res, next) => {
 // 	})
 // })
 
+// DELETE /api/tweets/:tweetId
+exports.deleteTweetById = catchAsync( async(req, res, next) => {
+	const tweetId = req.params.id 
+
+	const tweet = await Tweet.findByIdAndDelete(tweetId, { new: true })
+	if(!tweet) return next(appError('deleting Twite is failed', 400))
+
+	res.status(201).json({
+		status: 'success',
+		data: tweet
+	})
+})
+
 
 
 

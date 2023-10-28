@@ -10,9 +10,13 @@ router.route('/')
 
 router
 	.use(authController.protect)
-	.get('/:id', tweetController.getTweetById)
-	// .patch('/:id', tweetController.updateTweetById)
+	.route('/:id')
+	.get(tweetController.getTweetById)
+	// .patch(tweetController.updateTweetById)
+	.delete(tweetController.deleteTweetById)
 
+router
+	.use(authController.protect)
 	.patch('/:id/like', tweetController.updateTweetLike)
 	.post('/:id/retweet', tweetController.retweet)
 

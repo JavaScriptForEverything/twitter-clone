@@ -140,19 +140,27 @@ const getTweetHTML = (tweet, { isModal=false } = {}) => {
 
 			<div class='[&>button]:mt-2 flex-1'>
 
-				<div class='flex gap-2 cursor-pointer'>
-					<p class='text-slate-700 whitespace-nowrap'> ${tweet.user.firstName} ${tweet.user.lastName}</p> 
-					<p class='text-slate-700'> @${tweet.user.username} </p> 
-					<p class='text-slate-700 w-20 truncate'>${timeSince(new Date(tweet.createdAt))}</p> 
+				<div class='flex justify-between'>
+					<div class='flex gap-2 text-slate-700 hover:text-slate-900 cursor-pointer'>
+						<p class='redirect whitespace-nowrap'> ${tweet.user.firstName} ${tweet.user.lastName}</p> 
+						<p class='redirect'> @${tweet.user.username} </p> 
+						<p class='redirect w-20 truncate'>${timeSince(new Date(tweet.createdAt))}</p> 
+					</div>
+
+					${isModal ? '' : 
+						`<button name='delete-button' type='button' class='hover:bg-slate-200 p-1 rounded-full active:bg-slate-300' >
+							<svg class='w-4 h-4 text-slate-600 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="M2.93 17.07A10 10 0 1 1 17.07 2.93A10 10 0 0 1 2.93 17.07zM11.4 10l2.83-2.83l-1.41-1.41L10 8.59L7.17 5.76L5.76 7.17L8.59 10l-2.83 2.83l1.41 1.41L10 11.41l2.83 2.83l1.41-1.41L11.41 10z"/></svg>
+						</button>`
+					}
 				</div>
 
 				${tweet.replyTo?.user ? `
-				<p class='text-xs mb-2 cursor-pointer'>
+				<p class='text-xs mb-2'>
 					<span>Repling To</span>
 					<span class='text-blue-700'>@${tweet.replyTo.user.username}</span>
 				</p> ` :''}
 
-				<p class='text-slate-600 text-sm cursor-pointer'> ${tweet.tweet || 'no message'}</p> 
+				<p class='text-slate-600 text-sm'> ${tweet.tweet || 'no message'}</p> 
 
 				<div class='mt-3 pointer-events-none'>
 					<div id="actions" class="pointer-events-none flex justify-between items-center gap-2 mb-1 mt-3 text-slate-600">
