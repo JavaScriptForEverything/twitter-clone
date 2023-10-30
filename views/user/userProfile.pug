@@ -1,0 +1,37 @@
+extends ../layout/mainLayout
+block content
+
+	style.
+		.active {
+			color: red;
+		}
+
+
+	br
+	h1 userId: #{username}
+
+	- console.log(user)
+
+	button(
+		type='button' 
+		name='open-tweet-dialog'
+		class='border border-blue-500 text-blue-500 px-3 py-1.5 rounded-md'
+
+	) 22
+
+
+	script.
+
+		//- Solution-1: Store old value into a variable
+		const button = $('button')
+		const oldValue = button.textContent
+
+		button.addEventListener('click', (evt) => {
+			const currentValue = evt.target.textContent
+			evt.target.textContent = oldValue === currentValue ? +oldValue + 1 : oldValue 
+			evt.target.classList.toggle('active')
+		})
+
+
+
+

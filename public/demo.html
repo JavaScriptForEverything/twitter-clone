@@ -4,28 +4,23 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
+	<script src="js/tailwind_cdn.js"></script>
+	<style>
+
+		/* a {
+			color: red;
+			text-underline-offset: 1em;
+			text-decoration-style: dashed;
+		} */
+
+	</style>
 </head>
 <body>
 
-	<div id="demo"></div>
+	<a 
+		class="underline "
+	 href="http://">About</a>
 
-	<script>
-		const $ = (selector) => document.querySelector(selector)
-
-
-		const htmlString = `
-		<div>
-			<p>Ok</p>
-			<button>click</button>
-		</div>
-		`
-
-		$('#demo').insertAdjacentHTML('beforeend', htmlString)
-		$('#demo').innerHTML = htmlString
-
-
-
-	</script>
 
 </body>
 </html>

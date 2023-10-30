@@ -16,13 +16,16 @@ mixin Tweet(tweet)
 						wrap: 'whitespace-nowrap'
 					})
 					+Typography({ text: `@${tweet.user.username}` })
-					+Typography({ text: timeSince(tweet.createdAt) , wrap: 'whitespace-nowrap' })
+					+Typography({ text: timeSince(new Date(tweet.createdAt)) , wrap: 'whitespace-nowrap' })
 				+CloseIcon()
 
 			+Typography({ text: tweet.tweet , size: 'text-sm' })
 
 			div(class='mt-3')
 				+TweetReply()
+
+
+
 
 //- mixin Tweet(props = {})
 //- 	- 

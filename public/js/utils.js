@@ -113,6 +113,37 @@ const axios = async(option = {}) => {
 }
 
 
+const redirectTo = (path, { base='' } = {}) => {
+	const url = new URL( path, base || location.origin ) 		// get current url
+	location.href = url.href 	
+}
+
+const toggleIcon2 = (evt) => {
+	let count = 1
+	setInterval(() => {
+		console.log(count)
+		count++
+	}, 1000)
+
+}
+
+// used into Reply-Dialog icon clicked style
+const toggleIcon = (evt, props = {}) => {
+	const { activeColor='red', inactiveColor='gray', isValue = true, } = props
+
+		const childSVG = evt.target.children[0]
+		const childSpan = evt.target.children[1]
+		if(childSVG.tagName !== 'svg') return console.log(`Selector: '${childSVG}' is not svg `)
+		if(childSpan.tagName !== 'SPAN') return console.log(`Selector: '${childSpan}' is not span`)
+
+		childSVG.style.color = childSVG.style.color === activeColor ? inactiveColor : activeColor
+		//- if( isValue ) childSpan.textContent = childSpan.textContent ? "" : 1
+}
+
+
+
+
+
 
 const getTweetHTML = (tweet, { isModal=false } = {}) => {
 
@@ -142,7 +173,7 @@ const getTweetHTML = (tweet, { isModal=false } = {}) => {
 
 				<div class='flex justify-between'>
 					<div class='flex gap-2 text-slate-700 hover:text-slate-900 cursor-pointer'>
-						<p class='redirect whitespace-nowrap'> ${tweet.user.firstName} ${tweet.user.lastName}</p> 
+						<p class='profile hover:underline hover:decoration-dotted text-blue-600 whitespace-nowrap' > ${tweet.user.firstName} ${tweet.user.lastName}</p> 
 						<p class='redirect'> @${tweet.user.username} </p> 
 						<p class='redirect w-20 truncate'>${timeSince(new Date(tweet.createdAt))}</p> 
 					</div>
@@ -164,17 +195,17 @@ const getTweetHTML = (tweet, { isModal=false } = {}) => {
 
 				<div class='mt-3 pointer-events-none'>
 					<div id="actions" class="pointer-events-none flex justify-between items-center gap-2 mb-1 mt-3 text-slate-600">
-						<button name='dialog-chat-button' class="pointer-events-auto flex items-center gap-1" type="button" id="chat">
+						<button name='chat-button' class="pointer-events-auto flex items-center gap-1" type="button" id="chat">
 							<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024"><path fill="currentColor" d="m174.72 855.68l130.048-43.392l23.424 11.392C382.4 849.984 444.352 864 512 864c223.744 0 384-159.872 384-352c0-192.832-159.104-352-384-352S128 319.168 128 512a341.12 341.12 0 0 0 69.248 204.288l21.632 28.8l-44.16 110.528zm-45.248 82.56A32 32 0 0 1 89.6 896l56.512-141.248A405.12 405.12 0 0 1 64 512C64 299.904 235.648 96 512 96s448 203.904 448 416s-173.44 416-448 416c-79.68 0-150.848-17.152-211.712-46.72l-170.88 56.96z"/></svg>
 							<span class="pointer-events-none">${''}</span>
 						</button>
-						<button name='dialog-retweet-button' class="pointer-events-auto flex items-center gap-1" type="button" id="retweet">
+						<button name='retweet-button' class="pointer-events-auto flex items-center gap-1" type="button" id="retweet">
 							<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024"><path fill="currentColor" d="M136 552h63.6c4.4 0 8-3.6 8-8V288.7h528.6v72.6c0 1.9.6 3.7 1.8 5.2a8.3 8.3 0 0 0 11.7 1.4L893 255.4c4.3-5 3.6-10.3 0-13.2L749.7 129.8a8.22 8.22 0 0 0-5.2-1.8c-4.6 0-8.4 3.8-8.4 8.4V209H199.7c-39.5 0-71.7 32.2-71.7 71.8V544c0 4.4 3.6 8 8 8zm752-80h-63.6c-4.4 0-8 3.6-8 8v255.3H287.8v-72.6c0-1.9-.6-3.7-1.8-5.2a8.3 8.3 0 0 0-11.7-1.4L131 768.6c-4.3 5-3.6 10.3 0 13.2l143.3 112.4c1.5 1.2 3.3 1.8 5.2 1.8c4.6 0 8.4-3.8 8.4-8.4V815h536.6c39.5 0 71.7-32.2 71.7-71.8V480c-.2-4.4-3.8-8-8.2-8z"/></svg>
 							<span class="pointer-events-none">${tweet.retweetUsers.length || ""}</span>
 						</button>
-						<button name='dialog-heart-button' class="pointer-events-auto mr-10 flex items-center gap-1" type="button" id="heart">
+						<button name='heart-button' class="pointer-events-auto mr-10 flex items-center gap-1" type="button" id="heart">
 							<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256"><path fill="currentColor" d="M178 32c-20.65 0-38.73 8.88-50 23.89C116.73 40.88 98.65 32 78 32a62.07 62.07 0 0 0-62 62c0 70 103.79 126.66 108.21 129a8 8 0 0 0 7.58 0C136.21 220.66 240 164 240 94a62.07 62.07 0 0 0-62-62Zm-50 174.8C109.74 196.16 32 147.69 32 94a46.06 46.06 0 0 1 46-46c19.45 0 35.78 10.36 42.6 27a8 8 0 0 0 14.8 0c6.82-16.67 23.15-27 42.6-27a46.06 46.06 0 0 1 46 46c0 53.61-77.76 102.15-96 112.8Z"/></svg>
-							<span class="pointer-events-none">${tweet.likes.length || ""}</span>
+							<span class="pointer-events-none">${tweet.likes.length || "11"}</span>
 						</button>
 					</div>
 

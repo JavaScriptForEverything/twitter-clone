@@ -74,24 +74,11 @@ block content
 			}
 		}
 
-		// used into Reply-Dialog icon clicked style
-		const toggleIcon = (evt, props = {}) => {
-			const { activeColor='red', inactiveColor='gray', isValue = true, } = props
-
-			const childSVG = evt.target.children[0]
-			const childSpan = evt.target.children[1]
-			if(childSVG.tagName !== 'svg') return console.log(`Selector: '${childSVG}' is not svg `)
-			if(childSpan.tagName !== 'SPAN') return console.log(`Selector: '${childSpan}' is not span`)
-
-			childSVG.style.color = childSVG.style.color === activeColor ? inactiveColor : activeColor
-			//- if( isValue ) childSpan.textContent = childSpan.textContent ? "" : 1
-		}
 
 
 
 
-
-		// --- [ js Code ]
+		// --- [ js Code ]---
 		const button = $('button')
 		const textarea = $('textarea')
 
@@ -161,9 +148,7 @@ block content
 
 		// ------ Problem-1: Page not updated ? 
 		// Adding Tweets immediately before existing tweets: Event Delegation: to handle chat retween and heart
-		$('#tweets-container').addEventListener('click', async(evt) => {
-			//- if(evt.target.tagName !== 'svg') return
-
+		const tweetsContainerHandler = async(evt) => {
 			const container = evt.target.closest('.tweet-container')
 			const tweetId = container.id
 			if(!tweetId) return console.log('tweet._id is undefined')
@@ -205,12 +190,25 @@ block content
 
 				if(error) return console.log(error.message)
 
-				$(`:scope ${evt.target.tagName} > span`).textContent = data?.data.likes.length
+				const retweet = data?.data
+				const isLogedInUserLiked = retweet?.likes.includes(logedInUser._id)
+
+				if(isLogedInUserLiked) {
+					toggleIcon(evt)
+					$(`:scope button[name=retweet-button] > span`).textContent = retweet?.likes.length
+				} else {
+					toggleIcon(evt)
+					$(`:scope button[name=retweet-button] > span`).textContent = retweet?.likes.length
+				}
 
 			} // End
 
 			//- -----[ Handle heart button click ]-----
+
 			if( evt.target.id === 'heart' ) {
+				//- toggleIcon2(evt)
+				//- console.log(evt.target)
+				//- return 
 
 				const { data, error } = await axios({
 					url: `/api/tweets/${tweetId}/like`,
@@ -227,17 +225,19 @@ block content
 
 				if( isLogedInUserLiked ) {
 					toggleIcon(evt)
-					$(`:scope ${evt.target.tagName} > span`).textContent = tweet.likes.length
+					$(`:scope button[name=heart-button] > span`).textContent = tweet.likes.length
 
 				} else {
 					toggleIcon(evt, { activeColor: 'gray' })
-					$(`:scope ${evt.target.tagName} > span`).textContent = tweet.likes.length
+					$(`:scope button[name=heart-button] > span`).textContent = tweet.likes.length
 				}
 
 			} // End
 
-			
-		}) 	// Event Delegation block
+			//- // Its not removing side effects
+			evt.target.removeEventListener('click', tweetsContainerHandler)
+		} 	
+		$('#tweets-container').addEventListener('click', tweetsContainerHandler)
 
 
 		//- -------------------[ Start of Reply-Dialog ]-------------------------
@@ -314,14 +314,16 @@ block content
 			const tweetContainer = evt.target.closest('.tweet-container')
 			const tweetId = tweetContainer.id
 
+
+			// -----[ Redirect to Tweet details page ]-----
+			if(evt.target.classList.contains('profile')) {
+				redirectTo(`/profile/${logedInUser.username}`)
+			}
+
+
 			// -----[ Redirect to Tweet details page ]-----
 			if( evt.target.classList.contains('redirect') ) {
-				//- location.href = location.href + 'tweet/' + tweetId 		// This method has multiple bug.
-				const url = new URL( location.href ) 		// get current url
-				url.pathname = `/tweet/${tweetId}` 			// modify pathname only
-				
-				const encodedUrl = new URL( url ) 			// for auto encoding if id or string not valied url supplored string
-				location.href = encodedUrl.href 				// Finally push to new location
+				redirectTo(`/tweet/${tweetId}`)
 			}
 
 			// -----[ handle deleting Tweet ]-----

@@ -1,97 +1,58 @@
 extends ../layout/mainLayout
 block content
+	include ../icon/icons
+	include ../components/mui/@index
+	include ../components/@index
 
-	br
-
-
-	button(
-		type='button' 
-		name='open-tweet-dialog'
-		class='border border-blue-500 text-blue-500 px-3 py-1.5 rounded-md'
-
-	) Retweet
-
-	#my-dialog
+	div(class='grid grid-cols-12 p-2 divide-x')
+		//- left-section
+		div(class='col-span-2')
+			+NavComponent()
 
 
+		//- middle-section
+		div(class='col-span-10 md:col-span-7')
+
+			h1(class='p-2 border-b border-slate-200 text-slate-900 font-bold') #{user.username}
+
+			//- Image Section 
+			div(class='border border-slate-100 shadow-sm')
+				div(class='h-40 bg-blue-500 relative')
+					img(class='absolute top-28 left-2 rounded-full w-24 h-24' src=user.avatar alt=user.avatar )
+
+				div(class='mt-12 text-slate-500 space-y-0.5 p-2')
+					p(class=' text-slate-700 font-medium') #{user.username}
+					p @#{user.username}
+					div(class='flex gap-2 items-center')
+						p 
+							span(class='text-slate-700 font-medium') 3 
+							span following
+						p 
+							span(class='text-slate-700 font-medium') 3 
+							span followers
+
+			//- Posts & Reply Section 
+			div(class='border border-slate-100 shadow-sm mt-4')
+				nav(class='grid grid-cols-2 ')
+					p(class='text-center cursor-pointer border border-b-blue-500 text-blue-500 font-medium') Posts
+					p(class='text-center cursor-pointer') replies
 
 
+				div(class='')
+					each tweet in user.tweets
+						+Tweet(tweet)
+
+
+
+
+
+
+		//- right-section
+		div(class='hidden md:col-span-3')
+			p right section hiddend for now
+	
 
 	script.
-		$('#my-dialog').insertAdjacentHTML('beforeend', getReplyDialogHTML({
-			fullName: 'Riajul Islam',
-			username: 'riajulislam',
-			createdAt: Date.now(),
-			avatar: '/images/users/default.jpg',
-			replyAvatar: '/images/users/default.jpg',
-			tweet: 'hi there, it way an awesome tweets',
-			numberOfHeart: 5,
-			numberOfRetweet: 5,
-		}))
+		const logedInUser = !{ JSON.stringify(user) } 	
 
-		const openTweetDialogBtn = $('[name=open-tweet-dialog]')
-		const dialogEl = $('[name=reply-dialog]')
-		const dialogCloseButton = $('[name=dialog-close-button]')
-		const dialogCancelButton = $('[name=dialog-cancel-button]')
-		const dialogSubmitButton = $('[name=dialog-submit-button]')
-		const dialogTweetInput = $('[name=dialog-tweet-input]')
-
-		const dialogChatButton = $('[name=dialog-chat-button]')
-		const dialogRetweetButton = $('[name=dialog-retweet-button]')
-		const dialogHeartButton = $('[name=dialog-heart-button]')
-
-		// disabled submit button at first time
-		if( !dialogTweetInput.value.trim() ) dialogSubmitButton.disabled = true
-
-		// toggle submit on input change
-		dialogTweetInput.addEventListener('input', (evt) => {
-			dialogSubmitButton.disabled = !evt.target.value.trim() 
-		})
-
-
-		openTweetDialogBtn.addEventListener('click', (evt) => {
-			dialogEl.showModal()
-		})
-
-		dialogCloseButton.addEventListener('click', (evt) => {
-			dialogEl.close()
-		})
-		dialogCancelButton.addEventListener('click', (evt) => {
-			dialogEl.close()
-			dialogTweetInput.value = '' 	// empty value
-		})
-		dialogSubmitButton.addEventListener('click', (evt) => {
-			dialogEl.close()
-			const value = dialogTweetInput.value
-
-			if( !value.trim() ) dialogCancelButton.disabled = true
-
-			console.log({ value })
-
-			dialogTweetInput.value = '' 	// empty value
-		})
-
-
-
-		const toggleIcon = (evt, props = {}) => {
-			const { activeColor='red', inactiveColor='gray', isValue = true, } = props
-
-			const childSVG = evt.target.children[0]
-			const childSpan = evt.target.children[1]
-			if(childSVG.tagName !== 'svg') return console.log(`Selector: '${childSVG}' is not svg `)
-			if(childSpan.tagName !== 'SPAN') return console.log(`Selector: '${childSpan}' is not span`)
-
-			childSVG.style.color = childSVG.style.color === activeColor ? inactiveColor : activeColor
-			//- if( isValue ) childSpan.textContent = childSpan.textContent ? "" : 1
-		}
-
-		dialogChatButton.addEventListener('click', (evt) => {
-			toggleIcon( evt, { isValue: false })
-		})
-		dialogRetweetButton.addEventListener('click', (evt) => {
-			toggleIcon(evt, { activeColor: 'royalblue' })
-
-		})
-		dialogHeartButton.addEventListener('click', (evt) => {
-			toggleIcon(evt)
-		})
+		console.log(logedInUser)
