@@ -7,7 +7,7 @@ const tweetSchema = new Schema({
 		// required: true,
 		maxlength: 500,
 	},
-	user: {
+	user: { 														// <= postedBy
 		type: Schema.Types.ObjectId,
 		ref: 'User',
 		required: true,

@@ -7,6 +7,8 @@ const { catchAsync, appError } = require('./errorController')
 // GET /api/tweets
 exports.getTweets = catchAsync(async (req, res, next) => {
 
+	console.log(req.query)
+
 	const tweets = await Tweet.find().populate('user retweetData replyTo')
 	await User.populate(tweets, 'retweetData.user replyTo.user')
 
@@ -14,18 +16,6 @@ exports.getTweets = catchAsync(async (req, res, next) => {
 	res.status(200).json({
 		status: 'success',
 		data: tweets
-	})
-})
-
-// GET /api/tweets/id
-exports.getTweetById = catchAsync(async (req, res, next) => {
-
-	const tweet = await Tweet.findById(req.params.id).populate('user retweetData')
-	await User.populate(tweet, 'retweetData.user')
-
-	res.status(200).json({
-		status: 'success',
-		data: tweet
 	})
 })
 
@@ -47,6 +37,18 @@ exports.createTweet = catchAsync( async (req, res, next) => {
 		data: tweet
 	})
 })
+
+// GET /api/tweets/id
+exports.getTweetById = catchAsync(async (req, res, next) => {
+	const tweet = await Tweet.findById(req.params.id).populate('user retweetData')
+	await User.populate(tweet, 'retweetData.user')
+
+	res.status(200).json({
+		status: 'success',
+		data: tweet
+	})
+})
+
 
 
 // // PATCH /api/tweets/:tweetId
