@@ -173,7 +173,9 @@ const getTweetHTML = (tweet, { isModal=false } = {}) => {
 
 				<div class='flex justify-between'>
 					<div class='flex gap-2 text-slate-700 hover:text-slate-900 cursor-pointer'>
-						<p class='profile hover:underline hover:decoration-dotted text-blue-600 whitespace-nowrap' > ${tweet.user.firstName} ${tweet.user.lastName}</p> 
+						<a href="/profile/${tweet.user.username}">
+							<p class='profile hover:underline hover:decoration-dotted text-blue-600 whitespace-nowrap' > ${tweet.user.firstName} ${tweet.user.lastName}</p> 
+						</a>
 						<p class='redirect'> @${tweet.user.username} </p> 
 						<p class='redirect w-20 truncate'>${timeSince(new Date(tweet.createdAt))}</p> 
 					</div>

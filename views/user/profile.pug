@@ -18,8 +18,8 @@ block content
 			+NavComponent()
 
 
-		//- middle-section
-		div(class='col-span-10 md:col-span-7')
+		//- //- middle-section
+		//- div(class='col-span-10 md:col-span-7')
 
 			h1(class='p-2 border-b border-slate-200 text-slate-900 font-bold') #{user.username}
 
@@ -36,8 +36,8 @@ block content
 					a(href="/message" class='px-3 py-1.5 border border-blue-500 rounded-3xl hover:bg-blue-50 active:bg-blue-100') 
 						<svg class='fill-blue-500' xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6m-2 0l-8 5l-8-5h16m0 12H4V8l8 5l8-5v10Z"/></svg>
 
-					button(type="button" 
-					class='px-3 py-1.5 rounded-3xl border border-blue-500 text-blue-500 font-medium'
+					button(type="button" data-user-id=user._id
+					class='following px-3 py-1.5 rounded-3xl border border-blue-500 text-blue-500 font-medium'
 					class=' hover:bg-blue-50 hover:text-blue-600 active:bg-blue-100 active:text-blue-700'
 					) following
 
@@ -95,6 +95,5 @@ block content
 		})
 
 
-
-
 	script(src="/js/profile.js") 
+

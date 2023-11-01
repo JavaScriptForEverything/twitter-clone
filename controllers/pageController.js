@@ -36,10 +36,10 @@ exports.registerPageHandler = async (req, res) => {
 
 	try {
 		// throw new Error('do not have avatar')
-		const user = await User.create( req.body ).select('password')
+		const user = await User.create( req.body )
 		if(!user) throw new Error(`user nor found`)
 
-		res.redirect('login')
+		res.redirect('/login')
 
 	} catch (err) {
 		

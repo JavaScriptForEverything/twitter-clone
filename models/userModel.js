@@ -58,6 +58,14 @@ const userSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Tweet',
 	}],
+	followers: [{ 													// all the users following this user
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+	}],
+	following: [{ 													// this user are following other users
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+	}],
 
 	retweets: [{ 													
 		type: Schema.Types.ObjectId, 			// tweet._id 	those retweets retweeted by this user

@@ -125,15 +125,6 @@ block content
 					// /public/js/utils.js: const getTweetHTML = () => {...}
 					$('#tweets-container').insertAdjacentHTML('beforeend', getTweetHTML(tweet))
 
-					//- // Why not bellow show effect, though it adding styles
-					//- const isLikedByUser = tweet?.likes.includes( logedInUser._id )
-					//- const heartEl = $(':scope #heart')
-					//- if( isLikedByUser ) heartEl.style.fill = 'red' 
-					//- else heartEl.style.fill = '' 
-					
-
-
-
 				}) // End of getTweets loop
 
 
@@ -315,10 +306,10 @@ block content
 			const tweetId = tweetContainer.id
 
 
-			// -----[ Redirect to Tweet details page ]-----
-			if(evt.target.classList.contains('profile')) {
-				redirectTo(`/profile/${logedInUser.username}`)
-			}
+			//- // -----[ Redirect to Tweet details page ]-----
+			//- if(evt.target.classList.contains('profile')) {
+			//- 	redirectTo(`/profile/${logedInUser.username}`)
+			//- }
 
 
 			// -----[ Redirect to Tweet details page ]-----

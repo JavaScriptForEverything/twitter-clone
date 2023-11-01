@@ -6,7 +6,8 @@ const session = require('express-session')
 
 const errorController = require('./controllers/errorController')
 const pageRouter = require('./routes/pageRoutes')
-const tweetRoute = require('./routes/tweetRoute')
+const tweetRouter = require('./routes/tweetRoute')
+const userRouter = require('./routes/userRoutes')
 
 
 const publicDirectory = path.join(process.cwd(), 'public')
@@ -41,7 +42,8 @@ app.set('view engine', 'pug') 												// Setup pug as Templete
 
 // -----[ routes ]-----
 app.use('/', pageRouter)
-app.use('/api/tweets', tweetRoute)
+app.use('/api/tweets', tweetRouter)
+app.use('/api/users', userRouter)
 
 
 
