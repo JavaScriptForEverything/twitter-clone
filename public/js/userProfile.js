@@ -19,6 +19,8 @@ followingBtn.addEventListener('click', async (evt) => {
 	const updatedLogedInUser = data.data
 	evt.target.textContent = updatedLogedInUser?.following.includes(profileUser._id) ? 'following' : 'follow'
 	evt.target.classList.toggle('follow-active-button')
+
+	$('[name=followers-value]').textContent = updatedLogedInUser.following.length + ' '
 })
 
 //-----[ Tabs container ]-----

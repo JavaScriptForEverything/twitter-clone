@@ -76,6 +76,32 @@ exports.userProfilePage = async (req, res, next) => {
 	}
 }
 
+// GET 	/profile/:id/following  	+ 	GET /profile/:id/followers
+exports.followingAndFollwers = async (req, res, next) => {
+	try {
+		const username = req.params.id
+		
+		const profileUser = await User.findOne({ username })
+		if(!profileUser) return next(appError('profile user not found'))
+
+		const payload = {
+			pageTitle: 'following-and-followers',
+			username,
+			logedInUser: req.session.user,
+			profileUser
+		}
+
+		res.render(`user/profile/following-and-followers`, payload)
+
+	} catch (err) {
+		const payload = {
+			errorMessage: err.message
+		}
+		res.render('error', payload)	
+	}
+}
+
+
 
 
 

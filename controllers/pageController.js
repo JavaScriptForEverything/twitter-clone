@@ -105,5 +105,3 @@ exports.logout = (req, res) => {
 	res.render('login', payload)
 }
 
-
-
