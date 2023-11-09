@@ -81,7 +81,7 @@ exports.followingAndFollwers = async (req, res, next) => {
 	try {
 		const username = req.params.id
 		
-		const profileUser = await User.findOne({ username })
+		const profileUser = await User.findOne({ username }).populate('following followers')
 		if(!profileUser) return next(appError('profile user not found'))
 
 		const payload = {

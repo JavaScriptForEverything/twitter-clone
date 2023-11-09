@@ -1,3 +1,7 @@
+const path = require('path')
+const fs = require('fs');
+const { appError } = require('../controllers/errorController');
+
 
 // Google: javascript day and time ago
 module.exports.timeSince = (date) => {
@@ -23,3 +27,12 @@ module.exports.timeSince = (date) => {
 // var aDay = 24*60*60*1000;
 // console.log(timeSince(new Date(Date.now()-aDay)));
 // console.log(timeSince(new Date(Date.now()-aDay*2)));
+
+
+
+module.exports.removeFile = (relativePath) => {
+	const filepath = path.join( process.cwd(), relativePath )
+	fs.unlink(filepath, (err) => {
+		if(err) return appError(err.message)
+	})
+}
