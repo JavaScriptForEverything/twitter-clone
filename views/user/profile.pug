@@ -26,6 +26,15 @@ block content
 			//- Image Section 
 			div(class='border border-slate-100 shadow-sm')
 				div(class='h-40 bg-blue-500 relative')
+					if user.coverPhoto
+						img(name='cover-photo' src=user.coverPhoto alt="coverPhoto missing" class='w-full h-40')
+					
+					div(name='edit-cover-photo-container'
+						class='bg-slate-50 rounded-full p-1 border border-slate-100 shadow-md'
+						class='absolute top-4 right-4 cursor-pointer hover:bg-blue-50'
+					)
+						<svg class='pointer-events-none text-blue-500 w-5 h-5 font-semibold' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83l3.75 3.75l1.83-1.83a.996.996 0 0 0 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/></svg>
+
 					div(name='avatar-container' class='group border-4 cursor-pointer border-slate-100 shadow-xl rounded-full absolute left-2 top-28')
 						img(name='avatar' class='pointer-events-none w-24 h-24 rounded-full' src=user.avatar alt=user.avatar )
 						//- div(class='bg-slate-800 w-20 h-20 hidden peer-hover:block rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2')

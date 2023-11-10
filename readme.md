@@ -7,6 +7,15 @@
 - Creating Components similer as `Material-UI` by `tailwind CSS`
 
 
+- Upload image (avatar) the right way
+	- Preview image
+	- Crop image
+	- Upload image 
+	- Update avatar image (No Duplication)
+
+
+
+
 #### Tailwind With Express (pug templete)
 ```
 $ yarn add -D tailwindcss postcss autoprefixer

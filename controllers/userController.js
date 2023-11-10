@@ -71,3 +71,33 @@ exports.userAvatarRoute = (req, res, next) => {
 		next(appError(err.message))		
 	}
 }
+
+
+// POST /api/users/coverPhoto 		+ protect + upload.single('coverPhoto')
+exports.userCoverPhotoUpload = async(req, res, next) => {
+	try {
+		const userId = req.session.user._id
+
+
+		// remove project path:
+		const publicUrl = req.file.path.slice( process.cwd().length ) 	// start from length to end of string
+
+		// // Remove existing picture after user updated, else removed the old user
+		if(req.session.user.coverPhoto) removeFile(req.session.user.coverPhoto)
+
+		const user = await User.findByIdAndUpdate(userId, { coverPhoto: publicUrl }, { new: true, validate: true })
+		if(!user) return next(appError('update coverPhoto failed'))
+
+		// if user modified then update session, so that logedInUser has updated data
+		req.session.user = user
+		
+		res.status(201).json({
+			status: 'success',
+			data: user
+		})
+	} catch (err) {
+		// const publicUrl = req.file.path.slice( process.cwd().length ) 	// start from length to end of string
+		// removeFile(publicUrl)
+		next( appError(err.message)	)
+	}
+}
