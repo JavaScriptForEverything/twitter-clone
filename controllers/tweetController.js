@@ -51,21 +51,34 @@ exports.getTweetById = catchAsync(async (req, res, next) => {
 
 
 
-// // PATCH /api/tweets/:tweetId
-// exports.updateTweetById = catchAsync( async(req, res, next) => {
+// PATCH /api/tweets/:id
+exports.updateTweetById = catchAsync( async(req, res, next) => {
+	const tweetId = req.params.id
+	const body = req.body 		// need to filter
 
-// 	const filteredBody = req.body
-// 	const tweetId = req.params.id 
+	/* if pinned then 
+			1. remove pinned from other tweets: pinned: false
+			2. Only pin current tweet 				: pinned: true
+	*/ 
 
-// 	const tweet = await Tweet.findByIdAndUpdate(req.id, { $addToSet: { replyTo: tweetId }})
-	
-// 	if(!tweet) return next(appError('Update Twite is failed', 400))
+	// Step-1: Remove pinned from every tweets of current user's
+	if( req.body.pinned ) {
+		const tweets = await Tweet.updateMany({ user: req.session.user._id }, { pinned: false })
+		if(!tweets) return next(appError('Update other twites is failed', 400))
+	}
 
-// 	res.status(201).json({
-// 		status: 'success',
-// 		data: tweet
-// 	})
-// })
+
+	// Step-2: Update only current tweet's pinned + other properties
+	const tweet = await Tweet.findByIdAndUpdate(tweetId, body, { new: true })
+	if(!tweet) return next(appError('Update Twite is failed', 400))
+
+			
+	res.status(201).json({
+		status: 'success',
+		data: tweet
+	})
+
+})
 
 // DELETE /api/tweets/:tweetId
 exports.deleteTweetById = catchAsync( async(req, res, next) => {

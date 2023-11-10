@@ -153,10 +153,10 @@ const getTweetHTML = (tweet, { isModal=false } = {}) => {
 	return `<div class='tweet-container' id=${tweet._id}>
 		${isModal ? '' : "<hr class='mb-4' />" }
 
-		<h2 class='mb-1 text-slate-600 px-4'>Repoted by: @${tweet.user.username}</h2> 
-		<div class='px-4 py-2 text-slate-700 flex gap-4'>
+		${false ?  `<h2 class='mb-1 text-slate-600 px-4'>Repoted by: @${tweet.user.username}</h2>` : '' }
 
-		${isModal ? `
+		<div class='px-4 py-2 text-slate-700 flex gap-4'>
+			${isModal ? `
 			<img
 				src=${tweet.user.avatar}
 				alt=${tweet.user.avatar}
@@ -167,11 +167,16 @@ const getTweetHTML = (tweet, { isModal=false } = {}) => {
 				alt=${tweet.user.avatar}
 				class='w-12 h-12 rounded-full border border-blue-500 shadow-md p-0.5' 
 			/>
-		`}
+			`}
 
-			<div class='[&>button]:mt-2 flex-1'>
+			<div name='pin-label-container' class='[&>button]:mt-2 flex-1'>
+				${tweet.pinned ? `
+					<div name='pin-label' class='flex gap-0.5 items-center mb-0.5 text-slate-500'>
+						<svg class='w-3 h-3' xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M4.146.146A.5.5 0 0 1 4.5 0h7a.5.5 0 0 1 .5.5c0 .68-.342 1.174-.646 1.479c-.126.125-.25.224-.354.298v4.431l.078.048c.203.127.476.314.751.555C12.36 7.775 13 8.527 13 9.5a.5.5 0 0 1-.5.5h-4v4.5c0 .276-.224 1.5-.5 1.5s-.5-1.224-.5-1.5V10h-4a.5.5 0 0 1-.5-.5c0-.973.64-1.725 1.17-2.189A5.921 5.921 0 0 1 5 6.708V2.277a2.77 2.77 0 0 1-.354-.298C4.342 1.674 4 1.179 4 .5a.5.5 0 0 1 .146-.354z"/></svg>
+						<span class='text-xs'> Pinned Tweet </span>
+					</div>` : '' }
 
-				<div class='flex justify-between'>
+				<div class='flex gap-0.5 items-center'>
 					<div class='flex gap-2 text-slate-700 hover:text-slate-900 cursor-pointer'>
 						<a href="/profile/${tweet.user.username}">
 							<p class='profile hover:underline hover:decoration-dotted text-blue-600 whitespace-nowrap' > ${tweet.user.firstName} ${tweet.user.lastName}</p> 
@@ -180,10 +185,15 @@ const getTweetHTML = (tweet, { isModal=false } = {}) => {
 						<p class='redirect w-20 truncate'>${timeSince(new Date(tweet.createdAt))}</p> 
 					</div>
 
-					${isModal ? '' : 
-						`<button name='delete-button' type='button' class='hover:bg-slate-200 p-1 rounded-full active:bg-slate-300' >
-							<svg class='w-4 h-4 text-slate-600 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="M2.93 17.07A10 10 0 1 1 17.07 2.93A10 10 0 0 1 2.93 17.07zM11.4 10l2.83-2.83l-1.41-1.41L10 8.59L7.17 5.76L5.76 7.17L8.59 10l-2.83 2.83l1.41 1.41L10 11.41l2.83 2.83l1.41-1.41L11.41 10z"/></svg>
-						</button>`
+					${isModal ? '' : `
+							<button name='pin-button' type='button' 
+							class='disabled:hover:bg-transparent ml-auto ${tweet.pinned ? 'text-slate-500 ' : 'text-slate-50 stroke-slate-600'} hover:bg-slate-200 p-1 rounded-full active:bg-slate-300' >
+								<svg class='w-3 h-3  pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M4.146.146A.5.5 0 0 1 4.5 0h7a.5.5 0 0 1 .5.5c0 .68-.342 1.174-.646 1.479c-.126.125-.25.224-.354.298v4.431l.078.048c.203.127.476.314.751.555C12.36 7.775 13 8.527 13 9.5a.5.5 0 0 1-.5.5h-4v4.5c0 .276-.224 1.5-.5 1.5s-.5-1.224-.5-1.5V10h-4a.5.5 0 0 1-.5-.5c0-.973.64-1.725 1.17-2.189A5.921 5.921 0 0 1 5 6.708V2.277a2.77 2.77 0 0 1-.354-.298C4.342 1.674 4 1.179 4 .5a.5.5 0 0 1 .146-.354z"/></svg>
+							</button>
+							<button name='delete-button' type='button' class='disabled:hover:bg-transparent text-slate-600 hover:bg-slate-200 p-1 rounded-full active:bg-slate-300' >
+								<svg class='w-3 h-3 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="M2.93 17.07A10 10 0 1 1 17.07 2.93A10 10 0 0 1 2.93 17.07zM11.4 10l2.83-2.83l-1.41-1.41L10 8.59L7.17 5.76L5.76 7.17L8.59 10l-2.83 2.83l1.41 1.41L10 11.41l2.83 2.83l1.41-1.41L11.41 10z"/></svg>
+							</button>
+						`
 					}
 				</div>
 

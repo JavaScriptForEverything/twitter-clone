@@ -12,7 +12,7 @@ router
 	.use(authController.protect)
 	.route('/:id')
 	.get(tweetController.getTweetById)
-	// .patch(tweetController.updateTweetById)
+	.patch(tweetController.updateTweetById)
 	.delete(tweetController.deleteTweetById)
 
 router
