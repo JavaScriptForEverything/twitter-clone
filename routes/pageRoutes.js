@@ -4,6 +4,7 @@ const authController = require('../controllers/authController')
 
 const router = Router()
 
+
 router.get('/', 
 	authController.protect, 
 	pageController.homePage
@@ -27,6 +28,8 @@ router
 	.get('/profile/:id/following', authController.followingAndFollwers)
 	.get('/profile/:id/followers', authController.followingAndFollwers)
 	.get('/tweet/:id', authController.tweetDetailsPage)
+
+	.get('/search', authController.searchPage) // /search#tab-1 /search#tab-2
 
 
 

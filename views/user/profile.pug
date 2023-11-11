@@ -5,7 +5,7 @@ block content
 	include ../components/@index
 
 	style.
-		.active {
+		.tab-active {
 			border-bottom: 1px solid #3b82f6;
 			color: #3b82f6;
 			font-weight: bold;
@@ -65,11 +65,13 @@ block content
 			//- Posts & Reply Section 
 			div(class='border border-slate-100 shadow-sm mt-4')
 				nav(name='tab-container' class='grid grid-cols-2 ')
-					p(id=0 class='active hover:bg-blue-100 text-center p-2 cursor-pointer') Posts
-					p(id=1 class='hover:bg-blue-100 text-center p-2 cursor-pointer') replies
+					a(href="#tweets-tab") 
+						p(id=0 class='border border-slate-100 hover:bg-blue-100 text-center p-2 cursor-pointer') Tweets
+					a(href="#replies-tab") 
+						p(id=1 class='hover:bg-blue-100 border border-slate-100 text-center p-2 cursor-pointer') replies
 
 
-				div(name='tab-content-container' class='border border-blue-500 py-1.5 px-3 mb-10')
+				div(name='tab-content-container' class='border-blue-500 py-1.5 px-3 mb-10')
 					//- each tweet in user.tweets
 						//- +Tweet(tweet)
 					
@@ -90,7 +92,23 @@ block content
 		//- console.log(logedInUser)
 
 
+		//- const url = new URL(location.href) 
+		//- if(url.hash === '#replies-tab') { 	 //- /profile | /profile/#tweets-tab | /profile/#replies-tab
+		//- 	$('[name=tab-container]').children[0].classList.remove('tab-active')
+		//- 	$('[name=tab-container]').children[1].classList.add('tab-active')
+
+		//- 	$('[name=tab-content-container]').children[0].hidden=true
+		//- 	$('[name=tab-content-container]').children[1].hidden=false
+		//- } else {
+		//- 	$('[name=tab-container]').children[0].classList.add('tab-active')
+		//- }
+
+
+		$('[name=tab-container]').children[0].classList.add('tab-active')
+
+		//-----[ Tabs container ]-----
 		$('[name=tab-container]').addEventListener('click', (evt) => {
+
 
 			// Step-1: add active tab style
 			Array.from(evt.currentTarget.children).forEach( (tab, index) => {

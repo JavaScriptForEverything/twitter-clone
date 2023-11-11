@@ -3,6 +3,34 @@ const User = require('../models/userModel')
 const { removeFile } = require('../utils')
 const { catchAsync, appError } = require('./errorController')
 
+
+
+// GET /api/users
+exports.getAllUsers = catchAsync(async (req, res, next) => {
+	const filter = {}
+
+	if( req.query.search ) {
+		filter.search = {
+			$or: [
+				{ firstName: { $regex: req.query.search, $options: 'i' }},
+				{ lastName: { $regex: req.query.search, $options: 'i' }},
+				{ username: { $regex: req.query.search, $options: 'i' }},
+			]
+		}
+	}
+
+	const users = await User.find({})
+
+	res.status(200).json({
+		status: 'success',
+		data: users
+	})
+})
+
+
+
+
+
 // PATCH /api/users/:id/following 	(with protect middleware)
 exports.following = catchAsync(async (req, res, next) => {
 	

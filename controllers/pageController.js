@@ -79,9 +79,9 @@ exports.loginPageHandler = async (req, res) => {
 		user.password = undefined 		// Don't send password to user
 
 		req.session.user = user
-		res.redirect('/')
+		// res.redirect('/')
 
-		// res.redirect('/profile')
+		res.redirect('/search')
 		// res.redirect('/profile/riajulislam/following')
 
 	} catch (err) {

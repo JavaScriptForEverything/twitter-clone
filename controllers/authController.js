@@ -136,3 +136,16 @@ exports.tweetDetailsPage = async(req, res, next) => {
 		res.render('error', payload)
 	}
 }
+
+
+
+exports.searchPage = (req, res) => {
+
+		const payload = {
+			pageTitle: 'Search',
+			logedInUser: req.session.user,
+			// profileUser
+		}
+
+	res.render('user/profile/search-user-and-tweet', payload)
+}

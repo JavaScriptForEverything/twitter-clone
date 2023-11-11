@@ -59,13 +59,13 @@ if(error) return console.log(error.message)
 console.log(data)
 */
 const axios = async(option = {}) => {
-	let output = {}
+	let output = { }
 
 	try {
 		if(!option.url.trim()) throw new Error(`URL is empty`)
 
 		const res = await fetch(option.url, {
-			method: option.method.toUpperCase() || 'GET',
+			method: option.method.toUpperCase(),
 			body: JSON.stringify(option.data),
 			headers: {
 				'content-type': 'application/json',
@@ -141,6 +141,44 @@ const toggleIcon = (evt, props = {}) => {
 }
 
 
+
+const getUserHTML = (user, profileUser={}, fieldname = 'following') => {
+	const textContent = user?.[fieldname].includes(profileUser._id) ? 'followed' : 'Following'
+
+	return `
+		<div name='follow-list' class='py-1.5 flex gap-2 '>
+			<img src='${user.avatar}' alt=user.avatar class='w-10 h-10 rounded-full' />
+			<div class='flex-1 flex items-baseline gap-2 text-slate-900'>
+				<span class='font-medium'> ${user.firstName} ${user.lastName}</span>
+				<span class='text-slate-500 text-sm'> @${user.username}</span>
+			</div>
+
+			<button type='button' id=user._id name=fieldname
+				class='h-8 px-3 py-1.5 rounded-3xl bg-blue-500 text-white font-medium text-sm capitalize'
+				class='hover:bg-blue-600 active:bg-blue-700'
+			> ${textContent} </button>
+		</div>
+	`
+}
+	// mixin followList(user, profileUser, fieldname='following')
+	// 	//- 
+	// 		if fieldname === 'following' => user === followingUser
+	// 		if fieldname === 'followers' => user === followersUser
+
+	// 		NB: These 2 user will be populated from ehghter from `following[]` or `followers[]` array
+
+	// 	- const textContent = user?.[fieldname].includes(profileUser._id) ? 'followed' : 'Following'
+
+	// 	div(name='follow-list' class='py-1.5 flex gap-2 ')
+	// 		img(src=user.avatar alt=user.avatar class='w-10 h-10 rounded-full')
+	// 		div(class='flex-1 flex items-baseline gap-2 text-slate-900')
+	// 			span(class='font-medium') #{user.firstName} #{user.lastName}
+	// 			span(class='text-slate-500 text-sm') @#{user.username}
+
+	// 		button(type='button' id=user._id name=fieldname
+	// 			class='h-8 px-3 py-1.5 rounded-3xl bg-blue-500 text-white font-medium text-sm capitalize'
+	// 			class='hover:bg-blue-600 active:bg-blue-700'
+	// 		) #{textContent}
 
 
 
