@@ -1,0 +1,57 @@
+//- 
+		. when pass icon make sure remove <  /> from start and end
+
+	+List()
+	+List({
+		primary: 'Your text goes here',
+		secondary: 'It was an wonderful progrom or cerimony',
+		icon: `svg class='w-6 h-6'  xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M9.5 13a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0z"`,
+	})
+	+List({
+		avatar: '/images/users/default.jpg',
+	})
+	+List({
+		images: ['/images/users/default.jpg', '/images/users/default.jpg'],
+	})
+
+
+mixin List (props = {}) 
+	-
+		const {
+			primary='Primary Text',
+			secondary='Secondary Text',
+			avatar= '',
+			images=[],
+			icon= '',
+			isHover= false,
+			id='',
+			name='list-container',
+		} = props
+
+	div(
+			class='group border-b border-slate-200 px-3 py-1.5 rounded-sm bg-slate-50 '
+			class=isHover ? 'hover:bg-slate-100 active:bg-slate-200' : ''
+			id=id
+			name=name
+		)
+		div(class='flex items-center gap-2')
+				if images.length
+					div(class='relative w-8 h-8')
+						img(src=images[0], alt="images[0]" class='absolute -top-1 left-3 w-8 h-8 rounded-full border border-slate-300 ')
+						img(src=images[1], alt="images[1]" class='absolute top-2 left-0 w-8 h-8 rounded-full border border-slate-300 ')
+				else 
+					if avatar
+						img(src=avatar, alt="avatar" class='w-12 h-12 rounded-full border border-slate-300 ')
+
+				div(class=images.length ? 'ml-4' : '')
+					h2(class='text-slate-700 font-medium hover:text-slate-800 ') #{primary}
+					p(class='text-slate-700/95 hover:text-slate-800/90 font-light text-sm') #{secondary}
+
+				if icon
+					button(type='button' name='list-icon' 
+						class='ml-auto p-0.5 text-slate-600 rounded-full bg-slate-200 border border-slate-200'
+						class='group-hover:bg-slate-300 group-hover:border-slate-300 hover:bg-slate-300 hover:border-slate-300 hover:text-slate-700'
+						class='group-active:border-slate-400 active:bg-blue-400 active:border-blue-500 active:text-blue-600'
+					) 
+						#{icon}
+						

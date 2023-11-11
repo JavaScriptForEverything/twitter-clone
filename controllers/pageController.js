@@ -81,8 +81,7 @@ exports.loginPageHandler = async (req, res) => {
 		req.session.user = user
 		// res.redirect('/')
 
-		res.redirect('/search')
-		// res.redirect('/profile/riajulislam/following')
+		res.redirect('/message')
 
 	} catch (err) {
 		const payload = {

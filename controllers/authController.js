@@ -140,12 +140,45 @@ exports.tweetDetailsPage = async(req, res, next) => {
 
 
 exports.searchPage = (req, res) => {
-
-		const payload = {
-			pageTitle: 'Search',
-			logedInUser: req.session.user,
-			// profileUser
-		}
+	const payload = {
+		pageTitle: 'Search',
+		logedInUser: req.session.user,
+	}
 
 	res.render('user/profile/search-user-and-tweet', payload)
+}
+
+
+// GET /message
+exports.messageInboxPage = (req, res) => {
+
+	const payload = {
+		pageTitle: 'Inbox',
+		logedInUser: req.session.user,
+	}
+
+	res.render('message/inbox', payload)
+}
+
+// GET /message/:id
+exports.chatMessagePage = (req, res) => {
+
+	const payload = {
+		pageTitle: 'Chat',
+		logedInUser: req.session.user,
+		profileUser: {}
+	}
+
+	res.render('message/chat', payload)
+}
+
+// GET /message/new
+exports.newMessageInboxPage = (req, res) => {
+
+	const payload = {
+		pageTitle: 'New Message',
+		logedInUser: req.session.user,
+	}
+
+	res.render('message/new', payload)
 }
