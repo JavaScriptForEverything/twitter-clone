@@ -48,11 +48,15 @@ mixin CloseIcon()
 
 
 mixin NavComponent ()
-	nav(class='flex flex-col justify-center items-center gap-1 sm:items-end sm:mr-8')
+	nav(
+		id='nav-container'
+		class='[&>*:first-child]:fill-blue-500 [&>*:not(:first-child)]:fill-slate-700 '
+		class='flex flex-col justify-center items-center gap-1 sm:items-end sm:mr-8'
+	)
 		each navItem in navItems
-			a( href= navItem.path title=navItem.name
-				class='[&>svg]:fill-slate-800 [&>svg]:w-7 [&>svg]:h-7 hover:[&>svg]:fill-blue-500 hover:bg-blue-100 p-1 rounded-full'
-				class=''
+			a( href= navItem.path title=navItem.name name=navItem.path
+				class='[&>svg]:w-7 [&>svg]:h-7 hover:[&>svg]:fill-blue-500 hover:bg-blue-100 p-1 rounded-full'
+				class='active:[&>svg]:fill-blue-500 active:bg-blue-200'
 			) 
 				#{navItem.icon}
 

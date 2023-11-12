@@ -1,6 +1,20 @@
 const $ = selector => document.querySelector(selector)
 
 
+const activateMenUItem = () => {
+	const navContainer = $('#nav-container')
+
+	const navItems = Array.from(navContainer.children)
+	const targetedEl = navItems.find( (navItem) => navItem.href === location.href)
+	if(!targetedEl) return
+	targetedEl.style.fill = '#3b82f6'
+}
+document.addEventListener('DOMContentLoaded', activateMenUItem)
+
+
+
+
+
 const isFormValidated = (obj) => {
 	const errorObject = {}
 
