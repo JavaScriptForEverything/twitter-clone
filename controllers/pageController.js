@@ -81,7 +81,7 @@ exports.loginPageHandler = async (req, res) => {
 		req.session.user = user
 		// res.redirect('/')
 
-		res.redirect('/message')
+		res.redirect('/message/new')
 
 	} catch (err) {
 		const payload = {

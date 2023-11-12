@@ -1,17 +1,13 @@
 const $ = selector => document.querySelector(selector)
 
 
-const activateMenUItem = () => {
-	const navContainer = $('#nav-container')
+// Convert '<p> hi </p>' 	=> .createElement('p').textContent = 'hi'
+const stringToElement = ( htmlString ) => {
+	const parser = new DOMParser()
+	const doc = parser.parseFromString( htmlString, 'text/html' )
 
-	const navItems = Array.from(navContainer.children)
-	const targetedEl = navItems.find( (navItem) => navItem.href === location.href)
-	if(!targetedEl) return
-	targetedEl.style.fill = '#3b82f6'
+	return doc.body.firstChild
 }
-document.addEventListener('DOMContentLoaded', activateMenUItem)
-
-
 
 
 
@@ -408,3 +404,18 @@ const getTweetHTML = (tweet, { isModal=false } = {}) => {
 // 		</dialog>
 // 	`
 // }
+
+
+
+
+// add active color on left side menu item
+const activateMenUItem = () => {
+	const navContainer = $('#nav-container')
+	if(!navContainer) return
+
+	const navItems = Array.from(navContainer.children)
+	const targetedEl = navItems.find( (navItem) => navItem.href === location.href)
+	if(!targetedEl) return
+	targetedEl.style.fill = '#3b82f6'
+}
+document.addEventListener('DOMContentLoaded', activateMenUItem)

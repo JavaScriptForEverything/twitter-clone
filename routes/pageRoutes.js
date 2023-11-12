@@ -3,9 +3,10 @@ const pageController = require('../controllers/pageController')
 const authController = require('../controllers/authController')
 
 const router = Router()
-	.get('/message', authController.messageInboxPage) 
-	.get('/message/new', authController.newMessageInboxPage) 
-	.get('/message/:id', authController.chatMessagePage) 
+
+	// .get('/message', authController.messageInboxPage) 
+	// .get('/message/new', authController.newMessageInboxPage) 
+	// .get('/message/:id', authController.chatMessagePage) 
 
 
 router.get('/', 
@@ -33,9 +34,9 @@ router
 	.get('/tweet/:id', authController.tweetDetailsPage)
 	.get('/search', authController.searchPage) // /search#tab-1 /search#tab-2
 
-	// .get('/message', authController.messageInboxPage) 
-	// .get('/message/new', authController.newMessageInboxPage) 
-	// .get('/message/:id', authController.chatMessagePage) 
+	.get('/message', authController.messageInboxPage) 
+	.get('/message/new', authController.newMessageInboxPage) 
+	.get('/message/:id', authController.chatMessagePage) 
 
 
 module.exports = router

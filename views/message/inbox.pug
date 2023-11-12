@@ -25,16 +25,18 @@ block content
 
 			section(name='chat-list-container')
 				div(class='')
-					a(href='#')
+					a(href='/message/chat-1')
 						+List({
+							id: 'chat-1',
 							primary: 'Your text goes here',
 							secondary: 'It was an wonderful progrom',
 							isHover: true,
 							avatar: '/images/users/default.jpg',
 							avatar: '/logo.png',
 						})
-					a(href='#')
+					a(href='/message/chat-2')
 						+List({
+							id: 'chat-2',
 							primary: 'Your text goes here',
 							secondary: 'It was an wonderful progrom',
 							isHover: false,
