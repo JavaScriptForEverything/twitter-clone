@@ -80,7 +80,17 @@ const addSelectedUserBeforeInput = (selectedUsers) => {
 }
 
 
-createChatButton.addEventListener('click', (evt) => {
+createChatButton.addEventListener('click', async (evt) => {
+	if(!selectedUsers) return
+	const selectedUsersIds = selectedUsers.map( user => user._id )
 
-	console.log(selectedUsers)
+	const { data, error } = await axios({
+		url: '/api/chats',
+		method: 'POST',
+		data: selectedUsersIds 
+	})
+	if(error) return console.log(error.message)
+
+	const chat = data.data
+	redirectTo(`/message/${chat._id}`)
 })

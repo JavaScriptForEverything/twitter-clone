@@ -9,6 +9,7 @@ const pageRouter = require('./routes/pageRoutes')
 const tweetRouter = require('./routes/tweetRoute')
 const userRouter = require('./routes/userRoutes')
 const fileRouter = require('./routes/fileRoutes')
+const chatRouter = require('./routes/chatRoutes')
 
 
 const publicDirectory = path.join(process.cwd(), 'public')
@@ -45,6 +46,7 @@ app.set('view engine', 'pug') 												// Setup pug as Templete
 app.use('/', pageRouter)
 app.use('/api/tweets', tweetRouter)
 app.use('/api/users', userRouter)
+app.use('/api/chats', chatRouter)
 app.use('/upload', fileRouter)
 
 
