@@ -35,23 +35,23 @@ mixin List (props = {})
 			name=name
 		)
 		div(class='flex items-center gap-2')
-				if images.length
-					div(class='relative w-8 h-8')
-						img(src=images[0], alt="images[0]" class='absolute -top-1 left-3 w-8 h-8 rounded-full border border-slate-300 ')
-						img(src=images[1], alt="images[1]" class='absolute top-2 left-0 w-8 h-8 rounded-full border border-slate-300 ')
-				else 
-					if avatar
-						img(src=avatar, alt="avatar" class='w-12 h-12 rounded-full border border-slate-300 ')
+			if images.length
+				div(class='relative w-8 h-8')
+					img(src=images[0], alt="images[0]" class='absolute -top-1 left-3 w-8 h-8 rounded-full border border-slate-300 ')
+					img(src=images[1], alt="images[1]" class='absolute top-2 left-0 w-8 h-8 rounded-full border border-slate-300 ')
+			else 
+				if avatar
+					img(src=avatar, alt="avatar" class='w-12 h-12 rounded-full border border-slate-300 ')
 
-				div(class=images.length ? 'ml-4' : '')
-					h2(class='text-slate-700 font-medium hover:text-slate-800 ') #{primary}
-					p(class='text-slate-700/95 hover:text-slate-800/90 font-light text-sm') #{secondary}
+			div(class=images.length ? 'ml-4' : '')
+				h2(class='text-slate-700 font-medium hover:text-slate-800 truncate w-60') #{primary}
+				p(class='text-slate-700/95 hover:text-slate-800/90 font-light text-sm') #{secondary}
 
-				if icon
-					button(type='button' name='list-icon' 
-						class='ml-auto p-0.5 text-slate-600 rounded-full bg-slate-200 border border-slate-200'
-						class='group-hover:bg-slate-300 group-hover:border-slate-300 hover:bg-slate-300 hover:border-slate-300 hover:text-slate-700'
-						class='group-active:border-slate-400 active:bg-blue-400 active:border-blue-500 active:text-blue-600'
-					) 
-						#{icon}
+			if icon
+				button(type='button' name='list-icon' 
+					class='ml-auto p-0.5 text-slate-600 rounded-full bg-slate-200 border border-slate-200'
+					class='group-hover:bg-slate-300 group-hover:border-slate-300 hover:bg-slate-300 hover:border-slate-300 hover:text-slate-700'
+					class='group-active:border-slate-400 active:bg-blue-400 active:border-blue-500 active:text-blue-600'
+				) 
+					#{icon}
 						

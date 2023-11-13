@@ -7,6 +7,7 @@ const router = Router()
 // /api/chats
 router
 	.use(authController.protect)
+	.get('/', chatController.getAllChats)
 	.post('/', chatController.createChat)
 
 
