@@ -1,6 +1,6 @@
 
 
-- Tailwind With express
+- Tailwind-express with MVC architechture (Model, View, Controller)
 - Creating Project with browser reload
 - MongoDB Database wiht mongoose
 - Configure express-session
@@ -14,6 +14,10 @@
 	- Update avatar image (No Duplication)
 
 
+- Chat Interface
+	- Create chats by selecting user list one by one, and selected users will be shows on top
+	- Shows chats or chat groups with user logos
+	- Chat details page
 
 
 #### Tailwind With Express (pug templete)

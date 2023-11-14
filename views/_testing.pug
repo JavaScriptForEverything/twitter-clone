@@ -1,0 +1,19 @@
+doctype html
+html(lang="en")
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		title Testing
+		script(src="/js/tailwind_cdn.js") 
+	body 
+		h1 Testing Page
+
+		a(href='/') Home page
+		br
+
+		a(href='/message/652ad9ce8faff3b8cf3ff261') Chat Page
+		br
+
+		include components/mui/dialog
+
+		+Dialog()

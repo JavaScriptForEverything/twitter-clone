@@ -6,60 +6,60 @@ block content
 
 	style.
 
-	div(class='grid grid-cols-12 p-2 divide-x')
+	div(class='grid grid-cols-12 divide-x')
 		//- left-section
-		div(class='col-span-2')
+		div(class='col-span-2 p-2')
 			+NavComponent()
 
 
 		//- middle-section
-		div(class='col-span-10 md:col-span-7')
-			div(class='flex items-center justify-between p-2 border-b border-slate-200 text-slate-900')
-				h1(class=' font-bold') Chat
-				a(href='/message/new') 
-					button(type='button' 
-						class='shadow-2xl border border-slate-300 p-0.5 bg-slate-50 text-slate-500 rounded-md'
-						class='hover:bg-slate-100 hover:border-slate-400 hover:text-slate-600'
-						class='active:bg-blue-100 active:border-blue-500 active:text-blue-600'
-					)
-						<svg class='w-4 h-4' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path d="M12 8v3m0 0v3m0-3h3m-3 0H9"/><path stroke-linejoin="round" d="M14 19c3.771 0 5.657 0 6.828-1.172C22 16.657 22 14.771 22 11c0-3.771 0-5.657-1.172-6.828C19.657 3 17.771 3 14 3h-4C6.229 3 4.343 3 3.172 4.172C2 5.343 2 7.229 2 11c0 3.771 0 5.657 1.172 6.828c.653.654 1.528.943 2.828 1.07"/><path d="M14 19c-1.236 0-2.598.5-3.841 1.145c-1.998 1.037-2.997 1.556-3.489 1.225c-.492-.33-.399-1.355-.212-3.404L6.5 17.5"/></g></svg>
+		+GroupNameChangeModal()
+		div(class='col-span-10 md:col-span-7 min-h-screen')
+			div(class='p-2 min-h-full flex flex-col justify-between ')
+				div
+					div(class='flex items-center justify-between p-2 border-b border-slate-200 text-slate-900')
+						h1(class=' font-bold') Chat
+						a(href='/message/new') 
+							button(type='button' 
+								class='shadow-2xl border border-slate-300 p-0.5 bg-slate-50 text-slate-500 rounded-md'
+								class='hover:bg-slate-100 hover:border-slate-400 hover:text-slate-600'
+								class='active:bg-blue-100 active:border-blue-500 active:text-blue-600'
+							)
+								<svg class='w-4 h-4' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path d="M12 8v3m0 0v3m0-3h3m-3 0H9"/><path stroke-linejoin="round" d="M14 19c3.771 0 5.657 0 6.828-1.172C22 16.657 22 14.771 22 11c0-3.771 0-5.657-1.172-6.828C19.657 3 17.771 3 14 3h-4C6.229 3 4.343 3 3.172 4.172C2 5.343 2 7.229 2 11c0 3.771 0 5.657 1.172 6.828c.653.654 1.528.943 2.828 1.07"/><path d="M14 19c-1.236 0-2.598.5-3.841 1.145c-1.998 1.037-2.997 1.556-3.489 1.225c-.492-.33-.399-1.355-.212-3.404L6.5 17.5"/></g></svg>
 
-			div(class='flex items-center gap-2 p-2 border-b border-slate-200 text-slate-900')
-				div(
-					class='flex [&>img]:w-8 [&>img]:h-8 [&>img]:rounded-full [&>*:first-child]:z-10'
-					class='[&>*:not(:first-child)]:-ml-3'
-				) 
-					img(src='/images/users/default.jpg')
-					img(src='/logo.png')
+					div(class='flex items-center gap-2 p-2 border-b border-slate-200 text-slate-900')
+						div( name='chat-image-container'
+							class='flex flex-row-reverse [&>img]:w-8 [&>img]:h-8 [&>img]:rounded-full '
+							class='[&>*:not(:last-child)]:-ml-3'
+						) 
+							//- img(src='/logo.png')
+							//- img(src='/images/users/default.jpg')
 
-				p(class='text-slate-600') The boys
-				
+						span(name='more-image-placeholder' class='-ml-0.5 text-slate-500') 
+						span(name='edit-chat' class='text-slate-600 cursor-pointer') Group Name
 
-			//- ----[ Show Message section ]-----
-			div(class='p-2 text-slate-500')
-				p(class='text-slate-500/80 text-sm') riajulIslam
-				div(class='my-1 flex items-center gap-2')
-					img(src='/images/users/default.jpg' class='w-6 h-6 rounded-full')
-					p(class='bg-slate-100 text-slate-600 px-2 py-1 rounded-lg') your message
+					//- ----[ Show Message section ]-----
+					div(class='p-2 text-slate-500')
+						p(class='text-slate-500/80 text-sm') riajulIslam
+						div(class='my-1 flex items-center gap-2')
+							img(src='/images/users/default.jpg' class='w-6 h-6 rounded-full')
+							p(class='bg-slate-100 text-slate-600 px-2 py-1 rounded-lg') your message
 
-				div(class='my-1 flex justify-end items-center gap-2')
-					p(class='bg-blue-500 text-slate-50 px-2 py-1 rounded-lg') your message
+						div(class='my-1 flex justify-end items-center gap-2')
+							p(class='bg-blue-500 text-slate-50 px-2 py-1 rounded-lg') your message
 
-			//- ----[ Send Message section ]-----
-				class='absolute bottom-0 left-1/2 -translate-x-1/2 '
-			div(
-				class='p-2 text-slate-500 flex items-center'
-			)
-				input#send-input(type="text", name="send-input"
-					class='flex-1 border border-slate-200 rounded-md px-2 py-1 text-slate-600'
-					class='focus:outline-none focus:border-slate-400'
-				)
-				button(type="button"
-					class='text-blue-500 px-2 py-1 rounded-md border border-slate-200'
-					class='hover:bg-slate-50 hover:text-blue-600'
-					class='active:bg-white active:text-blue-500 active:border-slate-300'
-				) 
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="currentColor" d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26l.001.002l4.995 3.178l3.178 4.995l.002.002l.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215l7.494-7.494l1.178-.471l-.47 1.178Z"/></svg>
+				//- ----[ Send Message section ]-----
+				div( class='p-2 text-slate-500 flex items-center')
+						input#send-input(type="text", name="send-input"
+							class='flex-1 border border-slate-200 rounded-md px-2 py-1 text-slate-600'
+							class='focus:outline-none focus:border-slate-400'
+						)
+						button(type="button"
+							class='text-blue-500 px-2 py-1 rounded-md border border-slate-200'
+							class='hover:bg-slate-50 hover:text-blue-600'
+							class='active:bg-white active:text-blue-500 active:border-slate-300'
+						) 
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="currentColor" d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26l.001.002l4.995 3.178l3.178 4.995l.002.002l.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215l7.494-7.494l1.178-.471l-.47 1.178Z"/></svg>
 
 
 
@@ -69,16 +69,14 @@ block content
 			p right section hiddend for now
 	
 
-	script.
-		//- const logedInUser = !{ JSON.stringify(logedInUser) } 	
-		//- const profileUser = !{ JSON.stringify(profileUser) } 	
 
 
-		//- $('input').addEventListener('keydown', (evt) => {
-		//- 	console.log(evt.keyCode)
-		//- })
+			script.
+				const logedInUser = !{ JSON.stringify(logedInUser) } 	
 
 
-	script(src="/js/message-chat.js") 
+
+
+			script(src="/js/message-chat.js") 
 
 

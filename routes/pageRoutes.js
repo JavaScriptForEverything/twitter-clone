@@ -9,10 +9,10 @@ const router = Router()
 	// .get('/message/:id', authController.chatMessagePage) 
 
 
-router.get('/', 
-	authController.protect, 
-	pageController.homePage
-)
+router.route('/testing')
+	.get(pageController.testing)
+
+router.get('/', authController.protect, pageController.homePage)
 
 router.route('/register')
 	.get(pageController.registerPage)
@@ -24,6 +24,7 @@ router.route('/login')
 
 router.route('/logout')
 	.get(pageController.logout)
+
 
 router
 	.use(authController.protect)

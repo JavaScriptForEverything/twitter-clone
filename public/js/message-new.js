@@ -1,5 +1,13 @@
 // console.log({ logedInUser })
 
+/* Global Variables 
+		. logedInUser
+
+	from pug: 
+		. usersContainer
+		. messageInput
+*/
+
 
 let timer 
 
@@ -10,8 +18,6 @@ createChatButton.disabled = !selectedUsers.length
 
 
 
-// const messageInput = $('[name=message-input]') defined in `new.pug` page
-messageInput.value = '' 	// reset input value on page refresh
 
 messageInput.addEventListener('keydown', (evt) => {
 	clearTimeout(timer) 											// remove timer if user going typing and typing
@@ -25,7 +31,7 @@ messageInput.addEventListener('keydown', (evt) => {
 	}
 
 	timer = setTimeout(async() => {
-		$('#users-container').innerHTML = '' 		// clear container before append something
+		usersContainer.innerHTML = '' 		// clear container before append something
 
 		const { data, error } = await axios({ url: `/api/users`, method: 'GET' })
 		if(error) console.log(error.message)
@@ -51,7 +57,7 @@ messageInput.addEventListener('keydown', (evt) => {
 const showUser = (user, logedInUser) => {
 
 	const userElement = stringToElement( getUserHTML(user, logedInUser) )
-	$('#users-container').insertAdjacentElement('beforeend', userElement)
+	usersContainer.insertAdjacentElement('beforeend', userElement)
 
 	userElement.addEventListener('click', (evt) => {
 		selectedUsers.push( user ) 	
@@ -60,7 +66,7 @@ const showUser = (user, logedInUser) => {
 
 		messageInput.value = ''
 		messageInput.focus()
-		$('#users-container').innerHTML = ''
+		usersContainer.innerHTML = ''
 
 
 

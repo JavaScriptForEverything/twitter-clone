@@ -81,6 +81,7 @@ exports.loginPageHandler = async (req, res) => {
 		req.session.user = user
 		// res.redirect('/')
 
+		// res.redirect('/message/652ad9ce8faff3b8cf3ff261')
 		res.redirect('/message')
 
 	} catch (err) {
@@ -107,3 +108,12 @@ exports.logout = (req, res) => {
 	res.render('login', payload)
 }
 
+
+
+
+exports.testing = (req, res) => {
+	const payload = {
+		pageTitle: 'Testing',
+	}
+	res.render('_testing', payload)
+}

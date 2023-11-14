@@ -1,5 +1,6 @@
 const Tweet = require('../models/tweetModel')
 const User = require('../models/userModel')
+const Chat = require('../models/chatModel')
 const { appError } = require('./errorController')
 const { timeSince } = require('../utils')
 
@@ -161,15 +162,31 @@ exports.messageInboxPage = (req, res) => {
 }
 
 // GET /message/:id
-exports.chatMessagePage = (req, res) => {
+exports.chatMessagePage = async (req, res) => {
+	try {
+		const chatId = req.params.id
+		const logedInUserId = req.session.user._id
 
-	const payload = {
-		pageTitle: 'Chat',
-		logedInUser: req.session.user,
-		profileUser: {}
+		const chat = await Chat.findOne({ 
+			_id: chatId, 
+			users: { $elemMatch: { $eq: logedInUserId }} 
+		})
+
+		const payload = {
+			pageTitle: 'Chat',
+			logedInUser: req.session.user,
+			chat
+		}
+
+		res.render('message/chat', payload)
+
+	} catch (error) {
+		const payload = {
+			pageTitle: 'Chat',
+			errorMessage: error.message
+		}
+		redirect('error', payload)
 	}
-
-	res.render('message/chat', payload)
 }
 
 // GET /message/new
