@@ -1,17 +1,9 @@
 const { isValidObjectId, Types } = require('mongoose')
 const { catchAsync, appError } = require('./errorController')
 const Chat = require('../models/chatModel')
+const { filterObjectByArray } = require('../utils')
+const Message = require('../models/messageModal')
 
-
-const filterObjectByArray = (body={}, allowedFields=[]) => {
-	const tempObj = {}
-
-	Object.entries(body).forEach(([key, value]) => {
-		if(allowedFields.includes(key)) tempObj[key] = value
-	})
-
-	return tempObj
-}
 
 
 // GET 	/api/chats/ 	+ protected
@@ -19,7 +11,12 @@ exports.getAllChats = catchAsync( async (req, res, next) => {
 	const userId = req.session.user._id
 	
 	// Find which users has logedIn user._id ==> Find Group of user self exists
-	const chats = await Chat.find({ users: { $elemMatch: { $eq: userId }} }).sort('createdAt: -1').populate('users')
+	const chats = await Chat.find({ users: { $elemMatch: { $eq: userId }} })
+		.sort('createdAt: -1')
+		.populate('users latestMessage') 								// direct property
+
+	await Message.populate(chats, 'latestMessage.sender') 	// populated by others, then get sender
+	// console.log(chats)
 
 	res.status(200).json({
 		status: 'success',

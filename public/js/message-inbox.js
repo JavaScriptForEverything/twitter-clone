@@ -6,8 +6,10 @@ const getAllChats = async () => {
 	const { data, error } = await axios({ url: '/api/chats', method: 'GET' })
 	if(error) return console.log(`getAllChats error: ${error.message}`)
 
+
 	const chats = data.data
 	chats?.forEach( (chat) => {
+		// console.log(chat)
 		showChat(chat, chatListContainer, logedInUser)
 	})
 }
@@ -24,10 +26,13 @@ const showChat = (chat={}, elementContainer, logedInUser) => {
 		.filter(user => user._id !== logedInUser._id) 				// filter out self (user self sees the chants)
 		.map( user => user.avatar ) 
 
-	
+	const message = chat?.latestMessage?.message
+	const sender = chat?.latestMessage?.sender
+
+	const latestMessage = sender ? `${sender.firstName} ${sender.lastName}: ${message}` : ''
 	
 	const	primary= chat.name || filteredUsernames.join(', ') || 'Group Chat'
-	const	secondary='Secondary Text'
+	const	secondary= latestMessage || 'new message'
 	const images = filteredImages || []
 	const	icon= ''
 	const	isHover= false

@@ -10,6 +10,7 @@ const tweetRouter = require('./routes/tweetRoute')
 const userRouter = require('./routes/userRoutes')
 const fileRouter = require('./routes/fileRoutes')
 const chatRouter = require('./routes/chatRoutes')
+const messageRouter = require('./routes/messageRoutes')
 
 
 const publicDirectory = path.join(process.cwd(), 'public')
@@ -47,6 +48,7 @@ app.use('/', pageRouter)
 app.use('/api/tweets', tweetRouter)
 app.use('/api/users', userRouter)
 app.use('/api/chats', chatRouter)
+app.use('/api/messages', messageRouter)
 app.use('/upload', fileRouter)
 
 

@@ -1,8 +1,13 @@
 const { Router } = require('express')
 const chatController = require('../controllers/chatController')
 const authController = require('../controllers/authController')
+const messageRouter = require('./messageRoutes')
 
 const router = Router()
+
+router.use('/:chatId/messages', messageRouter)
+
+
 
 // /api/chats
 router

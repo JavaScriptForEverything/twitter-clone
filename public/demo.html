@@ -4,53 +4,31 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
-	<script src="js/tailwind_cdn.js"></script>
+	<!-- <script src="js/tailwind_cdn.js"></script> -->
 	<style>
 
-		.color1 {
-			fill: red;
-			stroke: none;
-			stroke-width: .2px;
-			width: 140px;
-			height: 140px;
+		p {
+			user-zoom: fixed;
 		}
-		.color2 {
-			fill: blue;
-			stroke: none;
-			width: 140px;
-			height: 140px;
-		}
+
 
 	</style>
 </head>
 <body>
 
-	<dialog open=false name="reply-dialog" class="w-2/3 md:max-w-md text-slate-700 rounded border border-slate-300 shadow">
-		<div class="flex flex-col divide-y">
+	<button>Ok</button>
 
-			<div class="flex justify-between items-center px-4 py-2 " id="header">
-				<h1 class="font-semibold text-slate-800">Reply</h1> 
-				<button name='dialog-close-button' class="p-1 rounded-full" type="button">
-					<svg class='w-3 h-3 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="M2.93 17.07A10 10 0 1 1 17.07 2.93A10 10 0 0 1 2.93 17.07zM11.4 10l2.83-2.83l-1.41-1.41L10 8.59L7.17 5.76L5.76 7.17L8.59 10l-2.83 2.83l1.41 1.41L10 11.41l2.83 2.83l1.41-1.41L11.41 10z"/></svg>
-				</button>
-			</div>
+	<p>
+		Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ratione nostrum quasi molestias at minus tempore quas ea. Reprehenderit accusantium vero dolor. Suscipit omnis maiores fuga est mollitia voluptate animi quibusdam.
+	</p>
 
-			<div class="px-4 py-2">
-				<input type="file" name="avatar">
-				<div class="flex justify-center">
-					<img src="/images/users/default.jpg" alt="">
-				</div>
-			</div>
-			
-
-			<div class="px-4 py-3 my-1 flex justify-end items-end gap-2" id="footer">
-				<button name='dialog-cancel-button' class="disabled:bg-slate-500/50 disabled:text-slate-600 px-2 py-1 bg-slate-500 text-slate-100 rounded-md text-sm border border-slate-500 hover:bg-slate-600 hover:text-white" type="button">Cancel</button> 
-				<button name='dialog-submit-button' class="disabled:bg-slate-500/50 disabled:text-slate-600 disabled:border-slate-500 px-2 py-1 bg-blue-500 text-slate-100 rounded-md text-sm border border-blue-500 hover:bg-blue-600 hover:text-white" type="submit">Submit</button>
-			</div>
-
-		</div>
-	</dialog>
-
+	<script>
+		document.querySelector('p').addEventListener('click', (evt) => {
+			const selectedText = getSelection().toString()
+			// const selectedText = document.getSelection().toString()
+			console.log( selectedText )
+		})
+	</script>
 
 </body>
 </html>

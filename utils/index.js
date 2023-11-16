@@ -3,6 +3,16 @@ const fs = require('fs');
 const { appError } = require('../controllers/errorController');
 
 
+exports.filterObjectByArray = (body={}, allowedFields=[]) => {
+	const tempObj = {}
+
+	Object.entries(body).forEach(([key, value]) => {
+		if(allowedFields.includes(key)) tempObj[key] = value
+	})
+
+	return tempObj
+}
+
 // Google: javascript day and time ago
 module.exports.timeSince = (date) => {
   var seconds = Math.floor((new Date() - date) / 1000);

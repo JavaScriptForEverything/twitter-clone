@@ -29,8 +29,8 @@ block content
 
 					div(class='flex items-center gap-2 p-2 border-b border-slate-200 text-slate-900')
 						div( name='chat-image-container'
-							class='flex flex-row-reverse [&>img]:w-8 [&>img]:h-8 [&>img]:rounded-full '
-							class='[&>*:not(:last-child)]:-ml-3'
+							class='flex [&>img]:w-8 [&>img]:h-8 [&>img]:rounded-full '
+							class='[&>*:not(:first-child)]:-ml-3'
 						) 
 							//- img(src='/logo.png')
 							//- img(src='/images/users/default.jpg')
@@ -39,27 +39,28 @@ block content
 						span(name='edit-chat' class='text-slate-600 cursor-pointer') Group Name
 
 					//- ----[ Show Message section ]-----
-					div(class='p-2 text-slate-500')
+					div(name='message-container' class='p-2 text-slate-500')
 						p(class='text-slate-500/80 text-sm') riajulIslam
+
 						div(class='my-1 flex items-center gap-2')
 							img(src='/images/users/default.jpg' class='w-6 h-6 rounded-full')
-							p(class='bg-slate-100 text-slate-600 px-2 py-1 rounded-lg') your message
+							p(class='bg-slate-100 text-slate-600 px-2 py-1 rounded-lg') thier message
 
 						div(class='my-1 flex justify-end items-center gap-2')
-							p(class='bg-blue-500 text-slate-50 px-2 py-1 rounded-lg') your message
+							p(class='bg-blue-500 text-slate-50 px-2 py-1 rounded-lg') my message
 
 				//- ----[ Send Message section ]-----
-				div( class='p-2 text-slate-500 flex items-center')
-						input#send-input(type="text", name="send-input"
-							class='flex-1 border border-slate-200 rounded-md px-2 py-1 text-slate-600'
-							class='focus:outline-none focus:border-slate-400'
-						)
-						button(type="button"
-							class='text-blue-500 px-2 py-1 rounded-md border border-slate-200'
-							class='hover:bg-slate-50 hover:text-blue-600'
-							class='active:bg-white active:text-blue-500 active:border-slate-300'
-						) 
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="currentColor" d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26l.001.002l4.995 3.178l3.178 4.995l.002.002l.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215l7.494-7.494l1.178-.471l-.47 1.178Z"/></svg>
+				form#send-message-form( class='p-2 text-slate-500 flex items-center')
+					input#send-input(type="text", name="send-input" autofocus=true
+						class='flex-1 border border-slate-200 rounded-md px-2 py-1 text-slate-600'
+						class='focus:outline-none focus:border-slate-400'
+					)
+					button#send-button(type="submit"
+						class='text-blue-500 px-2 py-1 rounded-md border border-slate-200'
+						class='hover:bg-slate-50 hover:text-blue-600'
+						class='active:bg-white active:text-blue-500 active:border-slate-300'
+					) 
+						<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="currentColor" d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26l.001.002l4.995 3.178l3.178 4.995l.002.002l.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215l7.494-7.494l1.178-.471l-.47 1.178Z"/></svg>
 
 
 
