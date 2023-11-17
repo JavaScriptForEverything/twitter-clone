@@ -1,4 +1,5 @@
 const $ = selector => document.querySelector(selector)
+const socket = io('/')
 
 
 // Convert '<p> hi </p>' 	=> .createElement('p').textContent = 'hi'

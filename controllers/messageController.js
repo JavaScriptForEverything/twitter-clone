@@ -40,6 +40,13 @@ exports.createMessage = catchAsync( async (req, res, next) => {
 			message = await message.populate('sender')
 			message = await message.populate('chat')
 
+			// await User.populate(message, 'chat.users')
+			// // 1. `chat` is available in Message Schema, so it populate from Message.Query.populate()
+			// // 2. and in Chat schem has `users` property, so we have 2 ways
+			// // 		a) populate from Chat Query or
+			// // 		b) populate from User Model, 	: here used the user model
+
+
 	if(!message) return next( appError('create messae is failed') )
 
 	const chat = await Chat.findByIdAndUpdate(filteredBody.chat, { latestMessage: message._id })

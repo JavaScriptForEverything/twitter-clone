@@ -9,8 +9,15 @@ const sendButton = $('#send-button')
 const messageContainer = $('[name=message-container]')
 const imageContainer = $('[name=chat-image-container]')
 const sendMessageForm = $('#send-message-form')
+const typingIndicator = $('[name=typing-indicator]')
+const pageLoadingIndicator = $('[name=page-loading-indicator]')
 
-const chatId = location.pathname.split('/').pop()
+const url = new URL(location.href)
+const chatId = url.pathname.split('/').pop()
+let timer = undefined
+
+sendInput.value=''
+
 
 const getAllMessagesOfSingleChat = async (chatId) => {
 	const { data, error } = await axios({
@@ -20,6 +27,7 @@ const getAllMessagesOfSingleChat = async (chatId) => {
 	if(error) return console.log(`fetch all messages failed: ${error.message}`)
 
 	const messageDocs = data.data
+	pageLoadingIndicator.remove() 	// hide as soon as data loaded
 
 
 	// const firstDoc = messageDocs[0]
@@ -29,8 +37,8 @@ const getAllMessagesOfSingleChat = async (chatId) => {
 		// 	<p class='text-slate-500/80 text-sm'> ${sender.firstName} ${sender.lastName} </p>
 		// </div>
 	
-	const mineMessageDoc = messageDocs.find( mineDoc => mineDoc._id === logedInUser._id)
-	messageContainer.insertAdjacentHTML('afterbegin', '<span> hi </span>')
+	// const mineMessageDoc = messageDocs.find( mineDoc => mineDoc._id === logedInUser._id)
+	// messageContainer.insertAdjacentHTML('afterbegin', '<span> hi </span>')
 
 	messageDocs.forEach( (messageDoc, index, docs) => {
 
@@ -49,7 +57,6 @@ const getAllMessagesOfSingleChat = async (chatId) => {
 		})
 	})
 
-
 	scrollToBottom()
 }
 getAllMessagesOfSingleChat(chatId)
@@ -57,7 +64,6 @@ getAllMessagesOfSingleChat(chatId)
 
 const scrollToBottom = (isFromBegining=true, speed=5, delay=1) => {
 	const messageContainerHeight = messageContainer.scrollHeight
-	let timer
 	let height = isFromBegining ? 0 : sendMessageForm.offsetTop - 200
 
 	// console.log(sendMessageForm.offsetTop)
@@ -144,30 +150,28 @@ dialogSubmitButton.addEventListener('click', async (evt) => {
 	closeHandler()
 })
 
+sendInput.addEventListener('keydown', (evt) => {
 
-sendMessageForm.addEventListener('submit', async (evt) => {
-	evt.preventDefault()
+	clearTimeout(timer)
+	const message = evt.target.value.trim()
+	socket.emit('typing', { chatId, message })
 
+	timer = setTimeout(() => {
+		const message = evt.target.value.trim()
+		if( !message ) return
 
-	const url = new URL(location.href)
-	const chatId = url.pathname.split('/').pop()
+		if(evt.keyCode === 13) sendMessageToBackend(message)
+	}, 0)
+})
 
-	const formData = new FormData(evt.target)
-
-	const message = formData.get('send-input')
+const sendMessageToBackend = async ( message ) => {
+	message = encodeHTML(message)
 	if(!message.trim()) return console.log('Your message is empty')
-
-
 
 	const { data, error } = await axios({
 		url: '/api/messages',
 		method: 'POST',
-		data: {
-			message: encodeHTML(message),
-			sender: logedInUser._id,
-			chat: chatId,
-			// users: [{ type: Schema.Types.ObjectId, ref: 'User' }], 	// => readBy
-		}
+		data: { message, sender: logedInUser._id, chat: chatId }
 	})
 
 	if(error) {
@@ -175,16 +179,15 @@ sendMessageForm.addEventListener('submit', async (evt) => {
 		console.log(`POST /api/messages: ${error.message}`)
 		return
 	}
-	// console.log(data.data)
-	addMessage(data.data)
+	
+	const messageDoc = data.data
 	sendInput.value=''
 	sendInput.focus()
-})
+		
+	socket.emit('new-message', { chatId, messageDoc })
+	addMessage(messageDoc)
+}
 
-
-	// const lastMessageDoc = messageDocs[messageDocs.length - 1]
-	// if(!lastMessageDoc.sender._id) return console.log('message.sender is not populated')
-	// const lastSenderId = lastMessageDoc.sender._id
 
 const addMessage = (currentDoc, classList={} ) => {
 	const logedInUserId = logedInUser._id 		// comes from global variable
@@ -219,9 +222,27 @@ const addMessage = (currentDoc, classList={} ) => {
 }
 
 
+socket.emit('join-room', { chatId })
+socket.on('room-joined', ({ roomId: chatId }) => {
+	if( !chatId ) return console.log('room-joined failed')
+})
 
-// setTimeout(() => {
-// const scrollHeight = messageContainer.scrollHeight
-// 	// messageContainer.scrollIntoView({ behavior: "smooth" }) 
-// 	window.scrollTo(0, scrollHeight)
-// }, 1000)
+socket.on('typing', ({ roomId }) => {
+	clearTimeout(timer)
+	typingIndicator.style.display = 'block'
+
+	timer = setTimeout(() => {
+		typingIndicator.style.display = 'none'
+	}, 3000);
+})
+
+// socket.on('stop-typing', ({ roomId }) => {
+// 	typingIndicator.style.display = 'none'
+// })
+socket.on('message-received', ({ roomId, messageDoc }) => {
+	addMessage(messageDoc)
+	typingIndicator.style.display = 'none'
+	sendInput.value=''
+	sendInput.focus()
+
+})

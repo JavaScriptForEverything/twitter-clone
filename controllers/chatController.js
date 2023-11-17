@@ -84,7 +84,7 @@ exports.getChatById = catchAsync( async (req, res, next) => {
 })
 
 
-// GET 	/api/chats 	+ protected
+// POST 	/api/chats 	+ protected
 exports.createChat = catchAsync( async (req, res, next) => {
 	if(!req.body.length) return next(appError('please send user._id as array '))
 	

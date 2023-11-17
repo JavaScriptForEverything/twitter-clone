@@ -13,8 +13,9 @@ html(lang="en")
 			referrerpolicy="no-referrer"
 		)
 
-		script(src="/js/utils.js") 
+		script(src="/socket.io/socket.io.js") 
 		script(src="/js/tailwind_cdn.js") 
+		script(src="/js/utils.js") 
 		include ../components/@index.pug
 		include ../components/mui/@index.pug
 	body  
@@ -30,4 +31,4 @@ html(lang="en")
 			crossorigin="anonymous" 
 			referrerpolicy="no-referrer"
 		)
-		script(src="/js/client.js") 
+		script(src="/js/socket-client.js") 
