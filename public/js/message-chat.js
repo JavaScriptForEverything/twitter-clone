@@ -6,6 +6,9 @@ const groupName = $('[name=dialog-tweet-input]')
 const editChat = $('[name=edit-chat]')
 const sendInput = $('#send-input')
 const sendButton = $('#send-button')
+const messageContainer = $('[name=message-container]')
+const imageContainer = $('[name=chat-image-container]')
+const sendMessageForm = $('#send-message-form')
 
 const chatId = location.pathname.split('/').pop()
 
@@ -17,14 +20,58 @@ const getAllMessagesOfSingleChat = async (chatId) => {
 	if(error) return console.log(`fetch all messages failed: ${error.message}`)
 
 	const messageDocs = data.data
-	messageDocs.forEach( messageDoc => {
-		addMessage(messageDoc, logedInUser)
+
+
+	// const firstDoc = messageDocs[0]
+	// const lastDoc  = messageDocs[messageDocs.length - 1]
+
+		// <div name='message-container' class='p-2 text-slate-500'>
+		// 	<p class='text-slate-500/80 text-sm'> ${sender.firstName} ${sender.lastName} </p>
+		// </div>
+	
+	const mineMessageDoc = messageDocs.find( mineDoc => mineDoc._id === logedInUser._id)
+	messageContainer.insertAdjacentHTML('afterbegin', '<span> hi </span>')
+
+	messageDocs.forEach( (messageDoc, index, docs) => {
+
+		if( messageDoc._id === docs[0]._id ) return addMessage(messageDoc, {
+			yours: 'rounded-br-none',
+			theirs: 'rounded-bl-none',
+		})
+		if( messageDoc._id === docs[docs.length - 1]._id ) return addMessage(messageDoc, {
+			yours: 'rounded-tr-none',
+			theirs: 'rounded-tl-none',
+		})
+
+		addMessage(messageDoc, {
+			yours: 'rounded-r-none',
+			theirs: 'rounded-l-none',
+		})
 	})
 
+
+	scrollToBottom()
 }
 getAllMessagesOfSingleChat(chatId)
 
 
+const scrollToBottom = (isFromBegining=true, speed=5, delay=1) => {
+	const messageContainerHeight = messageContainer.scrollHeight
+	let timer
+	let height = isFromBegining ? 0 : sendMessageForm.offsetTop - 200
+
+	// console.log(sendMessageForm.offsetTop)
+	// console.log(messageContainer.offsetTop)
+
+	const frame = () => {
+		if( height >= messageContainerHeight ) return clearInterval( timer )
+		
+		window.scrollTo(0, height)
+		height += speed
+	}
+	clearInterval( timer )
+	timer = setInterval(frame, delay)
+}
 
 
 // fetch chats in server-side in /authController.chatMessagePage not here
@@ -55,7 +102,7 @@ const getChatById = async (chatId) => {
 		const htmlString = `
 			<img src='${user.avatar}' class='z-[${-index}]' />
 		`
-		$('[name=chat-image-container]').insertAdjacentHTML('beforeend', htmlString)
+		imageContainer.insertAdjacentHTML('beforeend', htmlString)
 	})
 
 
@@ -98,7 +145,7 @@ dialogSubmitButton.addEventListener('click', async (evt) => {
 })
 
 
-$('#send-message-form').addEventListener('submit', async (evt) => {
+sendMessageForm.addEventListener('submit', async (evt) => {
 	evt.preventDefault()
 
 
@@ -116,7 +163,7 @@ $('#send-message-form').addEventListener('submit', async (evt) => {
 		url: '/api/messages',
 		method: 'POST',
 		data: {
-			message,
+			message: encodeHTML(message),
 			sender: logedInUser._id,
 			chat: chatId,
 			// users: [{ type: Schema.Types.ObjectId, ref: 'User' }], 	// => readBy
@@ -129,28 +176,52 @@ $('#send-message-form').addEventListener('submit', async (evt) => {
 		return
 	}
 	// console.log(data.data)
-	addMessage(data.data, logedInUser)
+	addMessage(data.data)
 	sendInput.value=''
 	sendInput.focus()
 })
 
-const addMessage = (messageDoc, logedInUser) => {
+
+	// const lastMessageDoc = messageDocs[messageDocs.length - 1]
+	// if(!lastMessageDoc.sender._id) return console.log('message.sender is not populated')
+	// const lastSenderId = lastMessageDoc.sender._id
+
+const addMessage = (currentDoc, classList={} ) => {
+	const logedInUserId = logedInUser._id 		// comes from global variable
+	const sender = currentDoc.sender
+	const currentSenderId = currentDoc.sender._id
+
+	const isOurMessages = currentSenderId === logedInUserId
+	const className = currentSenderId === logedInUserId ? classList.yours : classList.theirs
+
 
 	const thierMessage = `
-		<div class='my-1 flex items-end gap-2 '>
-			<img src='/images/users/default.jpg' class='w-6 h-6 rounded-full' />
-			<p class='w-2/3 bg-slate-100 text-slate-600 px-2 py-1 rounded-lg'>${messageDoc.message}</p>
-		</div>
+			<div class='my-1 flex items-end gap-2 '>
+				<img src='${sender.avatar}' class='w-6 h-6 rounded-full' />
+				<p class='w-2/3'>
+					<span class=' bg-slate-100 text-slate-600 px-2 py-1 rounded-lg ${className} '>${currentDoc.message}</span>
+				</p>
+			</div>
 	`
 	const myMessage = `
 		<div class='my-1 flex justify-end items-center gap-2 '>
-			<p class='w-2/3 bg-blue-500 text-slate-50 px-2 py-1 rounded-lg'>${messageDoc.message}</p>
+			<p class='w-2/3'>
+				<span class=' bg-blue-500 text-slate-50 px-2 py-1 rounded-lg ${className}' >${currentDoc.message}</span>
+			</p>
 		</div>
 	`
 
-	if(!messageDoc.sender._id) return console.log('make sure messageDoc.sender is populated ')
+	if(!currentSenderId) return console.log('make sure messageDoc.sender is populated ')
 
-	const htmlString = messageDoc?.sender._id === logedInUser._id ? myMessage : thierMessage
-	$('[name=message-container]').insertAdjacentHTML('beforeend', htmlString)
+	const htmlString = isOurMessages ? myMessage : thierMessage
+	messageContainer.insertAdjacentHTML('beforeend', htmlString)
+	scrollToBottom(false, 1)
 }
 
+
+
+// setTimeout(() => {
+// const scrollHeight = messageContainer.scrollHeight
+// 	// messageContainer.scrollIntoView({ behavior: "smooth" }) 
+// 	window.scrollTo(0, scrollHeight)
+// }, 1000)

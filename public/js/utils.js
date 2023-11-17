@@ -53,9 +53,18 @@ function timeSince(date) {
 // var aDay = 24*60*60*1000;
 // console.log(timeSince(new Date(Date.now()-aDay)));
 // console.log(timeSince(new Date(Date.now()-aDay*2)));
-
-
 // console.log( timeSince( new Date('2023-10-15T10:05:15.632Z') ) )
+
+
+
+// it prevent HTML XSS Attack
+function encodeHTML(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+}
+
+
+
+
 
 
 /*
