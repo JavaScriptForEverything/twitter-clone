@@ -1,28 +1,30 @@
 const path = require('path')
 const User = require('../models/userModel')  
-const { removeFile } = require('../utils')
+const { removeFile, apiFeatures } = require('../utils')
 const { catchAsync, appError } = require('./errorController')
 
 
 
 // GET /api/users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-	const filter = {}
+	// const filter = {}
 
-	if( req.query.search ) {
-		filter.search = {
-			$or: [
-				{ firstName: { $regex: req.query.search, $options: 'i' }},
-				{ lastName: { $regex: req.query.search, $options: 'i' }},
-				{ username: { $regex: req.query.search, $options: 'i' }},
-			]
-		}
-	}
+	// if( req.query.search ) {
+	// 	filter.search = {
+	// 		$or: [
+	// 			{ firstName: { $regex: req.query.search, $options: 'i' }},
+	// 			{ lastName: { $regex: req.query.search, $options: 'i' }},
+	// 			{ username: { $regex: req.query.search, $options: 'i' }},
+	// 		]
+	// 	}
+	// }
 
-	const users = await User.find({})
+	// const users = await User.find({})
+	const users = await apiFeatures(User, req.query)
 
 	res.status(200).json({
 		status: 'success',
+		count: users.length,
 		data: users
 	})
 })

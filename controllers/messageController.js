@@ -1,5 +1,5 @@
 const { isValidObjectId } = require('mongoose')
-const { filterObjectByArray } = require('../utils')
+const { filterObjectByArray, apiFeatures } = require('../utils')
 const { appError, catchAsync } = require('./errorController')
 const Message = require('../models/messageModal')
 const Chat = require('../models/chatModel')
@@ -12,12 +12,11 @@ exports.getAllMessages = catchAsync( async (req, res, next) => {
 	const filter = {}
 	if(chatId) filter.chat = chatId
 	
-	// console.log({ chatId })
-
-	let messages = await Message.find( filter ).populate('chat sender')
+	let messages = await apiFeatures(Message, req.query, filter)
 
 	res.status(201).json({
 		status: 'success',
+		count: messages.length,
 		data: messages
 	})
 })

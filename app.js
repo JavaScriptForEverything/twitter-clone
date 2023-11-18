@@ -8,9 +8,11 @@ const errorController = require('./controllers/errorController')
 const pageRouter = require('./routes/pageRoutes')
 const tweetRouter = require('./routes/tweetRoute')
 const userRouter = require('./routes/userRoutes')
+const reviewRouter = require('./routes/reviewRoutes')
 const fileRouter = require('./routes/fileRoutes')
 const chatRouter = require('./routes/chatRoutes')
 const messageRouter = require('./routes/messageRoutes')
+
 
 
 const publicDirectory = path.join(process.cwd(), 'public')
@@ -23,6 +25,8 @@ livereloadServer.server.once('connection', () => {
 })
 
 const app = express()
+app.set('query parser', 'simple') 										// Disable req.query auto object parse for ?color[red]
+
 app.use(express.json({ limit: '10mb' })) 							// To capture json data by: req.body
 app.use(express.urlencoded({ extended: false })) 			// To capture key=value data send by html form by: req.body
 app.use(express.static(publicDirectory))
@@ -42,11 +46,11 @@ app.use(session({
 
 app.set('view engine', 'pug') 												// Setup pug as Templete 
 
-
 // -----[ routes ]-----
 app.use('/', pageRouter)
 app.use('/api/tweets', tweetRouter)
 app.use('/api/users', userRouter)
+app.use('/api/reviews', reviewRouter)
 app.use('/api/chats', chatRouter)
 app.use('/api/messages', messageRouter)
 app.use('/upload', fileRouter)

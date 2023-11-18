@@ -9,4 +9,9 @@ const messageSchema = new Schema({
 
 }, { timestamps: true })
 
+messageSchema.pre(/^find/, function(next) {
+	this.populate('chat sender')
+	next()
+})
+
 module.exports = models.Message || model('Message', messageSchema)

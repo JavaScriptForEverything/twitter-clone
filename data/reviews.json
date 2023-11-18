@@ -1,0 +1,27 @@
+[
+	{
+		"review": "this was an awesome review 1",
+		"user" : "652ad9ce8faff3b8cf3ff261",
+		"tweet": "654e3b144a642dd2573d102f"
+	},
+	{
+		"review": "this was an awesome review 2",
+		"user": "6542366977aecce01e7a5b86",
+		"tweet": "654e3b144a642dd2573d102f"
+	},
+	{
+		"review": "this was an awesome review 3",
+		"user" : "652ad9ce8faff3b8cf3ff261",
+		"tweet": "654e70716816f82cf3ddb5f9"
+	},
+	{
+		"review": "this was an awesome review 4",
+		"user": "6542366977aecce01e7a5b86",
+		"tweet": "654e70716816f82cf3ddb5f9"
+	},
+	{
+		"review": "this was an awesome review 5",
+		"user" : "652ad9ce8faff3b8cf3ff261",
+		"tweet": "654e3b144a642dd2573d102f"
+	}
+]

@@ -1,7 +1,7 @@
 const { isValidObjectId, Types } = require('mongoose')
 const { catchAsync, appError } = require('./errorController')
 const Chat = require('../models/chatModel')
-const { filterObjectByArray } = require('../utils')
+const { filterObjectByArray, apiFeatures } = require('../utils')
 const Message = require('../models/messageModal')
 
 
@@ -9,17 +9,21 @@ const Message = require('../models/messageModal')
 // GET 	/api/chats/ 	+ protected
 exports.getAllChats = catchAsync( async (req, res, next) => {
 	const userId = req.session.user._id
-	
-	// Find which users has logedIn user._id ==> Find Group of user self exists
-	const chats = await Chat.find({ users: { $elemMatch: { $eq: userId }} })
-		.sort('createdAt: -1')
-		.populate('users latestMessage') 								// direct property
+	// const userId = '6543a1bc1db3877fa49913aa'
+
+	const filter = { users: { $elemMatch: { $eq: userId }} }
+	const chats = await apiFeatures(Chat, req.query, filter).populate('users latestMessage') 	
+
+	// // Find which users has logedIn user._id ==> Find Group of user self exists
+	// const chats = await Chat.find({ users: { $elemMatch: { $eq: userId }} })
+	// 	.sort('createdAt: -1')
+	// 	.populate('users latestMessage') 								// direct property
 
 	await Message.populate(chats, 'latestMessage.sender') 	// populated by others, then get sender
-	// console.log(chats)
 
 	res.status(200).json({
 		status: 'success',
+		count: chats.length,
 		data: chats
 	})
 })

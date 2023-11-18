@@ -199,3 +199,15 @@ exports.newMessageInboxPage = (req, res) => {
 
 	res.render('message/new', payload)
 }
+
+
+// GET /notification
+exports.notificationPage = (req, res) => {
+
+	const payload = {
+		pageTitle: 'Notification',
+		logedInUser: req.session.user,
+	}
+
+	res.render('notification', payload)
+}

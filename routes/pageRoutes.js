@@ -39,5 +39,6 @@ router
 	.get('/message/new', authController.newMessageInboxPage) 
 	.get('/message/:id', authController.chatMessagePage) 
 
+	.get('/notification', authController.notificationPage) 
 
 module.exports = router

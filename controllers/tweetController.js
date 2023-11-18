@@ -1,20 +1,21 @@
 const Tweet = require('../models/tweetModel')
 const User = require('../models/userModel')
-const { Types } = require('mongoose')
 const { catchAsync, appError } = require('./errorController')
+const { apiFeatures } = require('../utils')
 
 
 // GET /api/tweets
 exports.getTweets = catchAsync(async (req, res, next) => {
+	// console.log(req.query)
+	// const tweets = await Tweet.find().populate('user retweetData replyTo')
+	// await User.populate(tweets, 'retweetData.user replyTo.user')
 
-	console.log(req.query)
-
-	const tweets = await Tweet.find().populate('user retweetData replyTo')
+	const tweets = await apiFeatures(Tweet, req.query).populate('user retweetData replyTo')
 	await User.populate(tweets, 'retweetData.user replyTo.user')
-
 
 	res.status(200).json({
 		status: 'success',
+		count: tweets.length,
 		data: tweets
 	})
 })

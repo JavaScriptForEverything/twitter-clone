@@ -1,0 +1,34 @@
+[
+	{
+		"_id": "652ad9ce8faff3b8cf3ff261",
+		"firstName": "Riajul",
+		"lastName": "Islam",
+		"username": "riajulislam",
+		"email": "riaz@gmail.com",
+		"avatar": "/upload/users/avatar-652ad9ce8faff3b8cf3ff261-1700143321552.png",
+		"createdAt": "2023-10-14T18:11:26.896Z",
+		"updatedAt": "2023-11-16T14:02:01.558Z"
+	},
+	{
+		"_id": "6542366977aecce01e7a5b86",
+		"firstName": "Fiaz",
+		"lastName": "Sofone",
+		"username": "fiazsofone",
+		"email": "fiaz@gmail.com",
+		"avatar": "/upload/users/avatar-6542366977aecce01e7a5b86-1700143238604.png",
+		"likes": [],
+		"retweets": [],
+		"createdAt": "2023-11-01T11:28:42.003Z",
+		"updatedAt": "2023-11-16T14:00:38.621Z"
+	},
+	{
+		"_id": "6543a1971db3877fa49913a2",
+		"firstName": "User1",
+		"lastName": "Sofone",
+		"username": "user1sofone",
+		"email": "user1@gmail.com",
+		"avatar": "/images/users/default.jpg",
+		"createdAt": "2023-11-02T13:18:15.206Z",
+		"updatedAt": "2023-11-02T13:23:45.029Z"
+	}
+]

@@ -1,0 +1,102 @@
+[
+	{
+		"_id": "654e3b144a642dd2573d102f",
+		"tweet": "new tweet",
+		"user": "6542366977aecce01e7a5b86",
+		"pinned": false,
+		"likes": [],
+		"retweetUsers": [],
+		"createdAt": "2023-11-10T14:15:48.745Z",
+		"updatedAt": "2023-11-11T11:48:35.806Z",
+		"__v": 0
+	},
+	{
+		"_id": "654e70716816f82cf3ddb5f9",
+		"tweet": "tweet five",
+		"user": "6542366977aecce01e7a5b86",
+		"pinned": false,
+		"likes": [],
+		"retweetUsers": [],
+		"createdAt": "2023-11-10T18:03:29.448Z",
+		"updatedAt": "2023-11-11T11:48:35.806Z",
+		"__v": 0
+	},
+	{
+		"_id": "654e926063b20cf251c19f44",
+		"tweet": "new tweet for testing",
+		"user": "6542366977aecce01e7a5b86",
+		"pinned": false,
+		"likes": [],
+		"retweetUsers": [],
+		"createdAt": "2023-11-10T20:28:16.258Z",
+		"updatedAt": "2023-11-11T11:48:35.806Z",
+		"__v": 0
+	},
+	{
+		"_id": "654f6a05f3933a6dbd9963f6",
+		"tweet": "this message",
+		"user": "6542366977aecce01e7a5b86",
+		"pinned": true,
+		"likes": [],
+		"retweetUsers": [],
+		"replyTo": "654e926063b20cf251c19f44",
+		"createdAt": "2023-11-11T11:48:21.560Z",
+		"updatedAt": "2023-11-11T11:48:35.813Z",
+		"__v": 0
+	},
+	{
+		"_id": "6552633e44270a3a3d43719f",
+		"tweet": "testing from riaz",
+		"user": "6542366977aecce01e7a5b86",
+		"pinned": false,
+		"likes": [],
+		"retweetUsers": [],
+		"createdAt": "2023-11-13T17:56:14.465Z",
+		"updatedAt": "2023-11-13T17:56:14.465Z",
+		"__v": 0
+	},
+	{
+		"_id": "6552637c44270a3a3d4371a6",
+		"tweet": "tweet 8",
+		"user": "6542366977aecce01e7a5b86",
+		"pinned": false,
+		"likes": [],
+		"retweetUsers": [],
+		"createdAt": "2023-11-13T17:57:16.181Z",
+		"updatedAt": "2023-11-13T17:57:16.181Z",
+		"__v": 0
+	},
+	{
+		"_id": "655263a344270a3a3d4371b2",
+		"tweet": "asdfasdf",
+		"user": "6542366977aecce01e7a5b86",
+		"pinned": false,
+		"likes": [],
+		"retweetUsers": [],
+		"createdAt": "2023-11-13T17:57:55.007Z",
+		"updatedAt": "2023-11-13T17:57:55.007Z",
+		"__v": 0
+	},
+	{
+		"_id": "65526459f19796559795616a",
+		"tweet": "asdf",
+		"user": "652ad9ce8faff3b8cf3ff261",
+		"pinned": false,
+		"likes": [],
+		"retweetUsers": [],
+		"createdAt": "2023-11-13T18:00:57.338Z",
+		"updatedAt": "2023-11-13T18:00:57.338Z",
+		"__v": 0
+	},
+	{
+		"_id": "6552647cf197965597956171",
+		"tweet": "testing tweets",
+		"user": "652ad9ce8faff3b8cf3ff261",
+		"pinned": false,
+		"likes": [],
+		"retweetUsers": [],
+		"createdAt": "2023-11-13T18:01:32.253Z",
+		"updatedAt": "2023-11-13T18:01:32.253Z",
+		"__v": 0
+	}
+]
