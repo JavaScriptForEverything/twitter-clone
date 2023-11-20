@@ -35,7 +35,7 @@ const showChat = (chat={}, elementContainer, logedInUser) => {
 	const	secondary= latestMessage || 'new message'
 	const images = filteredImages || []
 	const	icon= ''
-	const	isHover= false
+	const	isHover= true
 	const	id=''
 	const	name='list-container'
 
@@ -45,8 +45,7 @@ const showChat = (chat={}, elementContainer, logedInUser) => {
 	const htmlString = `
 		<a href='/message/${chat._id}'>
 			<div
-				class='group border-b border-slate-200 px-3 py-1.5 rounded-sm bg-slate-50 '
-				class=${isHover ? 'hover:bg-slate-100 active:bg-slate-200' : ''}
+				class='group border-b border-slate-200 px-3 py-1.5 rounded-sm bg-slate-50/50 hover:bg-slate-100/80 active:bg-slate-200' 
 				id=${id}
 				name=${name}
 			>
@@ -73,11 +72,29 @@ const showChat = (chat={}, elementContainer, logedInUser) => {
 						` : ''}
 					</div>
 
+					<button name='close-button' class='ml-auto text-slate-600 p-0.5 bg-slate-200 active:bg-slate-400 hover:bg-slate-300 rounded-full'>
+						<svg class='w-3 h-3 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6l-5.6 5.6Z"/></svg>
+					</button>
+
 				</div>
 			</div>
 		</a>
-
 	`					
+	// elementContainer.insertAdjacentHTML('beforeend', htmlString)
 
-	elementContainer.insertAdjacentHTML('beforeend', htmlString)
+	const element = stringToElement( htmlString )
+	elementContainer.insertAdjacentElement('beforeend', element)
+
+	element.addEventListener('click', async (evt) => {
+		if(evt.target.name !== 'close-button') return
+		evt.preventDefault()
+
+		// const button = $(`:scope ${element.tagName} [name=close-button]`)
+		// console.log(button)
+
+		const { error } = await axios({ url: `/api/chats/${chat._id}`, method: 'DELETE' })
+
+		if(error) return console.log(`delete chat failed: ${error.message}`)
+		element.remove()
+	})
 }

@@ -1,7 +1,37 @@
-const search = async (searchValue, searchFor='') => {
-	const url = searchFor === 'users' ? '/api/users' : '/api/tweets'
+/* Global Variables
+		logedInUser 						: comes from 	'/search' controller
 
-	const searchUrl = `${url}?search=${searchValue}` 						// we doesn't create Searching machanisom yet
+*/ 
+// console.log( getUserHTML(logedInUser) )
+
+const tabContentContainer = $('[name=tab-content-container]')
+const tweetsContentContainer = tabContentContainer.children[0]
+const usersContentContainer = tabContentContainer.children[1]
+
+let timer
+const searchInput = $('[name=search]')
+searchInput.value = '' // empty value on page refresh
+
+
+
+const fetchInitialData = async (tab = 'tweets') => {
+	const url = tab !== 'tweets' ? '/api/users' : '/api/tweets'
+
+	const { data, error} = await axios({ url, method: 'GET' })
+	if(error) return console.log(`tweetError: ${error.message}`)
+
+	const tabs = data.data
+	tabs?.forEach( doc => {
+		if(tab === 'tweets') tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML( doc))
+		if(tab === 'users') usersContentContainer.insertAdjacentHTML('beforeend', getUserHTML( doc))
+	})
+}
+const fetchBySearchData = async ({ searchValue='', searchFor='' }) => {
+	const url = searchFor === 'users' ? '/api/users' : '/api/tweets'
+	const searchOnFields = searchFor === 'users' ? 'firstName,lastName,username' : 'tweet'
+
+
+	const searchUrl = `${url}?_search=${searchValue},${searchOnFields}` 						// we doesn't create Searching machanisom yet
 	const { error, data } = await axios({ url: searchUrl, method: 'GET' })
 
 	if(error) return console.log(error.message)
@@ -10,41 +40,46 @@ const search = async (searchValue, searchFor='') => {
 }
 
 
-const tabContentContainer = $('[name=tab-content-container]')
+fetchInitialData('tweets')
+fetchInitialData('users')
 
-let timer
-const searchInput = $('[name=search]')
-searchInput.value = '' // empty value on page refresh
 
 searchInput.addEventListener('input', (evt) => {
 	clearTimeout(timer) // remove setTimeout() if user press button within 1sec
 
 	let searchValue = searchInput.value.trim()
-	let searchFor = location.hash === '#users-tab' ? 'users' : ''
+	let searchFor = location.hash === '#users-tab' ? 'users' : 'tweets'
 
-	if(!searchValue) {
-		// if search value is empty then don't ajax call 
-		// or call again to reset search
-		return
-	}
+	// if(!searchValue) {
+	// 	if(searchFor === 'tweets') {
+	// 		tweetsContentContainer.innerHTML = ''
+	// 		fetchInitialData('tweets')
+	// 	}
 
-	// ajax call inside timer, so that it only call when user finish typing
+	// 	if(searchFor === 'users') {
+	// 		usersContentContainer.innerHTML = ''
+	// 		fetchInitialData('users')
+	// 	}
+	// }
+
 	timer = setTimeout( async () => { 	
+		const { data } = await fetchBySearchData({ searchValue, searchFor })
 		
-		if(searchFor === 'users') {
-			const { data } = await search(searchValue, searchFor)
-			data.forEach( (user) => {
-				tabContentContainer.children[1].insertAdjacentHTML('beforeend', getUserHTML(user))
-			})
+		const tabs = data
 
-		} else {
-			const { data } = await search(searchValue, searchFor)
-			data.forEach(tweet => {
-				tabContentContainer.children[0].insertAdjacentHTML('beforeend', getTweetHTML(tweet))
-			})
-		}
+		const element = searchFor === 'users' ? usersContentContainer : tweetsContentContainer
+					element.innerHTML = ''
 
-	}, 1000);
+		tabs?.forEach( doc => {
+			if(searchFor === 'tweets') {
+				tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML( doc))
+			}
 
+			if(searchFor === 'users') {
+				usersContentContainer.insertAdjacentHTML('beforeend', getUserHTML( doc))
+			}
+		})
+
+	}, 1000)
 })
 

@@ -55,7 +55,7 @@ if(process.env.NODE_ENV !== 'development') {
 app.use(hpp()) 									// => _page=1&_page=3 => { _page: 3 }, instead of { _page: [1,3] }
 app.use(rateLimit({ 						// => 
 	windowMs: 10 * 60 * 1000,    	// 10 minutes
-  max: 100                     	// 100 requests per IP
+  max: 10000                   	// 100 requests per IP
 })) 
 
 

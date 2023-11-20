@@ -119,3 +119,17 @@ exports.updateChatById = catchAsync( async (req, res, next) => {
 		data: groupChat
 	})
 })
+
+
+// DELETE 	/api/chats/:id 	+ protected
+exports.deleteChatById = catchAsync( async(req, res, next) => {
+	const chatId = req.params.id
+	if( !isValidObjectId(chatId) ) return next(appError('invalid chatId'))
+
+	const groupChat = await Chat.findByIdAndDelete( chatId )
+
+	res.status(200).json({
+		status: 'success',
+		data: groupChat
+	})
+})

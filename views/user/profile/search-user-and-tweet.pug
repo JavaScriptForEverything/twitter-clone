@@ -75,12 +75,12 @@ block content
 					
 					div(id='0' class='tab-item divide-y space-y' hidden=false ) 
 						//- each followingUser in profileUser.following
-							//- +followList(followingUser, profileUser, 'following')
+						//- +followList(logedInUser, profileUser, 'following')
 
 
 					div(id='1' class='tab-item' hidden ) 
 						//- each followerUser in profileUser.followers
-							+followList(followerUser, profileUser, 'followers')
+						//- +followList(logedInUser, profileUser, 'followers')
 
 
 					//- - console.log(profileUser)
@@ -91,11 +91,10 @@ block content
 		div(class='hidden md:col-span-3')
 			p right section hiddend for now
 	
+		//- - console.log(logedInUser)
 
 	script(nonce=cspNonce).
-		//- const logedInUser = !{ JSON.stringify(logedInUser) } 	
-		//- const profileUser = !{ JSON.stringify(profileUser) } 	
-
+		const logedInUser = !{ JSON.stringify(logedInUser) } 	
 
 		const url = new URL(location.href) 
 		if(url.hash === '#users-tab') { 	 //- /search | /search/#tweets-tab | /search/#users-tab

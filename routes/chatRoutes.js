@@ -19,5 +19,6 @@ router
 	.use(authController.protect)
 	.get('/:id', chatController.getChatById)
 	.patch('/:id', chatController.updateChatById)
+	.delete('/:id', chatController.deleteChatById)
 
 module.exports = router

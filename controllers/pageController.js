@@ -81,7 +81,8 @@ exports.loginPageHandler = async (req, res) => {
 		req.session.user = user
 		// res.redirect('/')
 
-		res.redirect('/notification')
+		// res.redirect('/notification')
+		res.redirect('/search#users-tab')
 
 	} catch (err) {
 		const payload = {
