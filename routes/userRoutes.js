@@ -5,6 +5,8 @@ const { profilePicture } = require('../middlewares/images')
 
 const router = Router()
 
+// router.post('/login', authController.login)
+
 router
 	.use(authController.protect)
 	.get('/', userController.getAllUsers)

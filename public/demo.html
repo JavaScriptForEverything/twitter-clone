@@ -7,26 +7,41 @@
 	<!-- <script src="js/tailwind_cdn.js"></script> -->
 	<style>
 
-		p {
-			user-zoom: fixed;
-		}
-
-
 	</style>
 </head>
 <body>
 
-	<button>Ok</button>
+	<form>
+		<input type="text">
+		<button type="submit">Submit</button>
+	</form>
+	<br>
+	<br>
+	<p name='paragraph'>Paragraph</p>
 
-	<p>
-		Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ratione nostrum quasi molestias at minus tempore quas ea. Reprehenderit accusantium vero dolor. Suscipit omnis maiores fuga est mollitia voluptate animi quibusdam.
-	</p>
 
 	<script>
-		document.querySelector('p').addEventListener('click', (evt) => {
-			const selectedText = getSelection().toString()
-			// const selectedText = document.getSelection().toString()
-			console.log( selectedText )
+		const $ = (selector) => document.querySelector( selector )
+		const input = $('input')
+		const button = $('button')
+		const p =	$('p')
+
+		const query = new URL( location.url ).searchParams.get('query')
+		input.value = query
+		p.innerHTML = query
+
+		input.addEventListener('keydown', (evt) => {
+			
+			setTimeout(() => {
+				p.innerText = evt.target.value
+
+			}, 0);
+		})
+
+		button.addEventListener('click', (evt) => {
+			evt.preventDefault()		
+			
+			location.hash = p.innerHTML 
 		})
 	</script>
 

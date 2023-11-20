@@ -50,7 +50,7 @@ block content
 
 
 
-	script.
+	script(nonce=cspNonce).
 
 		//                                           		// (1) user comes from Server-Side: res.render('/', payload)
 		let logedInUser = !{JSON.stringify( user )} 		// (2) Passing Server-Side variable to Client-Side

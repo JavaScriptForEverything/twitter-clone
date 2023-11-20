@@ -4,7 +4,6 @@ block content
 	include ../components/mui/@index
 	include ../components/@index
 
-	style.
 
 	div(class='grid grid-cols-12 divide-x')
 		//- left-section
@@ -81,7 +80,7 @@ block content
 
 
 
-			script.
+			script(nonce=cspNonce).
 				const logedInUser = !{ JSON.stringify(logedInUser) } 	
 
 

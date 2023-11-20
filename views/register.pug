@@ -67,7 +67,7 @@ block content
 			.text-center
 				a.text-blue-500.underline.decoration-dotted(href="/login") Already have an account ? login here
 
-	script.
+	script(nonce=cspNonce).
 		$('input[name=confirmPassword]').addEventListener('input', (evt) => {
 				const password = $('input[name=password]').value
 				const confirmPassword = evt.target.value

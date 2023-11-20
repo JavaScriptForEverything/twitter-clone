@@ -13,6 +13,11 @@ const { appError } = require('../controllers/errorController');
 	const reviews = await apiFeatures(Review, req.query)
 */
 exports.apiFeatures = (Model, query, newFilter={}) => {
+	/* make sure use app.use( hpp() ), to prevent multiple params: 
+				?_page=1&_page=3 				=> { _page: [1,3] } 			: without hpp() middleware
+				?_page=1&_page=3 				=> { _page: 3 } 					: applied hpp() middleware
+	*/ 
+
 	const page = +query._page || 1
 	const limit = +query._limit || 4
 	const skip = page <= 0 ? 0 : (page - 1) * limit 
@@ -58,6 +63,15 @@ exports.filterObjectByArray = (body={}, allowedFields=[]) => {
 
 	return tempObj
 }
+
+// it prevent HTML XSS Attack: 	<i>a</i> 	=> &gt;a&lt;
+exports.encodeHTML = (s) => s
+	.replace(/&/g, '&amp;')
+	.replace(/</g, '&lt;')
+	.replace(/>/g, '&gt;')
+	.replace(/"/g, '&quot;')
+	.replace(/'/g, '&apos;')
+
 
 // Google: javascript day and time ago
 module.exports.timeSince = (date) => {

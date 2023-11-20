@@ -28,7 +28,7 @@ block content
 			p right section hiddend for now
 	
 
-	script.
+	script(nonce=cspNonce).
 		const tweet = !{ JSON.stringify(tweet) } 	// send tweetId from server-side to client-side
 		//- console.log(tweet)
 
