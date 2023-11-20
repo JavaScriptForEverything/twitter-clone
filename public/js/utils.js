@@ -170,11 +170,13 @@ const getUserHTML = (user, profileUser={}, fieldname = 'following') => {
 	const textContent = user?.[fieldname].includes(profileUser._id) ? 'followed' : 'Following'
 
 	return `
-		<div name='follow-list' class='py-1.5 flex gap-2 cursor-pointer'>
+		<div name='follow-list' class='border-b border-b-slate-100 py-1.5 flex items-center gap-2 cursor-pointer'>
 			<img src='${user.avatar}' alt=user.avatar class='w-10 h-10 rounded-full' />
 			<div class='flex-1 flex items-baseline gap-2 text-slate-900'>
 				<span class='font-medium'> ${user.firstName} ${user.lastName}</span>
-				<span class='text-slate-500 text-sm'> @${user.username}</span>
+				<span class='text-slate-500 text-sm hover:underline hover:decoration-dashed hover:text-blue-700'> 
+					@${user.username}
+				</span>
 			</div>
 
 			<button type='button' id=user._id name=fieldname

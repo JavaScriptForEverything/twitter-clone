@@ -1,5 +1,3 @@
-// console.log({ logedInUser })
-
 /* Global Variables 
 		. logedInUser
 
@@ -8,32 +6,35 @@
 		. messageInput
 */
 
-
 let timer 
-
-// when user clicked any users from search store him into selectedUsers array
-const selectedUsers = []
+const selectedUsers = [] 	// from user selection
 createChatButton.disabled = !selectedUsers.length
 
+const selectedUsersContainer = $('#selected-users-container')
 
 
 
 
 messageInput.addEventListener('keydown', (evt) => {
 	clearTimeout(timer) 											// remove timer if user going typing and typing
+	const inputValeue = evt.target.value.trim()
 
-	if(!messageInput.value && evt.keyCode === 8) {
+	if(!inputValeue && evt.keyCode === 8) {
 		selectedUsers.pop()
 		createChatButton.disabled = !selectedUsers.length
-		$('#selected-users-container').lastChild.remove()
+		selectedUsersContainer.lastChild?.remove()
 
 		return
 	}
 
 	timer = setTimeout(async() => {
 		usersContainer.innerHTML = '' 		// clear container before append something
+		const searchOnFields = 'username,firstName,lastName'
 
-		const { data, error } = await axios({ url: `/api/users`, method: 'GET' })
+		const { data, error } = await axios({ 
+			url: `/api/users?_search=${inputValeue},${searchOnFields}`, 
+			method: 'GET' 
+		})
 		if(error) console.log(error.message)
 
 		const users = data?.data
@@ -47,8 +48,6 @@ messageInput.addEventListener('keydown', (evt) => {
 			showUser(user, logedInUser)
 		})
 
-		
-		
 	}, 1000)
 })
 
@@ -67,23 +66,32 @@ const showUser = (user, logedInUser) => {
 		messageInput.value = ''
 		messageInput.focus()
 		usersContainer.innerHTML = ''
-
-
-
-		// console.log(selectedUsers)
 	})
 }
 
 const addSelectedUserBeforeInput = (selectedUsers) => {
 	document.querySelectorAll('.selected-username').forEach(el => el.remove())
 
-	selectedUsers.forEach( user => {
-		const username = `${user.firstName} ${user.lastName}`
-		const htmlString = `<span class='selected-username'> ${username} </span>`
-
-		$('#selected-users-container').insertAdjacentHTML('beforeend', htmlString)
+	selectedUsers.forEach( (user) => {
+		const fullName = `${user.firstName} ${user.lastName}`
+		const htmlString = `
+			<button id=${user._id} class='selected-username hover:bg-slate-100 active:bg-slate-200'> 
+				 ${fullName} 
+			</button>
+		`
+		selectedUsersContainer.insertAdjacentHTML('beforeend', htmlString)
 	})
 }
+
+
+selectedUsersContainer.addEventListener('click', (evt) => {
+	if( evt.target.tagName === 'BUTTON') {
+		const userIndex = selectedUsers.findIndex( user => user.id === evt.target.id )
+		selectedUsers.splice( userIndex, 1)
+
+		evt.target.remove()
+	}
+})
 
 
 createChatButton.addEventListener('click', async (evt) => {

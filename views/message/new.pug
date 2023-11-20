@@ -15,29 +15,31 @@ block content
 		div(class='col-span-10 md:col-span-7')
 			h1(class='p-2 border-b border-slate-200 text-slate-900 font-bold') New Message
 
-			div(class='px-2 py-3 border-b border-slate-200 text-slate-900 flex items-center gap-2 flex-wrap') 
+			div(class='px-2 py-3  text-slate-900 flex items-center gap-2 flex-wrap') 
 				label(for='message-input' class='text-slate-700') To:
-				div#selected-users-container(
-					class=' flex gap-0.5 [&>*]:text-xs [&>*]:whitespace-nowrap [&>*]:font-light'
-					class='[&>*]:bg-slate-50 [&>*]:text-slate-900 [&>*]:border [&>*]:border-slate-400'
-					class='[&>*]:rounded-md [&>*]:px-1 [&>*]:py-0.5 '
-				)
-					//- span( class='selected-username') Riajul Islam 
-					//- span( class='selected-username') Fiaz Sofone
-
-				div(class='relative')
+				div(class='flex-1 relative')
 					input#message-input(type="text", name="message-input" placeholder='Type the name of other person'
-						class='flex-1 border border-slate-200 pl-1.5 pr-8 py-0.5 rounded text-slate-600'
+						class='w-full flex-1 border border-slate-200 pl-1.5 pr-8 py-1.5 rounded text-slate-600'
 						class='focus:outline-none focus:border-slate-400 placeholder:text-sm '
 					)
 					button(type="button" name='cross-input-button'
-						class='absolute top-[3px] right-2 text-slate-500 p-[1px] rounded-full bg-slate-50'
+						class='absolute top-1.5 right-2 text-slate-500 p-[1px] rounded-full bg-slate-50'
 						class='hover:text-slate-800 hover:bg-slate-100'
 						class='active:text-slate-800 active:bg-slate-200'
 					) 
 						<svg class='' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="m8.464 15.535l7.072-7.07m-7.072 0l7.072 7.07"/></svg>
 			
-			sestion#users-container
+					div#selected-users-container(
+						class='border-b border-slate-200 py-0.5'
+						class=' flex gap-0.5 [&>*]:text-xs [&>*]:whitespace-nowrap [&>*]:font-light'
+						class='[&>*]:bg-slate-50 [&>*]:text-slate-900 [&>*]:border [&>*]:border-slate-400'
+						class='[&>*]:rounded-md [&>*]:px-2 [&>*]:py-0.5 '
+					)
+						//- button( class='selected-username hover:bg-slate-100 active:bg-slate-200') Riajul Islam 
+						//- button( class='selected-username hover:bg-slate-100 active:bg-slate-200') Fiaz Sofone
+
+			div(class='px-1 py-0.5')
+				sestion#users-container
 
 			div(class='mt-2 p-2 flex justify-center')
 				button(type="button" name='create-chat'

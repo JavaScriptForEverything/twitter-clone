@@ -82,7 +82,8 @@ exports.loginPageHandler = async (req, res) => {
 		// res.redirect('/')
 
 		// res.redirect('/notification')
-		res.redirect('/search#users-tab')
+		res.redirect('/message/new')
+		// res.redirect('/search#users-tab')
 
 	} catch (err) {
 		const payload = {
