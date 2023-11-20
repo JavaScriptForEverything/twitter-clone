@@ -199,19 +199,19 @@ const addMessage = (currentDoc, classList={} ) => {
 
 
 	const thierMessage = `
-			<div class='my-1 flex items-end gap-2 '>
-				<img src='${sender.avatar}' class='w-6 h-6 rounded-full' />
-				<p class='w-2/3'>
-					<span class=' bg-slate-100 text-slate-600 px-2 py-1 rounded-lg ${className} '>${currentDoc.message}</span>
-				</p>
-			</div>
-	`
-	const myMessage = `
-		<div class='my-1 flex justify-end items-center gap-2 '>
-			<p class='w-2/3'>
-				<span class=' bg-blue-500 text-slate-50 px-2 py-1 rounded-lg ${className}' >${currentDoc.message}</span>
+		<div class='my-1 flex items-end gap-2 '>
+			<img src='${sender.avatar}' class='w-6 h-6 rounded-full' />
+			<p class='max-w-sm inline-block bg-slate-100 text-slate-600 px-2 py-1 rounded-lg'>
+				<span class='${className}'> ${currentDoc.message} </span>
 			</p>
 		</div>
+	`
+	const myMessage = `
+		<div class='flex justify-end'>
+			<p class='my-1 max-w-sm inline-block bg-blue-500 text-slate-50 px-3 py-1.5 rounded-lg '>
+				<span class=' ${className}'> ${currentDoc.message} </span>
+			</p>
+		<div>
 	`
 
 	if(!currentSenderId) return console.log('make sure messageDoc.sender is populated ')
