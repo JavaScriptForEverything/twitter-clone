@@ -4,7 +4,7 @@ const messageSchema = new Schema({
 
 	message: { type: String, trim: true }, 									// => content
 	sender: { type: Schema.Types.ObjectId, ref: 'User' },
-	chat: { type: Schema.Types.ObjectId, ref: 'Chat' },
+	chat: { type: Schema.Types.ObjectId, ref: 'Chat' }, 		// Group Chat Id
 	users: [{ type: Schema.Types.ObjectId, ref: 'User' }], 	// => readBy
 
 }, { timestamps: true })

@@ -127,6 +127,7 @@ exports.deleteChatById = catchAsync( async(req, res, next) => {
 	if( !isValidObjectId(chatId) ) return next(appError('invalid chatId'))
 
 	const groupChat = await Chat.findByIdAndDelete( chatId )
+	await Message.deleteMany({ chat: new Types.ObjectId(chatId) }) 	// must be awaited
 
 	res.status(200).json({
 		status: 'success',
