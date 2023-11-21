@@ -1,4 +1,5 @@
 const { Schema, models, model } = require('mongoose');
+const User = require('./userModel');
 
 const tweetSchema = new Schema({
 	tweet: {
@@ -12,6 +13,22 @@ const tweetSchema = new Schema({
 		ref: 'User',
 		required: true,
 	},
+	replyTo: { 										 			// tweet._id
+		type: Schema.Types.ObjectId,
+		ref: 'Tweet',
+	},
+	retweet: { 										 			// tweet._id
+		type: Schema.Types.ObjectId,
+		ref: 'Tweet',
+	},
+	retweetData: { 										 	// tweet._id, Delete: use retweet one
+		type: Schema.Types.ObjectId,
+		ref: 'Tweet',
+	},
+	retweetUsers: [{ 										// user._id
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+	}],
 	pinned: {
 		type: Boolean,
 		default: false
@@ -21,23 +38,17 @@ const tweetSchema = new Schema({
 		ref: 'User',
 	}],
 
-	retweetUsers: [{ 										// user._id
-		type: Schema.Types.ObjectId,
-		ref: 'User',
-	}],
-	retweetData: { 										 	// tweet._id
-		type: Schema.Types.ObjectId,
-		ref: 'Tweet',
-	},
-	replyTo: { 										 			// tweet._id
-		type: Schema.Types.ObjectId,
-		ref: 'Tweet',
-	},
 
 
 }, { timestamps: true })
 
 
+tweetSchema.post('save', async function (doc) {
+	await this.populate('user replyTo')
+
+	// --- Why not it work here, but works on POST handler
+	// await User.populate(doc, 'replayTo.user')
+})
 
 const Tweet = models.Tweet || model('Tweet', tweetSchema)
 module.exports = Tweet

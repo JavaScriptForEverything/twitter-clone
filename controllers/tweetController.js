@@ -1,7 +1,8 @@
+const { Types } = require('mongoose')
 const Tweet = require('../models/tweetModel')
 const User = require('../models/userModel')
 const { catchAsync, appError } = require('./errorController')
-const { apiFeatures } = require('../utils')
+const { apiFeatures, filterObjectByArray, encodeHTML } = require('../utils')
 
 
 // GET /api/tweets
@@ -22,16 +23,21 @@ exports.getTweets = catchAsync(async (req, res, next) => {
 
 // POST /api/tweets
 exports.createTweet = catchAsync( async (req, res, next) => {
+	const allowedFields = ['tweet', 'replyTo']
+	const filteredBody = filterObjectByArray(req.body, allowedFields)
+
+	if(req.body.tweet) {
+		filteredBody.tweet = encodeHTML(filteredBody.tweet)
+	}
+
 	const body = { 
-		...req.body,
+		...filteredBody,
 		user: req.session.user._id
-		// user: new Types.ObjectId("652ad9ce8faff3b8cf3ff261"),
 	} 
 
-	const tweet = await Tweet.create(body)
-	await tweet.populate('user replyTo')
-
+	const tweet = await Tweet.create( body )
 	if(!tweet) return next(appError('Can not create tweet', 204, 'TweetError'))
+	await User.populate(tweet, 'replyTo.user')
 	
 	res.status(201).json({
 		status: 'success',
@@ -55,25 +61,15 @@ exports.getTweetById = catchAsync(async (req, res, next) => {
 // PATCH /api/tweets/:id
 exports.updateTweetById = catchAsync( async(req, res, next) => {
 	const tweetId = req.params.id
-	const body = req.body 		// need to filter
+	
+	const allowedFields = ['pinned']
+	const filteredBody = filterObjectByArray(req.body, allowedFields)
 
-	/* if pinned then 
-			1. remove pinned from other tweets: pinned: false
-			2. Only pin current tweet 				: pinned: true
-	*/ 
+	console.log(filteredBody)
 
-	// Step-1: Remove pinned from every tweets of current user's
-	if( req.body.pinned ) {
-		const tweets = await Tweet.updateMany({ user: req.session.user._id }, { pinned: false })
-		if(!tweets) return next(appError('Update other twites is failed', 400))
-	}
-
-
-	// Step-2: Update only current tweet's pinned + other properties
-	const tweet = await Tweet.findByIdAndUpdate(tweetId, body, { new: true })
+	const tweet = await Tweet.findByIdAndUpdate(tweetId, filteredBody, { new: true })
 	if(!tweet) return next(appError('Update Twite is failed', 400))
 
-			
 	res.status(201).json({
 		status: 'success',
 		data: tweet
@@ -97,29 +93,65 @@ exports.deleteTweetById = catchAsync( async(req, res, next) => {
 
 
 
-// PATCH /api/tweets/:tweetId/like
-exports.updateTweetLike = catchAsync(async (req, res, next) => {
 
+// GET /api/tweets/:id/retweet
+exports.retweet = catchAsync(async (req, res, next) => {
+	const tweetId = req.params.id
+	const userId = req.session.user._id
+
+	let retweet = null
+
+	// Step-1: 
+	const deletedTweet = await Tweet.findOneAndDelete({ user: userId, retweet: tweetId })
+
+	// Step-2: 
+	if(!deletedTweet) {
+		retweet = await Tweet.create({ user: userId, retweet: tweetId })
+		// await retweet.populate('user retweet')
+		if(!retweet) return next(appError('retweet failed', '404'))
+	}
+
+	const operator = deletedTweet ? '$pull' : '$addToSet'
+
+	// Step-3: 
+	const updatedTweet = await Tweet.findByIdAndUpdate(
+		tweetId, 
+		{ [operator]: { retweetUsers: userId } }, 
+		{ new: true}
+	)
+	if(!updatedTweet) return next(appError('update retweet in Tweet collection, failed', '404'))
+
+	// Step-4: 
+	const updatedUser = await User.findByIdAndUpdate(
+			userId, 
+			{ [operator]: { retweets: tweetId }},  	// can't be retweet._id : on delete senerio retweet === null
+			{ new: true }
+		)
+	if(!updatedUser) return next(appError('update retweet in User collection, failed', '404'))
+
+	req.session.user = updatedUser
+
+	res.status(200).json({
+		status: 'success',
+		updatedUser,
+		data: updatedTweet 	// updatedTweet, which has updated user details
+	})
+})
+
+
+
+// GET /api/tweets/:tweetId/like
+exports.updateTweetLike = catchAsync(async (req, res, next) => {
+	const tweetId = req.params.id
 	const user = req.session.user
 	const userId = user._id
-	if(!userId) return next(appError('You are not authenticated user', 401))
 
-	const tweetId = req.params.id
-	if(!tweetId) return next(appError('tweetId is missing', 401))
-
-
-	// const id = req.params.tweetId
-	// const body = req.body
-	// 	body.id = undefined
-	// 	body.user = undefined
-
-	// const tweet = Tweet.findByIdAndUpdate(id, body, { new: true, runValidators: true })
+	// const tweet = await Tweet.findById(tweetId)
+	// if(!tweet) return next(appError(`No tweet found by tweetId: ${tweetId}`))
 	
 
 	// Tweet.findByIdAndUpdate(tweetId, { $addToSet: { likes: tweetId }}) 	// MongoDB: to add into array
 	// Tweet.findByIdAndUpdate(tweetId, { $pull: { likes: tweetId }}) 			// MongoDB: to remove from array
-
-
 
 
 	const isLiked = user.likes?.includes(tweetId)
@@ -136,31 +168,3 @@ exports.updateTweetLike = catchAsync(async (req, res, next) => {
 })
 
 
-
-
-// POST /api/tweets/:id/retweet
-exports.retweet = catchAsync(async (req, res, next) => {
-	const tweetId = req.params.id
-	const userId = req.session.user._id
-
-	const deletedTweet = await Tweet.findOneAndDelete({ user: userId, retweetData: tweetId })
-	let retweet = null
-	if( !deletedTweet ) {
-		retweet = await Tweet.create({ user: userId, retweetData: tweetId })
-		if(!retweet) return next(appError('retweet failed', '404'))
-	}
-
-	// Error: => here throw errors
-	const operator = deletedTweet ? '$pull' : '$addToSet'
-	const updatedUser = await User.findByIdAndUpdate(userId, { [operator]: { retweets: retweet.id }}, { new: true })
-	req.session.user = updatedUser
-
-	const updatedTweet = await Tweet.findByIdAndUpdate(tweetId, { [operator]: { retweetUsers: userId }}, { new: true})
-	if(!updatedTweet) return next(appError('update retweet failed', '404'))
-
-
-	res.status(201).json({
-		status: 'success',
-		data: updatedTweet
-	})
-})

@@ -174,7 +174,7 @@ exports.tweetDetailsPage = async(req, res, next) => {
 }
 
 
-
+// GET /search
 exports.searchPage = (req, res) => {
 	const payload = {
 		pageTitle: 'Search',
