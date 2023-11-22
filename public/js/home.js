@@ -1,6 +1,9 @@
 /* Global Variables 	: res.render('home', payload)
 		. logedInUser
 
+	/public/js/utils.js:
+		. getTweetHTML( tweetDoc )
+		. stringToElement( htmlString )
 */
 
 const sendTweetForm = $('#send-tweet-form')
@@ -68,8 +71,8 @@ sendTweetButton.addEventListener('click', async(evt) => {
 	const tweet = data.data
 	textarea.value = ''
 
-	// /public/js/utils.js: const getTweetHTML = () => {...}
-	tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(tweet))
+	// tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(tweet))
+	pinnedTweetContainer.insertAdjacentHTML('afterend', getTweetHTML(tweet))
 })
 
 
@@ -132,9 +135,9 @@ tweetsContainer.addEventListener('click', async (evt) => {
 		if(error) return console.log(error)
 
 		const updatedTweet = data.data
-		tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(updatedTweet))
+		// tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(updatedTweet))
+		pinnedTweetContainer.insertAdjacentHTML('afterend', getTweetHTML(updatedTweet))
 		closeModal()
-		console.log(updatedTweet)
 
 	}) // end submit button click
 	
@@ -202,6 +205,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 
 	const pinned = pinButton.classList.contains('active')
 
+	// Step-1: unpin if already pined
 	if( pinButton.id === 'pin-button' && pinned) {
 
 		const { data, error } = await axios({ 
@@ -226,6 +230,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 
 
 
+	// Step-2: pin and swap pinned and unpined elements possition
 	if( pinButton.id !== 'pin-button') return
 
 	const { data, error } = await axios({ 
