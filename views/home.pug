@@ -5,12 +5,6 @@ block content
 	include components/@index
 
 
-	style.
-		.active {
-			color: gray;
-		}
-
-
 	div(class='grid grid-cols-12 p-2 divide-x min-h-screen')
 		//- left-section
 		div(class='col-span-2')
@@ -39,8 +33,7 @@ block content
 
 
 			section#tweets-container(class='flex-1')
-				section#pinned-tweets-container
-					hr(class='bg-slate-200 h-0.5')
+				section#pinned-tweet-container(class='')
 
 				div(name='loading-container' class='h-full flex flex-col justify-center items-center') 
 					p(name='not-found' class='hidden text-slate-500') No tweets founds

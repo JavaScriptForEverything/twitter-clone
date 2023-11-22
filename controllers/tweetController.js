@@ -12,7 +12,8 @@ exports.getTweets = catchAsync(async (req, res, next) => {
 	// await User.populate(tweets, 'retweetData.user replyTo.user')
 
 	const tweets = await apiFeatures(Tweet, req.query).populate('user retweetData replyTo')
-	await User.populate(tweets, 'retweetData.user replyTo.user')
+	// await User.populate(tweets, 'retweetData.user replyTo.user')
+	await User.populate(tweets, 'retweet.user replyTo.user')
 
 	res.status(200).json({
 		status: 'success',
@@ -61,14 +62,22 @@ exports.getTweetById = catchAsync(async (req, res, next) => {
 // PATCH /api/tweets/:id
 exports.updateTweetById = catchAsync( async(req, res, next) => {
 	const tweetId = req.params.id
+	const userId = req.session.user._id
 	
 	const allowedFields = ['pinned']
 	const filteredBody = filterObjectByArray(req.body, allowedFields)
 
-	console.log(filteredBody)
+	// Step-1: Reset other tweets pinned
+	if(req.body.pinned) {
+		await Tweet.updateMany({ user: userId, pinned: false })
+	}
 
+	// Step-2: Now update to only current tweet.pinned
 	const tweet = await Tweet.findByIdAndUpdate(tweetId, filteredBody, { new: true })
+	await User.populate(tweet, 'user')
 	if(!tweet) return next(appError('Update Twite is failed', 400))
+
+	// console.log(filteredBody)
 
 	res.status(201).json({
 		status: 'success',
@@ -80,9 +89,23 @@ exports.updateTweetById = catchAsync( async(req, res, next) => {
 // DELETE /api/tweets/:tweetId
 exports.deleteTweetById = catchAsync( async(req, res, next) => {
 	const tweetId = req.params.id 
+	const userId = req.session.user._id
 
-	const tweet = await Tweet.findByIdAndDelete(tweetId, { new: true })
+	// Step-1: Delete the tweet of self user
+	const tweet = await Tweet.deleteOne({
+		_id: tweetId,
+		user: userId,
+	})
 	if(!tweet) return next(appError('deleting Twite is failed', 400))
+
+	// Step-2: Remove tweet._id form users.likes or users.retweets array 
+	await User.findByIdAndUpdate( userId, { 
+		$pull: { 
+			likes: tweetId, 
+			retweets: tweetId 
+		} 
+	})
+
 
 	res.status(201).json({
 		status: 'success',
@@ -107,7 +130,8 @@ exports.retweet = catchAsync(async (req, res, next) => {
 	// Step-2: 
 	if(!deletedTweet) {
 		retweet = await Tweet.create({ user: userId, retweet: tweetId })
-		// await retweet.populate('user retweet')
+		await retweet.populate('retweet')
+		await User.populate(retweet, 'retweet.user')
 		if(!retweet) return next(appError('retweet failed', '404'))
 	}
 
@@ -134,7 +158,10 @@ exports.retweet = catchAsync(async (req, res, next) => {
 	res.status(200).json({
 		status: 'success',
 		updatedUser,
-		data: updatedTweet 	// updatedTweet, which has updated user details
+		data: { 
+			retweet,
+			updatedTweet 	
+		}
 	})
 })
 

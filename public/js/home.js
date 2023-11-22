@@ -7,6 +7,7 @@ const sendTweetForm = $('#send-tweet-form')
 const sendTweetButton = $('#send-tweet-form button')
 const textarea = $('#send-tweet-form textarea')
 const tweetsContainer = $('#tweets-container')
+const pinnedTweetContainer = $('#pinned-tweet-container')
 
 const loadingContainer = $('[name=loading-container]')
 const notFound = $('[name=loading-container] [name=not-found]')
@@ -86,13 +87,15 @@ const fetchTweets = async () => {
 	loadingContainer.remove()
 		
 	tweets?.forEach((tweet) => {
-
-
 		if(!!tweet.pinned) {
-			$('#pinned-tweets-container').insertAdjacentHTML('beforeend', getTweetHTML(tweet))
-		} else {
-			tweetsContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet))
-		}
+			pinnedTweetContainer.innerHTML = ''
+			pinnedTweetContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet))
+			return
+		}  
+
+		tweetsContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet))
+		
+		
 	}) // End of getTweets loop
 }
 fetchTweets()
@@ -153,14 +156,16 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	if(error) return console.log(error)
 
 	const updatedUser = data.updatedUser
-	const tweet = data.data
+	const { updatedTweet, retweet } = data.data
 
 	const retweetButton = container.querySelector('[name=retweet-button]')
 	const retweetEl = container.querySelector('[name=retweet-button] span')
-	const color = tweet?.retweetUsers.includes(updatedUser?._id) ? '#3b82f6' : 'gray' 
+	const color = updatedTweet?.retweetUsers.includes(updatedUser?._id) ? '#3b82f6' : 'gray' 
 
-	retweetEl.textContent = tweet?.retweetUsers.length || ''
+	retweetEl.textContent = updatedTweet?.retweetUsers.length || ''
 	retweetButton.style.color = color
+
+	tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(retweet))
 })
 
 //-----[ Heart Handler ]-----
@@ -195,17 +200,50 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	const tweetId = container.id
 	const pinButton = evt.target
 
+	const pinned = pinButton.classList.contains('active')
+
+	if( pinButton.id === 'pin-button' && pinned) {
+
+		const { data, error } = await axios({ 
+			url: `/api/tweets/${tweetId}`, 
+			method: 'PATCH',
+			data: { pinned: false }
+		})
+		if(error) return console.log(error)
+		const tweet = data.data
+
+
+		const pinnedTweetEl = pinnedTweetContainer.firstChild
+		pinnedTweetEl.remove()
+
+		// pinnedTweetContainer.insertAdjacentElement('afterend', pinnedTweetEl)
+		const currentTweetEl = stringToElement( getTweetHTML(tweet) )
+		pinnedTweetContainer.insertAdjacentElement('afterend', currentTweetEl)
+
+		return
+	}
+
+
+
+
 	if( pinButton.id !== 'pin-button') return
-	pinValue = !pinButton.dataset.pinned
 
 	const { data, error } = await axios({ 
 		url: `/api/tweets/${tweetId}`, 
 		method: 'PATCH',
-		data: { pinned: pinValue }
+		data: { pinned: true }
 	})
 	if(error) return console.log(error)
 
 	const tweet = data.data
+
+	const pinnedTweetEl = pinnedTweetContainer.firstChild
+	pinnedTweetEl?.remove()
+	container.remove()
+
+	const currentTweetEl = stringToElement( getTweetHTML(tweet) )
+	pinnedTweetContainer.insertAdjacentElement('afterbegin', currentTweetEl)
+	if(pinnedTweetEl) pinnedTweetContainer.insertAdjacentElement('afterend', pinnedTweetEl)
 
 	if(tweet.pinned) {
 		pinButton.classList.remove('text-slate-50', 'stroke-slate-600')
@@ -215,14 +253,29 @@ tweetsContainer.addEventListener('click', async (evt) => {
 		pinButton.classList.remove('text-slate-500')
 	}
 
-// ${tweet.pinned ? 'text-slate-500 ' : 'text-slate-50 stroke-slate-600'}
+})
 
-	// const heartButton = container.querySelector('[name=pin-button]')
-	// const heartSpan = container.querySelector('[name=heart-button] span')
-	// const color = tweet?.likes.includes(logedInUser._id) ? '#3b82f6' : 'gray' 
+//-----[ Delete Handler ]-----
+// DELETE /api/tweets/:id 					: Cross Icon Click handling
+tweetsContainer.addEventListener('click', async (evt) => {
+	const container = evt.target.closest('.tweet-container')
+	const tweetId = container.id
+	const deleteButton = evt.target
 
-	// heartSpan.textContent = tweet?.likes.length || ''
-	// heartButton.style.color = color
+	if( deleteButton.id !== 'delete-button') return
+
+	// return
+
+	const { data, error } = await axios({ 
+		url: `/api/tweets/${tweetId}`, 
+		method: 'DELETE',
+	})
+	if(error) return console.log(error)
+
+	const tweet = data.data
+	console.log(tweet)
+	container.remove()
+
 })
 
 
