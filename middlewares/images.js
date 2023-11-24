@@ -17,6 +17,6 @@ exports.profilePicture = multer({
 	fileFilter: (req, file, callback) => {
 		if( !file.mimetype.match('image/*') ) callback(appError('please inser image file'), false)
 		callback(null, true)
-	}
+	},
 	
 })

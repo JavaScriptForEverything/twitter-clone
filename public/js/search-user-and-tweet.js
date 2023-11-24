@@ -22,8 +22,30 @@ const fetchInitialData = async (tab = 'tweets') => {
 
 	const tabs = data.data
 	tabs?.forEach( doc => {
-		if(tab === 'tweets') tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML( doc))
-		if(tab === 'users') usersContentContainer.insertAdjacentHTML('beforeend', getUserHTML( doc))
+		if(tab === 'tweets') {
+			tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML(doc, { 
+				showIcons: false,
+				showPinLabel: false
+			}))
+		}
+
+		if(tab === 'users') {
+			const user = doc
+			const listHtmlString = List({
+				primary: `${user.firstName} ${user.lastName}`,
+				secondary: user.username,
+				avatar: user.avatar 
+			})
+
+			const linkWrapper = `
+				<a href='/profile/${user.username}'>
+					${listHtmlString}
+				</a>
+			`
+
+			usersContentContainer.insertAdjacentHTML('beforeend', linkWrapper)
+			// usersContentContainer.insertAdjacentHTML('beforeend', getUserHTML( doc))
+		}
 	})
 }
 const fetchBySearchData = async ({ searchValue='', searchFor='' }) => {

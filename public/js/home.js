@@ -285,12 +285,12 @@ tweetsContainer.addEventListener('click', async (evt) => {
 
 
 
-// -----[ Redirect to Tweet details page ]-----
-tweetsContainer.addEventListener('click', async (evt) => {
-	const container = evt.target.closest('.tweet-container')
-	const tweetId = container.id
+// // -----[ Redirect to Tweet details page ]-----
+// tweetsContainer.addEventListener('click', async (evt) => {
+// 	const container = evt.target.closest('.tweet-container')
+// 	const tweetId = container.id
 
-	if( !evt.target.classList.contains('redirect') ) return
+// 	if( !evt.target.classList.contains('redirect') ) return
 
-	redirectTo(`/tweet/${tweetId}`)
-})
+// 	redirectTo(`/tweet/${tweetId}`)
+// })

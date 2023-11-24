@@ -5,13 +5,14 @@ const { catchAsync, appError } = require('./errorController')
 const { apiFeatures, filterObjectByArray, encodeHTML } = require('../utils')
 
 
+
 // GET /api/tweets
 exports.getTweets = catchAsync(async (req, res, next) => {
 	// console.log(req.query)
 	// const tweets = await Tweet.find().populate('user retweetData replyTo')
 	// await User.populate(tweets, 'retweetData.user replyTo.user')
 
-	const tweets = await apiFeatures(Tweet, req.query).populate('user retweetData replyTo')
+	const tweets = await apiFeatures(Tweet, req.query).populate('user retweet replyTo')
 	// await User.populate(tweets, 'retweetData.user replyTo.user')
 	await User.populate(tweets, 'retweet.user replyTo.user')
 
@@ -46,7 +47,7 @@ exports.createTweet = catchAsync( async (req, res, next) => {
 	})
 })
 
-// GET /api/tweets/id
+// GET /api/tweets/:id
 exports.getTweetById = catchAsync(async (req, res, next) => {
 	const tweet = await Tweet.findById(req.params.id).populate('user retweetData')
 	await User.populate(tweet, 'retweetData.user')
@@ -194,4 +195,16 @@ exports.updateTweetLike = catchAsync(async (req, res, next) => {
 	})
 })
 
+
+// // GET /api/tweets/user/:username
+// exports.getAllProfileUserTweets = async (req, res, next) => {
+// 	const username = req.params.username
+
+// 	const tweets = await apiFeatures(Tweet, req.query)
+
+// 	res.status(200).json({
+// 		status: 'success',
+// 		data: tweets
+// 	})
+// }
 

@@ -13,11 +13,12 @@ block content
 		//- middle-section
 		div(class='col-span-10 md:col-span-7 flex flex-col')
 			p(class='p-2 border-b border-slate-200') #{pageTitle}
-			div(class='p-2 text-slate-700 flex gap-4 mb-8')
+			div(class='p-2 text-slate-700 flex gap-4 pb-8 border-b border-slate-200')
 				+Avatar({ src: user.avatar })
 				div(id='send-tweet-form' class='[&>button]:mt-2 flex-1')
 					+Textarea({ name: 'tween' })
 					+Button({ value: 'Tween', disabled: false })
+
 
 			section#reply-dialog-container
 				+RetweetModal({

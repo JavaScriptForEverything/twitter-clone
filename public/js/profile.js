@@ -1,6 +1,23 @@
-// Cropper available via cropper cdn
+/* Global Variables
+		. logedInUser
+		. profileUser
 
+	utils.js:
+		. $
+		. Cropper 		from cropper CDN
 
+*/
+
+const tweetsContentContainer = $('[name=tweets-container]')
+const repliesContentContainer = $('[name=replies-container]')
+const loadingContainer = $('[name=loading-container]')
+const notFound = $('[name=loading-container] [name=not-found]')
+
+const activeTab = location.hash === '#replies-tab' ? 'replies' : 'tweets' 
+if(activeTab === 'replies') {
+	tweetsContentContainer.hidden = true
+	repliesContentContainer.hidden = false
+}
 
 
 // -------[ avatar photo ]-------
@@ -60,16 +77,24 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 			const formData = new FormData()
 			formData.append('avatar', blob)
 
-			const res = await fetch('/api/users/avatar', {
-				method: 'POST',
-				body: formData
-			})
+			try {
+				// Don't Send headers, else in backend file will not be caputed by Multer
+				const res = await fetch('/api/users/avatar', {
+					method: 'POST',
+					body: formData
+				})
+				if(!res.ok) throw res.json()
 
-			const data = await res.json()
-			const user = data.data
-			avatar.src = user.avatar
+				const data = await res.json()
+				const user = data.data
+				avatar.src = user.avatar
 
-			dialog.close()
+				dialog.close()
+
+			} catch (error) {
+				console.log(error.message)
+				dialog.close()
+			}
 		})
 	})
 
@@ -136,7 +161,6 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 	const cancelButton = $('[name=dialog-cancel-button]')
 	const submitButton = $('[name=dialog-submit-button]')
 	const avatarInput = $('[name=avatar-input]')
-	const avatar = $('[name=avatar]')
 	const coverPhoto = $('[name=cover-photo]')
 	const image = $('[name=image-preview]')
 
@@ -145,21 +169,34 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 	submitButton.addEventListener('click', () => {
 		if(!cropper) return console.log('please choose image and save that')
 
+
 		const canvas = cropper.getCroppedCanvas()
 		canvas.toBlob( async (blob) => {
 			const formData = new FormData()
 			formData.append('coverPhoto', blob)
 
-			const res = await fetch('/api/users/cover-photo', {
-				method: 'POST',
-				body: formData
-			})
 
-			const data = await res.json()
-			const user = data.data
-			coverPhoto.src = user.coverPhoto
 
-			dialog.close()
+			try {
+				// Don't Send headers, else in backend file will not be caputed by Multer
+				const res = await fetch('/api/users/cover-photo', {
+					method: 'POST',
+					data: formData
+				})
+				if(!res.ok) throw res.json()
+
+				const data = await res.json()
+				console.log(data.data)
+
+				const user = data.data
+				coverPhoto.src = user.coverPhoto
+
+				dialog.close()
+
+			} catch (error) {
+				console.log(error.message)
+				dialog.close()
+			}
 		})
 	})
 
@@ -181,4 +218,46 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 
 	})
 })
+
+
+// GET /api/tweets
+const fetchAllTweets = async () => {
+	const { data, error } = await axios({
+		url: `/api/tweets`,
+		method: 'GET'
+	})
+
+	if(error) {
+		console.log(`fetch all tweets is failed: ${error.message}`)
+		// notFound.style.display = 'block'
+		// notFound.textContent = error.message
+		return 
+	}
+
+	loadingContainer.remove()
+
+	data.data?.forEach( (tweet) =>  {
+		// Tweets-Tab: 
+		if( tweet.replyTo === undefined) {
+			tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet, { 
+				showIcons: false,
+				showPinLabel: false
+			}))
+		}
+
+		// Replies-Tab: 
+		if( tweet.replyTo !== undefined) {
+			const reply = tweet
+			repliesContentContainer.insertAdjacentHTML('beforeend', getTweetHTML(reply, { 
+				showIcons: false,
+				showPinLabel: false
+			}))
+		}
+	})
+}
+
+setTimeout(() => {
+	
+fetchAllTweets()
+}, 1000);
 

@@ -14,6 +14,7 @@ exports.protect = (req, res, next) => {
 }
 
 
+
 // // POST 	/api/users/login
 // exports.login = async (req, res, next) => {
 // 	const allowedFields = ['email', 'password']
@@ -47,70 +48,33 @@ exports.protect = (req, res, next) => {
 
 
 
-// GET /profile 		: self-profile 
-exports.profilePage = (req, res, next) => {
-
-	const user = req.session.user
-	// const user = {
-	// 	_id: '652ad9ce8faff3b8cf3ff261',
-	// 	firstName: 'Riajul',
-	// 	lastName: 'Islam',
-	// 	username: 'riajulislam',
-	// 	email: 'riaz@gmail.com',
-	// 	avatar: '/images/users/default.jpg',
-	// 	createdAt: '2023-10-14T18:11:26.896Z',
-	// 	updatedAt: '2023-10-28T12:27:03.442Z',
-
-	// 	tweets: [
-	// 		{
-	// 			user: {
-	// 				_id: '652ad9ce8faff3b8cf3ff261',
-	// 				firstName: 'Riajul',
-	// 				lastName: 'Islam',
-	// 				username: 'riajulislam',
-	// 				email: 'riaz@gmail.com',
-	// 				avatar: '/images/users/default.jpg',
-	// 				createdAt: '2023-10-14T18:11:26.896Z',
-	// 				updatedAt: '2023-10-28T12:27:03.442Z',
-	// 			},
-	// 			createdAt: '2023-10-14T18:11:26.896Z',
-	// 		},
-	// 	]
-	// }
-
-
-	const payload = {
-		pageTitle: 'Profile',
-		user,
-		timeSince
-	}
-
-	res.render('user/profile', payload)
-}
-
-
-// GET /profile/${userId}  	: Other users profile
-exports.userProfilePage = async (req, res, next) => {
+// GET /profile 				: self-profile 
+// GET /profile/${id}  	: Other users profile
+exports.profilePage = async (req, res, next) => {
 	try {
-		const username = req.params.id
-		
-		const profileUser = await User.findOne({ username })
+		const logedInUser = req.session.user
+		const userId = req.params.id
+		const filter = userId ? { username: userId } : { _id: logedInUser._id, }  
+
+		const profileUser = await User.findOne( filter )
 		if(!profileUser) return next(appError('profile user not found'))
 
 		const payload = {
 			pageTitle: `${profileUser.firstName} ${profileUser.lastName} Profile`,
-			username,
-			logedInUser: req.session.user,
-			profileUser
+			logedInUser,
+			profileUser,
+			timeSince
 		}
 
-		res.render(`user/userProfile`, payload)
-
+		res.render('user/profile', payload)
+		
 	} catch (err) {
 		console.log(err)
 		res.render('notFound')	
 	}
 }
+
+
 
 // GET 	/profile/:id/following  	+ 	GET /profile/:id/followers
 exports.followingAndFollwers = async (req, res, next) => {

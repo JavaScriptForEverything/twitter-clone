@@ -106,24 +106,27 @@ exports.userAvatarRoute = (req, res, next) => {
 // POST /api/users/coverPhoto 		+ protect + upload.single('coverPhoto')
 exports.userCoverPhotoUpload = async(req, res, next) => {
 	try {
-		const userId = req.session.user._id
+		if(!req.file) return next(appError('req.file is empty'))
+
+		const logedInUser = req.session.user
+		const userId = logedInUser._id
 
 
 		// remove project path:
 		const publicUrl = req.file.path.slice( process.cwd().length ) 	// start from length to end of string
 
 		// // Remove existing picture after user updated, else removed the old user
-		if(req.session.user.coverPhoto) removeFile(req.session.user.coverPhoto)
+		if(logedInUser.coverPhoto) removeFile(logedInUser.coverPhoto)
 
-		const user = await User.findByIdAndUpdate(userId, { coverPhoto: publicUrl }, { new: true, validate: true })
-		if(!user) return next(appError('update coverPhoto failed'))
+		const updatedUser = await User.findByIdAndUpdate(userId, { coverPhoto: publicUrl }, { new: true, validate: true })
+		if(!updatedUser) return next(appError('update coverPhoto failed'))
 
 		// if user modified then update session, so that logedInUser has updated data
-		req.session.user = user
+		req.session.user = updatedUser
 		
 		res.status(201).json({
 			status: 'success',
-			data: user
+			data: updatedUser
 		})
 	} catch (err) {
 		// const publicUrl = req.file.path.slice( process.cwd().length ) 	// start from length to end of string
@@ -131,3 +134,6 @@ exports.userCoverPhotoUpload = async(req, res, next) => {
 		next( appError(err.message)	)
 	}
 }
+
+
+

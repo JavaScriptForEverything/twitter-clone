@@ -79,8 +79,9 @@ exports.loginPageHandler = async (req, res) => {
 		user.password = undefined 		// Don't send password to user
 
 		req.session.user = user
-		res.redirect('/')
+		// res.redirect('/')
 
+		res.redirect('/profile')
 		// res.redirect('/notification')
 		// res.redirect('/message/new')
 		// res.redirect('/message/6542366977aecce01e7a5b86')

@@ -21,10 +21,6 @@ const tweetSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Tweet',
 	},
-	retweetData: { 										 	// tweet._id, Delete: use retweet one
-		type: Schema.Types.ObjectId,
-		ref: 'Tweet',
-	},
 	retweetUsers: [{ 										// user._id
 		type: Schema.Types.ObjectId,
 		ref: 'User',

@@ -29,7 +29,7 @@ router.route('/logout')
 router
 	.use(authController.protect)
 	.get('/profile', authController.profilePage)
-	.get('/profile/:id', authController.userProfilePage)
+	.get('/profile/:id', authController.profilePage)
 	.get('/profile/:id/following', authController.followingAndFollwers)
 	.get('/profile/:id/followers', authController.followingAndFollwers)
 	.get('/tweet/:id', authController.tweetDetailsPage)
