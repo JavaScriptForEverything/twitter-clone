@@ -11,6 +11,7 @@ const rateLimit = require('express-rate-limit') 					// Set request limit per IP
 
 const errorController = require('./controllers/errorController')
 const pageRouter = require('./routes/pageRoutes')
+const docRouter = require('./routes/docRoutes')
 const tweetRouter = require('./routes/tweetRoute')
 const userRouter = require('./routes/userRoutes')
 const reviewRouter = require('./routes/reviewRoutes')
@@ -82,6 +83,7 @@ app.use(session({
 app.set('view engine', 'pug') 												// Setup pug as Templete 
 
 // -----[ routes ]-----
+app.use('/docs', docRouter)
 app.use('/', pageRouter)
 app.use('/api/tweets', tweetRouter)
 app.use('/api/users', userRouter)

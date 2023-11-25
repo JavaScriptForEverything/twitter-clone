@@ -1,19 +1,31 @@
-doctype html
-html(lang="en")
-	head
-		meta(charset="UTF-8")
-		meta(name="viewport", content="width=device-width, initial-scale=1.0")
-		title Testing
-		script(src="/js/tailwind_cdn.js") 
-	body 
-		h1 Testing Page
+extends layout/mainLayout
+block content
+	include icon/icons
+	include components/mui/@index
+	include components/@index
 
-		a(href='/') Home page
-		br
 
-		a(href='/message/652ad9ce8faff3b8cf3ff261') Chat Page
-		br
 
-		include components/mui/dialog
+	div(class='grid grid-cols-12 p-2 divide-x')
+		//- left-section
+		div(class='col-span-2')
+			+NavComponent()
 
-		+Dialog()
+
+		//- middle-section
+		div#forModalContainer(class='col-span-10 md:col-span-7')
+
+			h1(class='p-2 border-b border-slate-200 text-slate-900 font-bold') Testing Page
+
+			section(id='root')
+				h2 Heading goes here
+
+		//- right-section
+		div(class='hidden md:col-span-3')
+			p right section hiddend for now
+	
+
+	script(nonce=cspNonce).
+
+	script(src="/js/_testing.js") 
+

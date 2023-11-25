@@ -168,21 +168,27 @@ const sendMessageToBackend = async ( message ) => {
 	message = encodeHTML(message)
 	if(!message.trim()) return console.log('Your message is empty')
 
+	/* Note: chatId can be 
+			1. chatId  	: will be chatId if it is group chat
+			2. chatId  	: will be userId if it is not group chat, but user-to-user chat
+	
+			So in backend we also have to handle those senerio */ 
 	const { data, error } = await axios({
 		url: '/api/messages',
 		method: 'POST',
 		data: { message, sender: logedInUser._id, chat: chatId }
 	})
 
-	if(error) {
-		sendInput.value = message
-		console.log(`POST /api/messages: ${error.message}`)
-		return
-	}
+	// if(error) {
+	// 	sendInput.value = message
+	// 	console.log(`POST /api/messages: ${error.message}`)
+	// 	return
+	// }
 	
 	const messageDoc = data.data
 	sendInput.value=''
 	sendInput.focus()
+
 		
 	socket.emit('new-message', { chatId, messageDoc })
 	addMessage(messageDoc)

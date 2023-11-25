@@ -82,9 +82,11 @@ exports.loginPageHandler = async (req, res) => {
 		// res.redirect('/')
 
 		res.redirect('/profile')
+		// res.redirect('/docs')
+
 		// res.redirect('/notification')
 		// res.redirect('/message/new')
-		// res.redirect('/message/6542366977aecce01e7a5b86')
+		// res.redirect('/message/655e019f890666a9ec090931')
 
 	} catch (err) {
 		const payload = {
@@ -98,7 +100,7 @@ exports.loginPageHandler = async (req, res) => {
 	}
 }
 
-
+// GET /logout
 exports.logout = (req, res) => {
 	req.session.destroy(err => {
 		if(err) return console.log(`error: ${err.message}`)
@@ -113,6 +115,7 @@ exports.logout = (req, res) => {
 
 
 
+// GET /testing
 exports.testing = (req, res) => {
 	const payload = {
 		pageTitle: 'Testing',
