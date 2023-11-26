@@ -12,7 +12,7 @@ exports.getAllMessages = catchAsync( async (req, res, next) => {
 	const chatId = req.params.chatId
 	const filter = {}
 	if(chatId) filter.chat = chatId
-	
+
 	let messages = await apiFeatures(Message, req.query, filter)
 
 	res.status(201).json({
@@ -28,8 +28,9 @@ exports.getAllMessages = catchAsync( async (req, res, next) => {
 // POST /api/messages
 exports.createMessage = catchAsync( async (req, res, next) => {
 	/* chat can be userId or chatId
-			1. Chat Id handle bello way 	: ?
-			2. userId handle bello way 		: ?  */
+			1. if chatId === chatId 			: 
+			2. if chatId === userId 			: 
+			 */
 	const allowedFields = ['message', 'chat', 'sender']
 	const filteredBody = filterObjectByArray(req.body, allowedFields)
 
@@ -66,21 +67,17 @@ exports.createMessage = catchAsync( async (req, res, next) => {
 	}
 
 
-
-	// const chat = await Chat.findByIdAndUpdate(filteredBody.chat, { latestMessage: message._id }, { new: true })
-	// if(!chat) return next( appError('update chat.latestMessage is failed') )
+	// Step-3: To show updated message on chat list
+	const updatedChat = await Chat.findByIdAndUpdate( chatId, { latestMessage: messageDoc._id })
+	if(!updatedChat) return next( appError('update chat.latestMessage is failed') )
 
 	res.status(201).json({
 		status: 'success',
 		data: messageDoc,
-		// data: {
-		// 	message: messageDoc,
-		// 	chat
-		// }
 	})
 })
 
-
+// used above: if( !chat ) { ... }
 const getChatByUsersId = (userId, senderId) => {
 	return Chat.findOneAndUpdate(
 		{

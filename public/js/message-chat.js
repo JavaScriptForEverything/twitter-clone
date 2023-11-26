@@ -150,17 +150,32 @@ dialogSubmitButton.addEventListener('click', async (evt) => {
 	closeHandler()
 })
 
+// 2. Send Message by button Click
+sendButton.addEventListener('click', (evt) => {
+	let message = sendInput.value.trim()
+			message = encodeHTML(message)
+	if( !message ) return
+
+	sendMessageToBackend(message)
+})
+
+// 1. Send Message by pressing enteredKey 
 sendInput.addEventListener('keydown', (evt) => {
+	const enteredKey = 13
 
 	clearTimeout(timer)
 	const message = evt.target.value.trim()
 	socket.emit('typing', { chatId, message })
 
 	timer = setTimeout(() => {
-		const message = evt.target.value.trim()
+		const isPressedEnteredKey = evt.keyCode === enteredKey
+
+		let message = evt.target.value.trim()
+				message = encodeHTML(message)
+
 		if( !message ) return
 
-		if(evt.keyCode === 13) sendMessageToBackend(message)
+		if(isPressedEnteredKey) sendMessageToBackend(message)
 	}, 0)
 })
 

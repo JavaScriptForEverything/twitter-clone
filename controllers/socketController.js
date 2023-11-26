@@ -28,7 +28,7 @@ module.exports = (io) => (socket) => {
 				
 		// })
 
-		if( !messageDoc._id ) return
+		if( !messageDoc ) return socket.to(roomId).emit('error', { message: `messageDoc not found` })
 		socket.to(roomId).emit('message-received', { roomId, messageDoc })
 	})
 

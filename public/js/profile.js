@@ -11,7 +11,9 @@
 const tweetsContentContainer = $('[name=tweets-container]')
 const repliesContentContainer = $('[name=replies-container]')
 const loadingContainer = $('[name=loading-container]')
-const notFound = $('[name=loading-container] [name=not-found]')
+// const notFound = $('[name=loading-container] [name=not-found]')
+const notFoundChild = loadingContainer.children[0]
+const loadingChild = loadingContainer.children[1]
 
 const activeTab = location.hash === '#replies-tab' ? 'replies' : 'tweets' 
 if(activeTab === 'replies') {
@@ -229,8 +231,12 @@ const fetchAllTweets = async () => {
 
 	if(error) {
 		console.log(`fetch all tweets is failed: ${error.message}`)
-		// notFound.style.display = 'block'
-		// notFound.textContent = error.message
+		notFoundChild.classList.remove('hidden')
+		loadingChild.classList.add('hidden')
+
+		if(activeTab === 'replies') {
+			notFoundChild.textContent = notFoundChild.textContent.replace('tweets', 'replies')
+		}
 		return 
 	}
 

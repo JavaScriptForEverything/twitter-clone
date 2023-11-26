@@ -102,6 +102,8 @@ module.exports.timeSince = (date) => {
 
 module.exports.removeFile = (relativePath) => {
 	const filepath = path.join( process.cwd(), relativePath )
+
+	// unlink if exists check
 	fs.unlink(filepath, (err) => {
 		if(err) return appError(err.message)
 	})

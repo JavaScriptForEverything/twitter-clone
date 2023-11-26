@@ -1,10 +1,10 @@
 const getAllTweets = async () => {
 	
 	const { data, error } = await axios({
-		url: '/api/users?_fields=email,avatar,-_id,firstName',
-		method: 'GET'
+		url: '/api/messages',
 	})
 
+	if(error) return console.log(error)
 	// console.log(data)
 	
 	const tweets = data.data 

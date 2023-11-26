@@ -13,13 +13,6 @@ exports.appError = (message='', statusCode=400, status='error') => {
 }
 
 
-exports.pageNotFound = (req, res) => {
-	const payload = { pageTitle: 'Not Found' }
-
-	res.render('notFound', payload)
-}
-
-
 exports.errorHandler = (err, req, res, next) => {
 
 	res.status(err.statusCode || 404).json({
@@ -27,12 +20,12 @@ exports.errorHandler = (err, req, res, next) => {
 		status: err.status || 'failed',
 		stack: err.stack
 	})
-
-	// const payload = {
-	// 	pageTitle : 'Error',
-	// 	errorMessage: err.message,
-	// 	stack: err.stack
-	// }
-
-	// res.render('error', payload)
 }
+
+
+exports.pageNotFound = (req, res) => {
+	const payload = { pageTitle: 'Not Found' }
+
+	res.render('notFound', payload)
+}
+

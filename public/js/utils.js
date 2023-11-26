@@ -66,6 +66,13 @@ const encodeHTML = (string) => string
 	.replace(/"/g, '&quot;')
 	.replace(/'/g, '&apos;')
 
+const decodeHTML = (string) => string
+	.replace(/&amp;/g, '&')
+	.replace(/&lt;/g, '<')
+	.replace(/&gt;/g, '>')
+	.replace(/&quot;/g, '"')
+	.replace(/&apos;/g, "'")
+
 
 
 
@@ -82,50 +89,41 @@ if(error) return console.log(error.message)
 
 console.log(data)
 */
-const axios = async(option = {}) => {
-	let output = { }
+const axios = async(option) => {
+	let output = {
+		data: {},
+		error: null
+	}
+
+	const { 
+		url, 
+		method= 'GET', 
+		isConvertToObject=true, 
+		data 
+	} = option
+
+	const body = isConvertToObject ? JSON.stringify(data) : data
+	const headers = option.headers || {
+		'content-type': 'application/json',
+		'accept': 'application/json',
+	}
 
 	try {
-		if(!option.url.trim()) throw new Error(`URL is empty`)
-
-		const res = await fetch(option.url, {
-			method: option.method.toUpperCase(),
-			body: JSON.stringify(option.data),
-			headers: {
-				'content-type': 'application/json',
-				'accept': 'application/json',
-			},
-			...option,
+		const res = await fetch(url, { 
+			method: method.toUpperCase(), 
+			body: body ? body: undefined, 
+			headers 
 		})
 
+		const result = await res.json()
 
-		// // Parse to JSON when it is json
-		// const contentType = res.headers.get('content-type') 
+		// handle ServerSide: user throw error 							: return next( appError('...') )
+		if(result.message) throw new Error(result.message) 		
 
-		// if( contentType?.indexOf('application/json' !== -1) ) {
-		// 	if(!res.ok) throw await res.json()
-		// } else {
-		// 	if(!res.ok) throw await res.text()
-		// }
+		// handle ServerSide: unhandled error 							: return next( '...' ) or any error
+		if( !res.ok ) throw new Error('Unknown Error') 				
 
-
-
-		/** Don't Relay on headers `content-type`
-		 * 		- because what the data get depends on how backend sends, so parse your self
-		 * 			manually when it needed. Bellow example solve the problem.
-		 */ 
-
-		const message = `You are not logedin:
-			your data is html (becasue of redirect to login page which is html data)
-			That won't be a problems when you protect current page
-			or else send json on authentication failed instead of redirecting to html page
-		`
-		const getDataAsText = await res.text()
-		if(!getDataAsText.startsWith('{')) throw new Error(message)
-		const parseToJSON = JSON.parse(getDataAsText)
-		output.data = parseToJSON
-
-
+		output.data = result
 
 	} catch (err) {
 		output.error = {
@@ -331,7 +329,9 @@ const List = (props = {}) => {
 					<h2 class='text-slate-700 font-medium hover:text-slate-800 truncate w-60'> ${primary} </h2>
 				` : ''}
 				${secondary ? `
-					<p class='text-slate-700/95 hover:text-slate-800/90 font-light text-sm'> ${secondary} </p>
+					<p class='text-slate-700/95 hover:text-slate-800/90 font-light text-sm truncate w-120'> 
+						${decodeHTML(secondary)} 
+					</p>
 				` : ''}
 
 				${icon ? `
