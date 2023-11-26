@@ -11,7 +11,7 @@ const User = require('../models/userModel')
 exports.getAllMessages = catchAsync( async (req, res, next) => {
 	const chatId = req.params.chatId
 	const filter = {}
-	if(chatId) filter.chat = chatId
+	// if(chatId) filter.chat = chatId
 
 	let messages = await apiFeatures(Message, req.query, filter)
 
@@ -22,6 +22,19 @@ exports.getAllMessages = catchAsync( async (req, res, next) => {
 	})
 })
 
+
+// 
+exports.getAllMessagesOfSingleUser = catchAsync( async (req, res, next) => {
+	const userId = req.params.userId
+
+	let messages = await Message.find({ chat: new Types.ObjectId(userId) })
+
+	res.status(201).json({
+		status: 'success',
+		count: messages.length,
+		data: messages
+	})
+})
 
 
 
@@ -54,6 +67,11 @@ exports.createMessage = catchAsync( async (req, res, next) => {
 	// Step-1: if user already exists then return that
 	let chat = await Chat.findOne({ _id: chatId, users: { $elemMatch: { $eq: senderId }} }).populate('users')
 
+	if(chat && messageDoc) {
+		chat.latestMessage = messageDoc._id
+		await chat.save()
+	}
+
 
 	// Step-2: if user not exists then create one and return that
 	if(!chat) {
@@ -64,12 +82,12 @@ exports.createMessage = catchAsync( async (req, res, next) => {
 
 		// also populate('users) here
 		chat = await getChatByUsersId(userId, senderId)
+
+		chat.latestMessage = messageDoc._id
+		await chat.save()
 	}
 
 
-	// Step-3: To show updated message on chat list
-	const updatedChat = await Chat.findByIdAndUpdate( chatId, { latestMessage: messageDoc._id })
-	if(!updatedChat) return next( appError('update chat.latestMessage is failed') )
 
 	res.status(201).json({
 		status: 'success',
@@ -77,7 +95,7 @@ exports.createMessage = catchAsync( async (req, res, next) => {
 	})
 })
 
-// used above: if( !chat ) { ... }
+// used in POST /api/messages above: if( !chat ) { ... }
 const getChatByUsersId = (userId, senderId) => {
 	return Chat.findOneAndUpdate(
 		{

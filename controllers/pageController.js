@@ -81,10 +81,11 @@ exports.loginPageHandler = async (req, res) => {
 		req.session.user = user
 		// res.redirect('/')
 
-		res.redirect('/profile')
+		// res.redirect('/profile')
 		// res.redirect('/docs')
 
 		// res.redirect('/notification')
+		res.redirect('/message')
 		// res.redirect('/message/new')
 		// res.redirect('/message/655e019f890666a9ec090931')
 

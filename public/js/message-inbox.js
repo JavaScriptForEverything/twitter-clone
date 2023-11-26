@@ -3,7 +3,7 @@ const chatListContainer = $('[name=chat-list-container]')
 // console.log(logedInUser)
 
 const getAllChats = async () => {
-	const { data, error } = await axios({ url: '/api/chats', method: 'GET' })
+	const { data, error } = await axios({ url: '/api/chats' })
 	if(error) return console.log(`getAllChats error: ${error.message}`)
 
 
@@ -17,6 +17,8 @@ getAllChats()
 
 
 
+// Show Chat in UI
+// DELETE /api/chats/:id
 const showChat = (chat={}, elementContainer, logedInUser) => {
 	const filteredUsernames = chat.users
 		.filter(user => user._id !== logedInUser._id) 				// filter out self (user self sees the chants)

@@ -19,16 +19,16 @@ exports.apiFeatures = (Model, query, newFilter={}) => {
 	*/ 
 
 	const page = +query._page || 1
-	const limit = +query._limit || 4
+	const limit = +query._limit || 100
 	const skip = page <= 0 ? 0 : (page - 1) * limit 
 
-	const sort = query._sort?.toString().trim().split(',').join(' ') || '-createdAt'
+	const sort = query._sort?.toString().trim().split(',').join(' ') || 'createdAt'
 	const select = query._fields?.toString().trim().split(',').join(' ') || '-_v'
 
 	const search = query._search?.toString().trim().split(',') || ['', '']
 	const [ searchValue, ...searchFields ] = search
 	let searchObj = {
-	"$or" : searchFields.map( field => ({ [field]: { "$regex": searchValue, "$options": "i" } }))
+		"$or" : searchFields.map( field => ({ [field]: { "$regex": searchValue, "$options": "i" } }))
 	}
 	searchObj = search[1] ? searchObj : {}
 

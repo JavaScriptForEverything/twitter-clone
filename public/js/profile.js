@@ -224,10 +224,7 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 
 // GET /api/tweets
 const fetchAllTweets = async () => {
-	const { data, error } = await axios({
-		url: `/api/tweets`,
-		method: 'GET'
-	})
+	const { data, error } = await axios({ url: `/api/tweets` })
 
 	if(error) {
 		console.log(`fetch all tweets is failed: ${error.message}`)

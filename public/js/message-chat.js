@@ -19,26 +19,19 @@ let timer = undefined
 sendInput.value=''
 
 
+// GET /api/messages/:id 	
 const getAllMessagesOfSingleChat = async (chatId) => {
-	const { data, error } = await axios({
-		url: `/api/chats/${chatId}/messages`,
-		method: 'GET'
-	})
-	if(error) return console.log(`fetch all messages failed: ${error.message}`)
+	pageLoadingIndicator.classList.remove('hidden') 	// Show loading
+
+	const { data, error } = await axios({ url: `/api/messages/${chatId}` })
+	if(error) {
+		console.log(`fetch all messages failed: ${error.message}`)
+		pageLoadingIndicator.classList.add('hidden') 	// Hide loading
+		return
+	}
 
 	const messageDocs = data.data
-	pageLoadingIndicator.remove() 	// hide as soon as data loaded
-
-
-	// const firstDoc = messageDocs[0]
-	// const lastDoc  = messageDocs[messageDocs.length - 1]
-
-		// <div name='message-container' class='p-2 text-slate-500'>
-		// 	<p class='text-slate-500/80 text-sm'> ${sender.firstName} ${sender.lastName} </p>
-		// </div>
-	
-	// const mineMessageDoc = messageDocs.find( mineDoc => mineDoc._id === logedInUser._id)
-	// messageContainer.insertAdjacentHTML('afterbegin', '<span> hi </span>')
+	pageLoadingIndicator.classList.add('hidden') 	// Hide loading
 
 	messageDocs.forEach( (messageDoc, index, docs) => {
 
@@ -131,7 +124,7 @@ const closeHandler = () => {
 dialogCloseButton.addEventListener('click', closeHandler)
 dialogCancelButton.addEventListener('click', closeHandler)
 groupName.addEventListener('input', (evt) => dialogSubmitButton.disabled = !evt.target.value.trim() )
-editChat.addEventListener('click', (evt) => dialog.showModal())
+editChat.addEventListener('click', () => dialog.showModal())
 
 dialogSubmitButton.addEventListener('click', async (evt) => {
 	const url = new URL(location.href)

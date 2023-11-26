@@ -9,9 +9,17 @@ const Message = require('../models/messageModal')
 // GET 	/api/chats/ 	+ protected
 exports.getAllChats = catchAsync( async (req, res, next) => {
 	const userId = req.session.user._id
-	// const userId = '6543a1bc1db3877fa49913aa'
 
+	// Shows all chat's of current user
 	const filter = { users: { $elemMatch: { $eq: userId }} }
+
+	// // Shows all chat of Group Users
+	// const filter = { 
+	// 	isGroup: true, 									// Only show group chat
+	// 	users: { 
+	// 		$elemMatch: { $eq: userId } 	// of currentUser
+	// 	} 
+	// }
 	const chats = await apiFeatures(Chat, req.query, filter).populate('users latestMessage') 	
 
 	// // Find which users has logedIn user._id ==> Find Group of user self exists
@@ -128,6 +136,7 @@ exports.deleteChatById = catchAsync( async(req, res, next) => {
 
 	const groupChat = await Chat.findByIdAndDelete( chatId )
 	await Message.deleteMany({ chat: new Types.ObjectId(chatId) }) 	// must be awaited
+		// => Only delete group chat's messages, not user-to-user messages
 
 	res.status(200).json({
 		status: 'success',
