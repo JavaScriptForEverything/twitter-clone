@@ -283,12 +283,23 @@ const getTweetHTML = (tweet, { isModal=false, showIcons=true, showPinLabel=true 
 
 
 /*
-	List({
-		id: 1,
-		secondary: 'It was an wonderful progrom or cerimony',
-		avatar: '/images/users/default.jpg',
-		icon: `svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6l-5.6 5.6Z"`
-	})
+const listHtmlString =	List({
+	isHover: true,
+	primary: 'List primary',
+	secondary: 'list summary goes here',
+	avatar: '/images/users/default.jpg',
+	images: ['/images/users/default.jpg', '/images/users/default.jpg'],
+	icon: `
+		<svg class='w-3 h-3 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6l-5.6 5.6Z"/></svg>
+	`
+})
+
+const listWrapper = `
+	<a href='/tweet/tweetId/'>
+		${listHtmlString}
+	</a>
+`
+document.querySelector('#container').insertAdjacentHTML('beforeend', listWrapper )
 */
 const List = (props = {}) => {
 
@@ -299,6 +310,7 @@ const List = (props = {}) => {
 		images=[],
 		icon= '',
 		isHover= false,
+		isActive=false,
 		id='',
 		name='list-container',
 	} = props
@@ -307,8 +319,10 @@ const List = (props = {}) => {
 
 	const htmlString = `
 	<div
-		class='group border-b border-slate-200 px-3 py-1.5 rounded-sm bg-slate-50 '
-		class=${isHover ? 'hover:bg-slate-100 active:bg-slate-200' : ''}
+		class=" group border-b border-slate-200 px-3 py-1.5 rounded-sm  
+			${isHover ? 'hover:bg-slate-100 active:bg-slate-200' : ''}
+			${isActive ? 'bg-slate-200 border-slate-300' : 'bg-slate-50'}
+		"
 		id=${id}
 		name=${name}
 		>
@@ -329,21 +343,23 @@ const List = (props = {}) => {
 					<h2 class='text-slate-700 font-medium hover:text-slate-800 truncate w-60'> ${primary} </h2>
 				` : ''}
 				${secondary ? `
-					<p class='text-slate-700/95 hover:text-slate-800/90 font-light text-sm truncate w-120'> 
+					<p class='text-slate-700/95 hover:text-slate-800/90 font-light text-sm truncate w-60'> 
 						${decodeHTML(secondary)} 
 					</p>
 				` : ''}
-
-				${icon ? `
-				<button type='button' name='list-icon' 
-					class='ml-auto p-0.5 text-slate-600 rounded-full bg-slate-200 border border-slate-200'
-					class='group-hover:bg-slate-300 group-hover:border-slate-300 hover:bg-slate-300 hover:border-slate-300 hover:text-slate-700'
-					class='group-active:border-slate-400 active:bg-blue-400 active:border-blue-500 active:text-blue-600'
-				> 
-					${icon}
-				</button>
-				` :''}
 			</div>
+
+			${icon ? `
+			<button type='button' name='list-icon' 
+				class="
+					ml-auto p-0.5 text-slate-600 rounded-full bg-slate-200 border border-slate-200
+				group-hover:bg-slate-300 group-hover:border-slate-300 hover:bg-slate-300 hover:border-slate-300 hover:text-slate-700
+				group-active:border-slate-400 active:bg-blue-400 active:border-blue-500 active:text-blue-600
+				"
+			> 
+				${icon}
+			</button>
+			` :''}
 		</div>
 	</div>
 	`

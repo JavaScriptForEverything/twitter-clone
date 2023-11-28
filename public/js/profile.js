@@ -8,10 +8,10 @@
 
 */
 
+const followingButton = $('#following-button')
 const tweetsContentContainer = $('[name=tweets-container]')
 const repliesContentContainer = $('[name=replies-container]')
 const loadingContainer = $('[name=loading-container]')
-// const notFound = $('[name=loading-container] [name=not-found]')
 const notFoundChild = loadingContainer.children[0]
 const loadingChild = loadingContainer.children[1]
 
@@ -222,6 +222,35 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 })
 
 
+
+// PATCH /api/users/:id/following
+followingButton.addEventListener('click', async (evt) => {
+
+	const { data, error } = await axios({ 
+		url: `/api/users/${profileUser._id}/following`, 
+		method: 'PATCH'
+	})
+	if(error) return console.log(`show alert in UI: ${error.message}`)
+	// const updatedProfileUser = data.data
+	// console.log(updatedProfileUser)
+
+	const isFollowed = followingButton.textContent === 'follow'
+
+	followingButton.textContent = isFollowed ? 'following' : 'follow'
+	followingButton.classList.toggle('bg-blue-500', isFollowed)
+	followingButton.classList.toggle('text-white', isFollowed)
+
+
+
+})
+
+
+
+
+
+
+
+
 // GET /api/tweets
 const fetchAllTweets = async () => {
 	const { data, error } = await axios({ url: `/api/tweets` })
@@ -258,9 +287,7 @@ const fetchAllTweets = async () => {
 		}
 	})
 }
-
 setTimeout(() => {
-	
 fetchAllTweets()
 }, 1000);
 

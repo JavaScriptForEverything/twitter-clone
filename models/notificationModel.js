@@ -1,15 +1,66 @@
 const { Schema, models, model } = require('mongoose')
 
-const notificationSchema = new Schema({
-	userFrom: { type: Schema.Types.ObjectId, ref: 'User' }, 		// (Fixed ref)
-	userTo: { type: Schema.Types.ObjectId, ref: 'User' },
-	
-	// redirectTo: 	to generate redirectTo url, or we can send directly
-	notificationType: String, 				// [ 'User', 'Chat', 'Tweet', ... ] 		: Model Names
-	entityId: Schema.Types.ObjectId, 	// (Dynamic ref):	ref: notificationType : Populate dynamically to redirect to details by Id 
+/* Show notification when user:
 
-	// isVisited ? 'text-slate-200' : 'text-blue-200
-	isOpend: { type: Boolean, default: false }
+		. follow user
+		. replyTo a tweet
+		. retweet a tweet
+		. like a tweet
+
+*/
+
+
+
+			// notificationType: 'Tweet', 							// notification for 'tweet
+			// entityId: updatedTweet._id, 						// on which notification user liked ?
+			// userFrom: userId, 											// Who liked it ?
+			// userTo: updatedTweet.user._id, 					// this tweet created by whom ?
+
+/*
+{
+	entityId: '',
+	userFrom: '',
+	userTo: '',
+	type: 'like', 			// ['like', 'retweet', 'replyTo', 'follow']
+	kind: 'tweet', 			// ['tweet', 'message' ]
+	isOpened: false
+}
+
+*/
+
+
+const notificationSchema = new Schema({
+	entityId: {
+		type: Schema.Types.ObjectId, 								// On which task notification applied on
+		required: true,
+	},
+	userFrom: { 
+		type: Schema.Types.ObjectId, 								// Who create notification
+		ref: 'User',
+		required: true
+	}, 		
+	userTo: { 
+		type: Schema.Types.ObjectId, 								// on which user's task notification apploed on
+		ref: 'User',
+		required: true
+	}, 			
+	
+	type: { 																			// for which task this notification this
+		type: String,
+		enum: ['like', 'retweet', 'replyTo', 'follow'],
+		required: true,
+	},
+
+	kind: { 																			// what kind of notification is this
+		type: String,
+		enum: ['user', 'tweet', 'message' ],
+		required: true,
+	},
+
+	isOpened: {  																	// To check it notification clicked: seen or unseen
+		type: Boolean, 
+		default: false 
+	}
 
 }, { timestamps: true })
 
@@ -48,12 +99,14 @@ PATCH /api/tweets/:id/retweet
 
 PATCH /api/tweets/:id/like
 
-	if( !isLiked ) = await Notification.insertNotification({ 
-		fromUser 				: req.session.user._id, 
-		userTo 					: tweet.user._id, 							// post.postedBy._id
-		notificationType: 'postLike', 
-		entityId 				: tweet._id, 										// post._id
-	})
+	if( !isLiked ) { 														// Show notification only when liked, skip unlike senerio
+		await Notification.insertNotification({
+			notificationType: 'Tweet', 							// notification for 'tweet
+			entityId: updatedTweet._id, 						// on which notification user liked ?
+			userFrom: userId, 											// Who liked it ?
+			userTo: updatedTweet.user._id, 					// this tweet created by whom ?
+		})
+	}
 
 
 POST /api/messages/
@@ -80,8 +133,15 @@ POST /api/messages/
 */
 
 notificationSchema.statics.insertNotification = async function ( data ) {
-	await this.deleteOne(data)
-	return await this.create(data)
+	// const { userFrom, userTo, notificationType, entityId } = data
+
+	await this.deleteOne(data) 				// if all 4 argument matched then delete that before clreate one
+	return this.create(data)
 }
 
+notificationSchema.pre(/^find/, function(next) {
+	this.populate('userFrom userTo')
+
+	next()
+})
 module.exports = models.Notification || model('Notification', notificationSchema)

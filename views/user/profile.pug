@@ -46,21 +46,23 @@ block content
 					a(href=`/message/${profileUser._id}` class='px-3 py-1.5 border border-blue-500 rounded-3xl hover:bg-blue-50 active:bg-blue-100') 
 						<svg class='fill-blue-500' xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6m-2 0l-8 5l-8-5h16m0 12H4V8l8 5l8-5v10Z"/></svg>
 
-					button(type="button" data-user-id=profileUser._id
-					class='following px-3 py-1.5 rounded-3xl border border-blue-500 text-blue-500 font-medium'
+					- const isFollowing = profileUser.followers.includes( logedInUser._id )
+					button(type="button" id='following-button' data-user-id=profileUser._id
+					class='following px-6 py-1.5 rounded-3xl border border-blue-500 text-blue-500 font-medium'
 					class=' hover:bg-blue-50 hover:text-blue-600 active:bg-blue-100 active:text-blue-700'
-					) following
+					class= isFollowing ? 'bg-blue-500 text-white hover:bg-blue-500/95 hover:text-white' : ''
+					)= isFollowing ? 'following' : 'follow' 
 
 				div(class=' text-slate-500 space-y-0.5 px-4 py-2')
 					p(class=' text-slate-700 font-medium') #{profileUser.username}
 					p @#{profileUser.username}
 					div(class='flex gap-2 items-center')
 						a(href=`/profile/${profileUser.username}/following`) 
-							span(class='text-slate-700 font-medium') 3 
+							span(class='text-slate-700 font-medium') #{profileUser.following.length} 
 							span(class='hover:text-blue-500 hover:underline hover:decoration-dotted hover:decoration-blue-500 ') following
 
 						a(href=`/profile/${profileUser.username}/followers`) 
-							span(class='text-slate-700 font-medium') 3 
+							span(class='text-slate-700 font-medium') #{profileUser.followers.length} 
 							span(class='hover:text-blue-500 hover:underline hover:decoration-dotted hover:decoration-blue-500 ') followers
 
 			//- Posts & Reply Section 

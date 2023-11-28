@@ -37,54 +37,31 @@ block content
 						span(name='edit-chat' class='text-slate-600 cursor-pointer') Group Name
 
 					//- ----[ Show Message section ]-----
-					div(name='message-container' class='text-slate-500')
-						a(href='#')
-							+List({
-								id: 1,
-								secondary: 'Your text goes here',
-								avatar: '/logo.png',
-								icon: `svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6l-5.6 5.6Z"`
-							})
+					div(name='notification-container' class='text-slate-500')
+						//- each notification in notifications
+						//- 	- const fullName = notification?.userFrom.fullName
+						//- 	- const type = notification.type
+						//- 	- const kind = notification.kind
 
-						a(href='#')
-							+List({
-								id: 2,
-								primary: 'Your text goes here',
-								secondary: 'Your text goes here',
-								images: ['/logo.png', '/images/users/default.jpg'],
-								icon: `svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6l-5.6 5.6Z"`
-							})
-
-
-
-						//- div(class='my-1 flex items-center gap-2')
-						//- 	img(src='/images/users/default.jpg' class='w-6 h-6 rounded-full')
-						//- 	p(class='bg-slate-100 text-slate-600 px-2 py-1 rounded-lg') thier message
-
-						//- div(class='my-1 flex justify-end items-center gap-2')
-						//- 	p(class='bg-blue-500 text-slate-50 px-2 py-1 rounded-lg') my message
-
-				//- button(name='typing-indicator' type="button" class='hidden px-2 text-slate-600 font-thin') 
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="4" cy="12" r="3" fill="currentColor"><animate id="svgSpinners3DotsFade0" fill="freeze" attributeName="opacity" begin="0;svgSpinners3DotsFade1.end-0.25s" dur="0.75s" values="1;.2"/></circle><circle cx="12" cy="12" r="3" fill="currentColor" opacity=".4"><animate fill="freeze" attributeName="opacity" begin="svgSpinners3DotsFade0.begin+0.15s" dur="0.75s" values="1;.2"/></circle><circle cx="20" cy="12" r="3" fill="currentColor" opacity=".3"><animate id="svgSpinners3DotsFade1" fill="freeze" attributeName="opacity" begin="svgSpinners3DotsFade0.begin+0.3s" dur="0.75s" values="1;.2"/></circle></svg>
-
-				//- ----[ Send Message section ]-----
-				//- div#send-message-form( class='p-2 text-slate-500 flex items-center')
-					input#send-input(type="text", name="send-input" autofocus=true
-						class='flex-1 border border-slate-200 rounded-md px-2 py-1 text-slate-600'
-						class='focus:outline-none focus:border-slate-400'
-					)
-					button#send-button(type="button"
-						class='text-blue-500 px-2 py-1 rounded-md border border-slate-200'
-						class='hover:bg-slate-50 hover:text-blue-600'
-						class='active:bg-white active:text-blue-500 active:border-slate-300'
-					) 
-						<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="currentColor" d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26l.001.002l4.995 3.178l3.178 4.995l.002.002l.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215l7.494-7.494l1.178-.471l-.47 1.178Z"/></svg>
+						//- 	a(href=`/tweet/${notification.entityId}`)
+						//- 		+List({
+						//- 			id: notification._id,
+						//- 			isHover: true,
+						//- 			isActive: !notification.isOpened,
+						//- 			secondary: `${fullName} ${type} your ${kind}`,
+						//- 			avatar: notification.userFrom.avatar,
+						//- 			icon: `svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6l-5.6 5.6Z"`
+						//- 		})
 
 
 
 
 
-			div(name='page-loading-indicator' class='absolute inset-0')
+
+
+
+
+			div(name='page-loading-indicator' class='absolute inset-0 hidden')
 				div(class='h-full flex justify-center items-center text-slate-500')
 					<svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24"><circle cx="12" cy="2" r="0" fill="currentColor"><animate attributeName="r" begin="0" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(45 12 12)"><animate attributeName="r" begin="0.125s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(90 12 12)"><animate attributeName="r" begin="0.25s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(135 12 12)"><animate attributeName="r" begin="0.375s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(180 12 12)"><animate attributeName="r" begin="0.5s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(225 12 12)"><animate attributeName="r" begin="0.625s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(270 12 12)"><animate attributeName="r" begin="0.75s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(315 12 12)"><animate attributeName="r" begin="0.875s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle></svg>
 

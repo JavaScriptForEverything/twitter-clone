@@ -1,6 +1,7 @@
 const Tweet = require('../models/tweetModel')
 const User = require('../models/userModel')
 const Chat = require('../models/chatModel')
+const Notification = require('../models/notificationModel')
 const { appError } = require('./errorController')
 const { timeSince, filterObjectByArray } = require('../utils')
 
@@ -201,12 +202,25 @@ exports.newMessageInboxPage = (req, res) => {
 
 
 // GET /notification
-exports.notificationPage = (req, res) => {
+exports.notificationPage = async (req, res) => {
+	try {
+		const notifications = await Notification.find({ userFrom: req.session.user._id })
+		if(!notifications) throw new Error('no nitifications found')
 
-	const payload = {
-		pageTitle: 'Notification',
-		logedInUser: req.session.user,
+		const payload = {
+			pageTitle: 'Notification',
+			logedInUser: req.session.user,
+			notifications
+		}
+
+		res.render('notification', payload)
+
+	} catch (error) {
+		const payload = {
+			pageTitle: 'Notification',
+			logedInUser: req.session.user,
+			errorMessage: error.message
+		}
+		res.render('notification', payload)
 	}
-
-	res.render('notification', payload)
 }

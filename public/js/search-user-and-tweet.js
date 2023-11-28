@@ -34,7 +34,10 @@ const fetchInitialData = async (tab = 'tweets') => {
 			const listHtmlString = List({
 				primary: `${user.firstName} ${user.lastName}`,
 				secondary: user.username,
-				avatar: user.avatar 
+				avatar: user.avatar,
+		icon: `
+			<svg class='w-3 h-3 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6l-5.6 5.6Z"/></svg>
+		`
 			})
 
 			const linkWrapper = `

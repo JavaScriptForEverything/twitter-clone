@@ -76,7 +76,12 @@ const userSchema = new Schema({
 	}],
 
 }, {
-	timestamps: true
+	timestamps: true,
+	toJSON: { virtuals: true }, 			// To show virtual fields when convert to json for response back
+})
+
+userSchema.virtual('fullName').get(function(value) {
+	return `${this.firstName} ${this.lastName}`
 })
 
 

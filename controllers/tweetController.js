@@ -1,6 +1,7 @@
 const { Types } = require('mongoose')
 const Tweet = require('../models/tweetModel')
 const User = require('../models/userModel')
+const Notification = require('../models/notificationModel')
 const { catchAsync, appError } = require('./errorController')
 const { apiFeatures, filterObjectByArray, encodeHTML } = require('../utils')
 
@@ -28,19 +29,31 @@ exports.createTweet = catchAsync( async (req, res, next) => {
 	const allowedFields = ['tweet', 'replyTo']
 	const filteredBody = filterObjectByArray(req.body, allowedFields)
 
+	const userId = req.session.user._id
+
 	if(req.body.tweet) {
 		filteredBody.tweet = encodeHTML(filteredBody.tweet)
 	}
 
 	const body = { 
 		...filteredBody,
-		user: req.session.user._id
+		user: userId
 	} 
 
 	const tweet = await Tweet.create( body )
 	if(!tweet) return next(appError('Can not create tweet', 204, 'TweetError'))
 	await User.populate(tweet, 'replyTo.user')
 	
+	if(req.body.replyTo) {
+		await Notification.insertNotification({
+			entityId: tweet._id, 						// on which notification user liked ?
+			userFrom: userId, 											// Who liked it ?
+			userTo: tweet.user._id, 					// which user create this tweet ?
+			type: 'replyTo', 												// ['like', 'retweet', 'replyTo', 'follow']
+			kind: 'tweet', 													// ['tweet', 'message' ]
+		})
+	}
+
 	res.status(201).json({
 		status: 'success',
 		data: tweet
@@ -49,8 +62,8 @@ exports.createTweet = catchAsync( async (req, res, next) => {
 
 // GET /api/tweets/:id
 exports.getTweetById = catchAsync(async (req, res, next) => {
-	const tweet = await Tweet.findById(req.params.id).populate('user retweetData')
-	await User.populate(tweet, 'retweetData.user')
+	const tweet = await Tweet.findById(req.params.id).populate('user retweet')
+	await User.populate(tweet, 'retweet.user')
 
 	res.status(200).json({
 		status: 'success',
@@ -156,6 +169,16 @@ exports.retweet = catchAsync(async (req, res, next) => {
 
 	req.session.user = updatedUser
 
+	if(!deletedTweet) {
+		await Notification.insertNotification({
+			entityId: updatedTweet._id, 						// on which notification user liked ?
+			userFrom: userId, 											// Who liked it ?
+			userTo: updatedTweet.user._id, 					// which user create this tweet ?
+			type: 'retweet', 												// ['like', 'retweet', 'replyTo', 'follow']
+			kind: 'tweet', 													// ['tweet', 'message' ]
+		})
+	}
+
 	res.status(200).json({
 		status: 'success',
 		updatedUser,
@@ -174,13 +197,6 @@ exports.updateTweetLike = catchAsync(async (req, res, next) => {
 	const user = req.session.user
 	const userId = user._id
 
-	// const tweet = await Tweet.findById(tweetId)
-	// if(!tweet) return next(appError(`No tweet found by tweetId: ${tweetId}`))
-	
-
-	// Tweet.findByIdAndUpdate(tweetId, { $addToSet: { likes: tweetId }}) 	// MongoDB: to add into array
-	// Tweet.findByIdAndUpdate(tweetId, { $pull: { likes: tweetId }}) 			// MongoDB: to remove from array
-
 
 	const isLiked = user.likes?.includes(tweetId)
 
@@ -188,6 +204,16 @@ exports.updateTweetLike = catchAsync(async (req, res, next) => {
 	const updatedUser = await User.findByIdAndUpdate(userId, { [operator]: { likes: tweetId }}, { new: true, }) 	
 	const updatedTweet = await Tweet.findByIdAndUpdate(tweetId, { [operator]: { likes: userId }}, { new: true, }) 	
 	req.session.user = updatedUser
+
+	if( !isLiked ) { 														// Show notification only when liked, skip unlike senerio
+		await Notification.insertNotification({
+			entityId: updatedTweet._id, 						// on which notification user liked ?
+			userFrom: userId, 											// Who liked it ?
+			userTo: updatedTweet.user._id, 					// which user create this tweet ?
+			type: 'like', 													// ['like', 'retweet', 'replyTo', 'follow']
+			kind: 'tweet', 													// ['tweet', 'message' ]
+		})
+	}
 
 	res.status(201).json({
 		status: 'success',

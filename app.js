@@ -18,6 +18,7 @@ const reviewRouter = require('./routes/reviewRoutes')
 const fileRouter = require('./routes/fileRoutes')
 const chatRouter = require('./routes/chatRoutes')
 const messageRouter = require('./routes/messageRoutes')
+const notificationRouter = require('./routes/notificationRoutes')
 
 
 const publicDirectory = path.join(process.cwd(), 'public')
@@ -90,6 +91,7 @@ app.use('/api/users', userRouter)
 app.use('/api/reviews', reviewRouter)
 app.use('/api/chats', chatRouter)
 app.use('/api/messages', messageRouter)
+app.use('/api/notifications', notificationRouter)
 app.use('/upload', fileRouter)
 
 

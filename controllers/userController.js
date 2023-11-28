@@ -1,5 +1,6 @@
 const path = require('path')
 const User = require('../models/userModel')  
+const Notification = require('../models/notificationModel')  
 const { removeFile, apiFeatures } = require('../utils')
 const { catchAsync, appError } = require('./errorController')
 
@@ -41,20 +42,32 @@ exports.following = catchAsync(async (req, res, next) => {
 	if(!profileUser) return next(appError('profile user not found by name'))
 
 	const logedInUser = req.session.user
+	const userId = logedInUser._id
 
 	const isFollowing = profileUser.followers?.includes(logedInUser._id) 
 	const operator = isFollowing ? '$pull' : '$addToSet'
 
 
 	// Step-1: add profileUser._id to following array of logedInUser
-	req.session.user = await User.findByIdAndUpdate(logedInUser._id, { [operator]: { following: profileUserId }}, { new: true })
+	const updatedUser = await User.findByIdAndUpdate(logedInUser._id, { [operator]: { following: profileUserId }}, { new: true })
+	req.session.user = updatedUser 
 
 	// Step-2: add logedInUser._id to followers array of profileUser
 	await User.findByIdAndUpdate(profileUserId, { [operator]: { followers: logedInUser._id }} )
 	
+	if( !isFollowing ) {
+		await Notification.insertNotification({
+			entityId: updatedUser._id, 						// on which notification user following ?
+			userFrom: userId, 											// Who following it ?
+			userTo: updatedUser.following.find(userId => userId === userId),		// tweet.user._id, 	// which user create this tweet ?
+			type: 'follow', 												// ['like', 'retweet', 'replyTo', 'follow']
+			kind: 'user', 													// ['tweet', 'message', 'user' ]
+		})
+	}
+	
 	res.status(201).json({
 		status: 'success',
-		data: req.session.user
+		data: updatedUser
 	})
 })
 
