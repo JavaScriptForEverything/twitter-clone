@@ -24,7 +24,7 @@ $('[name=tab-content-container]').addEventListener('click', async (evt) => {
 		})
 
 		if(error) {
-			Alert({
+			Snackbar({
 				severity: 'error',
 				variant: 'filled',
 				message: error.message || 'toggle following failed',

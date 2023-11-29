@@ -24,7 +24,7 @@ module.exports = (io) => (socket) => {
 		// 		//=> And now sending message to every user's parsonal room.
 		// 		// On the client-side:
 		// 		// 		1. if user in the chat page: /message/${messageDoc._id} add new chat 
-		// 		// 		2. if not than show alert on bottom-right or top-right, new message comes
+		// 		// 		2. if not than show Snackbar on bottom-right or top-right, new message comes
 				
 		// })
 

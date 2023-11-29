@@ -62,8 +62,24 @@ exports.createTweet = catchAsync( async (req, res, next) => {
 
 // GET /api/tweets/:id
 exports.getTweetById = catchAsync(async (req, res, next) => {
-	const tweet = await Tweet.findById(req.params.id).populate('user retweet')
-	await User.populate(tweet, 'retweet.user')
+	/* 	Step-1: We need tweet it self by tweet id
+	 		Step-2: We need all the replies from replyTo field
+	 		Step-3: We also need all retweets from tweet.user.retweets + with there user details
+	*/
+
+
+	const tweet = await Tweet.findById(req.params.id).populate('user retweet replyTo')
+	if( !tweet ) return next(appError('no tweet found by id'))
+
+	// // Method-1: mixed up multiple query, but mongoose run one by one untill it found true one
+	// const unknown = await User.populate(tweet, 'retweet.user replyTo.user user.retweets')
+	// await User.populate(unknown, 'user.retweets.user')
+
+	// Method-2: Populate user from tweetDoc => populate tweet from nested tweet => populated user from retweet
+	await User.populate(tweet, 'retweet.user replyTo.user') 
+	const retweets = await Tweet.populate(tweet, 'user.retweets')
+	await User.populate(retweets, 'user.retweets.user')
+
 
 	res.status(200).json({
 		status: 'success',

@@ -19,7 +19,7 @@ const fetchInitialData = async (tab = 'tweets') => {
 
 	const { data, error} = await axios({ url, method: 'GET' })
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'tweetError failed',
@@ -69,7 +69,7 @@ const fetchBySearchData = async ({ searchValue='', searchFor='' }) => {
 	const { error, data } = await axios({ url: searchUrl, method: 'GET' })
 
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'SearchError failed',

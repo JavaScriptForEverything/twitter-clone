@@ -4,11 +4,6 @@ const authController = require('../controllers/authController')
 
 const router = Router()
 
-	// .get('/message', authController.messageInboxPage) 
-	// .get('/message/new', authController.newMessageInboxPage) 
-	// .get('/message/:id', authController.chatMessagePage) 
-
-
 router
 	.get('/testing', 
 		authController.protect, 

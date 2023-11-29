@@ -5,7 +5,7 @@ const chatListContainer = $('[name=chat-list-container]')
 const getAllChats = async () => {
 	const { data, error } = await axios({ url: '/api/chats' })
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'getAllChats failed',
@@ -105,7 +105,7 @@ const showChat = (chat={}, elementContainer, logedInUser) => {
 
 		const { error } = await axios({ url: `/api/chats/${chat._id}`, method: 'DELETE' })
 		if(error) {
-			Alert({
+			Snackbar({
 				severity: 'error',
 				variant: 'filled',
 				message: error.message || 'delete chat failed',

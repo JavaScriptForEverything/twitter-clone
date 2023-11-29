@@ -11,6 +11,7 @@ const imageContainer = $('[name=chat-image-container]')
 const sendMessageForm = $('#send-message-form')
 const typingIndicator = $('[name=typing-indicator]')
 const pageLoadingIndicator = $('[name=page-loading-indicator]')
+const deleteChatButton = $('[name=delete-chat]')
 
 const url = new URL(location.href)
 const chatId = url.pathname.split('/').pop()
@@ -25,7 +26,7 @@ const getAllMessagesOfSingleChat = async (chatId) => {
 
 	const { data, error } = await axios({ url: `/api/messages/${chatId}` })
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'fetch all messages failed',
@@ -82,7 +83,7 @@ const scrollToBottom = (isFromBegining=true, speed=5, delay=1) => {
 const getChatById = async (chatId) => {
 	const { data, error } = await axios({ url: `/api/chats/${chatId}`, method: 'GET' })
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'getChatById failed',
@@ -150,7 +151,7 @@ dialogSubmitButton.addEventListener('click', async (evt) => {
 		data: { name: groupName.value, isGroup: true }
 	})
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'show update groupName failed',
@@ -211,7 +212,7 @@ const sendMessageToBackend = async ( message ) => {
 	})
 
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'add message failed',
@@ -287,4 +288,10 @@ socket.on('message-received', ({ roomId, messageDoc }) => {
 	sendInput.value=''
 	sendInput.focus()
 
+})
+
+
+deleteChatButton.addEventListener('click', (evt) => {
+	messageContainer.innerHTML = ''
+	// console.log(children)
 })

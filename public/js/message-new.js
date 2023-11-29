@@ -36,7 +36,7 @@ messageInput.addEventListener('keydown', (evt) => {
 			method: 'GET' 
 		})
 		if(error) {
-			Alert({
+			Snackbar({
 				severity: 'error',
 				variant: 'filled',
 				message: error.message || 'search user failed',
@@ -113,7 +113,7 @@ createChatButton.addEventListener('click', async (evt) => {
 		data: selectedUsersIds 
 	})
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'create chat failed',

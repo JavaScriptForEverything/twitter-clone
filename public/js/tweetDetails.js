@@ -1,21 +1,16 @@
-/* Global Variables 	: res.render('home', payload)
-		. logedInUser
-
-	/public/js/utils.js:
-		. getTweetHTML( tweetDoc )
-		. stringToElement( htmlString )
+/* Global Variables
+		. logedInUser 	// comes from backend
+		. tweetId  			// comes from backend 	: aslo checked is valid tweetId or not
 */
 
 const sendTweetForm = $('#send-tweet-form')
 const sendTweetButton = $('#send-tweet-form button')
-const textarea = $('#send-tweet-form textarea')
 const tweetsContainer = $('#tweets-container')
 const pinnedTweetContainer = $('#pinned-tweet-container')
 
 const loadingContainer = $('[name=loading-container]')
 const notFound = $('[name=loading-container] [name=not-found]')
 const loadingIcon = $('[name=loading-container] [name=loading-icon]')
-
 
 const dialogEl = $('[name=reply-dialog]')
 const tweetContainer = $('[name=reply-dialog] [name=tweet-container]')
@@ -48,48 +43,9 @@ dialogTweetInput.addEventListener('input', (evt) => dialogSubmitButton.disabled 
 
 
 
-
-
-// Tweet Input handler
-if(!textarea.value.trim()) sendTweetButton.disabled = true
-textarea.addEventListener('input', (evt) => {
-	if(!evt.target.value.trim()) sendTweetButton.disabled = true
-	if(evt.target.value.trim()) sendTweetButton.disabled = false
-})
-
-// POST /api/tweets  			: { tweet: inputValue }
-sendTweetButton.addEventListener('click', async(evt) => {
-	const inputValue = encodeHTML(textarea.value.trim())
-
-	const { data, error } = await axios({ 
-		url: '/api/tweets', 
-		method: 'POST',
-		data: { tweet: inputValue }
-	})
-
-	if(error) {
-		Snackbar({
-			severity: 'error',
-			variant: 'filled',
-			message: error.message || 'add tweet failed',
-			action: true,
-		})
-
-		return console.log(`add tweet failed: ${error.message}`)
-	}
-
-
-	const tweet = data.data
-	textarea.value = ''
-
-	// tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(tweet))
-	pinnedTweetContainer.insertAdjacentHTML('afterend', getTweetHTML(tweet))
-})
-
-
-// GET /api/tweets
-const fetchTweets = async () => {
-	const { data, error } = await axios({ url: `/api/tweets?_sort=-createdAt&_limit=100`, method: 'GET', })
+// GET /api/tweets/:id
+const fetchTweetById = async () => {
+	const { data, error } = await axios({ url: `/api/tweets/${tweetId}`})
 	if(error) {
 		notFound.textContent = error.message
 		notFound.style.display = 'block'
@@ -105,22 +61,19 @@ const fetchTweets = async () => {
 		return console.log(`cannot fetch all tweets: ${error.message}`)
 	}
 
-	const tweets = data.data
+	const tweet = data.data
 	loadingContainer.remove()
 		
-	tweets?.forEach((tweet) => {
-		if(!!tweet.pinned) {
-			pinnedTweetContainer.innerHTML = ''
-			pinnedTweetContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet))
-			return
-		}  
+	if(!!tweet.pinned) {
+		pinnedTweetContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet))
+	}  
 
-		tweetsContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet))
-		
-		
-	}) // End of getTweets loop
+	tweetsContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet.replyTo))
+	tweet.user.retweets.forEach( retweet => {
+		tweetsContainer.insertAdjacentHTML('beforeend', getTweetHTML(retweet))
+	})
 }
-fetchTweets()
+fetchTweetById()
 
 //-----[ Chat Handler ]-----
 // GET /api/tweets/:id 		: Chat Icon Click handling
@@ -352,17 +305,6 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	const tweet = data.data
 	console.log(tweet)
 	container.remove()
-
 })
 
 
-
-// // -----[ Redirect to Tweet details page ]-----
-// tweetsContainer.addEventListener('click', async (evt) => {
-// 	const container = evt.target.closest('.tweet-container')
-// 	const tweetId = container.id
-
-// 	if( !evt.target.classList.contains('redirect') ) return
-
-// 	redirectTo(`/tweet/${tweetId}`)
-// })

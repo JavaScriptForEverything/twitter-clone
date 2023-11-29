@@ -4,6 +4,7 @@ const Chat = require('../models/chatModel')
 const Notification = require('../models/notificationModel')
 const { appError } = require('./errorController')
 const { timeSince, filterObjectByArray } = require('../utils')
+const { isValidObjectId } = require('mongoose')
 
 
 exports.protect = (req, res, next) => {
@@ -110,20 +111,15 @@ exports.followingAndFollwers = async (req, res, next) => {
 exports.tweetDetailsPage = async(req, res, next) => {
 	try {
 		const tweetId = req.params.id
-		const isValidTweetId = true
-		if(!isValidTweetId) console.log('redirect to 404 page: tweetId is not valied')
-
-		const tweet = await Tweet.findById(tweetId).populate('replyTo')
-		if(!tweet) throw new Error('Tweet not found')
-		const user = await User.populate(tweet, 'user')
-		await Tweet.populate(user, 'user.retweets')
+		const isValidTweetId = isValidObjectId(tweetId)
+		if(!isValidTweetId) throw new Error('tweetId is invalid')
 
 
 		const payload = {
 			pageTitle: 'Tweet Details',
+			tweetId,
 			timeSince,
-			user: req.session.user,
-			tweet
+			logedInUser: req.session.user,
 		}
 
 		res.render('tweet/tweetDetails', payload)

@@ -95,7 +95,7 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 				dialog.close()
 
 			} catch (error) {
-				Alert({
+				Snackbar({
 					severity: 'error',
 					variant: 'filled',
 					message: error.message || '',
@@ -202,7 +202,7 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 				dialog.close()
 
 			} catch (error) {
-				Alert({
+				Snackbar({
 					severity: 'error',
 					variant: 'filled',
 					message: error.message || 'toggle following failed',
@@ -242,7 +242,7 @@ followingButton.addEventListener('click', async (evt) => {
 		method: 'PATCH'
 	})
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'toggle following failed',
@@ -284,7 +284,7 @@ const fetchAllTweets = async () => {
 			notFoundChild.textContent = notFoundChild.textContent.replace('tweets', 'replies')
 		}
 
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'toggle following failed',

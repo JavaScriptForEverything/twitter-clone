@@ -10,7 +10,7 @@ const fetchInitialNotifications = async () => {
 
 	const { data, error } = await axios({ url: '/api/notifications' })	
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'fetch all notification failed',
@@ -74,7 +74,7 @@ notificationContainer.addEventListener('click', async (evt) => {
 		data: { isOpened: true } 		//=> true : viewed, 	[ flase: new, not views yet ]
 	})
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'isOpened notification failed',
@@ -110,7 +110,7 @@ notificationContainer.addEventListener('click', async (evt) => {
 
 	const { data, error } = await axios({ url: `/api/notifications/${notificationId}`, method: 'DELETE', })
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'delete notification failed',
@@ -129,7 +129,7 @@ notificationContainer.addEventListener('click', async (evt) => {
 checkAllButton.addEventListener('click', async (evt) => {
 	const { error, data } = await axios({ url: '/api/notifications', method: 'PATCH' })
 	if(error) {
-		Alert({
+		Snackbar({
 			severity: 'error',
 			variant: 'filled',
 			message: error.message || 'read all notification failed',
