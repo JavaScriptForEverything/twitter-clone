@@ -14,6 +14,7 @@ const repliesContentContainer = $('[name=replies-container]')
 const loadingContainer = $('[name=loading-container]')
 const notFoundChild = loadingContainer.children[0]
 const loadingChild = loadingContainer.children[1]
+const followersSpan = $('#followers')
 
 const activeTab = location.hash === '#replies-tab' ? 'replies' : 'tweets' 
 if(activeTab === 'replies') {
@@ -231,7 +232,7 @@ followingButton.addEventListener('click', async (evt) => {
 		method: 'PATCH'
 	})
 	if(error) return console.log(`show alert in UI: ${error.message}`)
-	// const updatedProfileUser = data.data
+	const updatedProfileUser = data.data
 	// console.log(updatedProfileUser)
 
 	const isFollowed = followingButton.textContent === 'follow'
@@ -240,8 +241,8 @@ followingButton.addEventListener('click', async (evt) => {
 	followingButton.classList.toggle('bg-blue-500', isFollowed)
 	followingButton.classList.toggle('text-white', isFollowed)
 
-
-
+	// logedInUser is the followers, and profile users are following
+	followersSpan.textContent = updatedProfileUser.following.length + ' '
 })
 
 

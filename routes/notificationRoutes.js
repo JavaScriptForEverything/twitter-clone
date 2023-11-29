@@ -9,6 +9,7 @@ const router = Router()
 	router
 		.use(authController.protect)
 		.get('/', notificationController.getAllNotifications)
+		.patch('/', notificationController.updateAllNotifications)
 		.patch('/:id', notificationController.update)
 		.delete('/:id', notificationController.deleteById)
 

@@ -14,8 +14,29 @@ exports.getAllNotifications = catchAsync(async (req, res, next) => {
 		count: notifications.length,
 		data: notifications
 	})
-	}, 300)
+	}, 500)
 })
+
+
+// PATCH 	/api/notifications
+exports.updateAllNotifications = catchAsync(async (req, res, next) => {
+	const userId = req.session.user._id
+
+	const notifications = await Notification.updateMany(
+		{ userTo: userId },
+		{ isOpened: true }
+	)
+	if(!notifications) return next(appError('notification update failed'))
+
+
+	res.status(201).json({
+		status: 'success',
+		data: notifications
+	})
+})
+
+
+
 
 
 // PATCH 	/api/notifications/:id

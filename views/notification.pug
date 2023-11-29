@@ -4,6 +4,13 @@ block content
 	include components/mui/@index
 	include components/@index
 
+	style.
+		.active-check {
+			color: #3b82f6;
+			border-color: #3b82f6;
+			font-weight: 700;
+		}
+
 	div(class='grid grid-cols-12 divide-x')
 		//- left-section
 		div(class='col-span-2 p-2')
@@ -17,13 +24,12 @@ block content
 				div
 					div(class='flex items-center justify-between p-2 border-b border-slate-200 text-slate-900')
 						h1(class=' font-bold') Notification
-						a(href='/message/new') 
-							button(type='button' 
-								class='shadow-2xl border border-slate-300 p-0.5 bg-slate-50 text-slate-500 rounded-md'
-								class='hover:bg-slate-100 hover:border-slate-400 hover:text-slate-600'
-								class='active:bg-blue-100 active:border-blue-500 active:text-blue-600'
-							)
-								<svg class='w-4 h-4' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path d="M12 8v3m0 0v3m0-3h3m-3 0H9"/><path stroke-linejoin="round" d="M14 19c3.771 0 5.657 0 6.828-1.172C22 16.657 22 14.771 22 11c0-3.771 0-5.657-1.172-6.828C19.657 3 17.771 3 14 3h-4C6.229 3 4.343 3 3.172 4.172C2 5.343 2 7.229 2 11c0 3.771 0 5.657 1.172 6.828c.653.654 1.528.943 2.828 1.07"/><path d="M14 19c-1.236 0-2.598.5-3.841 1.145c-1.998 1.037-2.997 1.556-3.489 1.225c-.492-.33-.399-1.355-.212-3.404L6.5 17.5"/></g></svg>
+						button(name='check-all' type='button' 
+							class='shadow-2xl border border-slate-300 p-0.5 bg-slate-50 text-slate-500 rounded-md'
+							class='hover:bg-slate-100 hover:border-slate-400 hover:text-slate-600'
+							class='active:bg-blue-100 active:border-blue-500 active:text-blue-600'
+						)
+							<svg class='w-4 h-4 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M.41 13.41L6 19l1.41-1.42L1.83 12m20.41-6.42L11.66 16.17L7.5 12l-1.43 1.41L11.66 19l12-12M18 7l-1.41-1.42l-6.35 6.35l1.42 1.41L18 7Z"/></svg>
 
 					//- div(class='flex items-center gap-2 p-2 border-b border-slate-200 text-slate-900')
 						div( name='chat-image-container'

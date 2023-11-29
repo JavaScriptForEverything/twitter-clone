@@ -1,8 +1,8 @@
-
+let isAllOpened = false
 const notificationContainer = $('[name=notification-container]')
 const listContainer = $('[name=list-container]')
 const loadingIndicator = $('[name=page-loading-indicator]')
-// loadingIndicator.classList.remove('hidden')
+const checkAllButton = $('[name=check-all]')
 
 
 const fetchInitialNotifications = async () => {
@@ -10,7 +10,6 @@ const fetchInitialNotifications = async () => {
 
 	const { data, error } = await axios({ url: '/api/notifications' })	
 	if(error) {
-
 		loadingIndicator.classList.add('hidden')
 		console.log(`show alert: ${error.message}`)
 		return 
@@ -19,6 +18,9 @@ const fetchInitialNotifications = async () => {
 	loadingIndicator.classList.add('hidden')
 
 	const notifications = data.data
+	isAllOpened = notifications.every( doc => doc.isOpened === true )
+	checkAllButton.classList.toggle('active-check', isAllOpened)
+
 	notifications.forEach( ({ _id, userFrom, type, kind, isOpened, entityId }) => {
 		const listHtmlString =	List({
 			id: _id,
@@ -31,12 +33,9 @@ const fetchInitialNotifications = async () => {
 			`: ''
 		})
 
-		const listWrapper = `
-			<a href='/tweet/${entityId}/'>
-				${listHtmlString}
-			</a>
-		`
+		const url = kind === 'tweet' ? `/tweet/${entityId}` : `/profile/${userFrom.username}`
 
+		const listWrapper = ` <a href='${url}'> ${listHtmlString} </a>`
 		const listEl = stringToElement(listWrapper)
 
 		listEl?.querySelector('button')?.addEventListener('click', (evt) => {
@@ -66,7 +65,7 @@ notificationContainer.addEventListener('click', async (evt) => {
 	const { data, error } = await axios({ 
 		url: `/api/notifications/${notificationId}`, 
 		method: 'PATCH',
-		data: { isOpened: true }
+		data: { isOpened: true } 		//=> true : viewed, 	[ flase: new, not views yet ]
 	})
 	if(error) return console.log(`error: ${error.message}`)
 
@@ -74,8 +73,8 @@ notificationContainer.addEventListener('click', async (evt) => {
 	container.classList.add('bg-slate-50')
 	// console.log(data.data)
 
-	const a = evt.target.closest('a')
-	redirectTo(a.href)
+	// const a = evt.target.closest('a')
+	// redirectTo(a.href)
 
 	// NB.
 	// 	. Browser history.back() === BackButton : 
@@ -101,6 +100,21 @@ notificationContainer.addEventListener('click', async (evt) => {
 	a.remove()
 })
 
+
+// PATCH 	/api/notifications/ 				: check-all button handler
+checkAllButton.addEventListener('click', async (evt) => {
+	const { error, data } = await axios({ url: '/api/notifications', method: 'PATCH' })
+	if(error) {
+		console.log(`show error in UI: ${error.message}`)
+		return
+	}
+
+	evt.target.classList.toggle('active-check')
+	notificationContainer.querySelectorAll('[name=list-container]').forEach( (list) => {
+		list.style.borderColor = '#cbd5e1'
+		list.style.backgroundColor = '#f8fafc'
+	})
+})
 
 
 

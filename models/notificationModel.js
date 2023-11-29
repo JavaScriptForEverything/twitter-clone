@@ -65,77 +65,21 @@ const notificationSchema = new Schema({
 }, { timestamps: true })
 
 
-// const notification = await Notification.insertNotification({ fromUser, userTo, notificationType, entityId })
-/* 
-POST /api/users/:id/follow
-
-	if( !following ) = await Notification.insertNotification({ 
-		fromUser 				: req.session.user._id, 
-		userTo 					: req.params.id, 
-		notificationType: 'follow', 
-		entityId 				: req.session.user._id,
-	})
-
-
-POST /api/tweets/ 	: self post or replyTo the post
-
-	if( !following ) = await Notification.insertNotification({ 
-		fromUser 				: req.session.user._id, 
-		userTo 					: updatedTweet.replyTo.postBy._id, 				// Tweet.populat(updatedPost, 'replyTo' )
-		notificationType: 'replyTo', 
-		entityId 				: updatedPost._id,
-	})
-
-
-PATCH /api/tweets/:id/retweet
-
-	if( !deleteTweet ) = await Notification.insertNotification({ 
-		fromUser 				: req.session.user._id, 
-		userTo 					: tweet.user._id, 							// post.postedBy._id
-		notificationType: 'retweet', 
-		entityId 				: tweet._id, 										// post._id
-	})
-
-
-PATCH /api/tweets/:id/like
-
-	if( !isLiked ) { 														// Show notification only when liked, skip unlike senerio
+/*
+// GET /api/tweets/:id/retweet
+	...
+	if(!deletedTweet) {
 		await Notification.insertNotification({
-			notificationType: 'Tweet', 							// notification for 'tweet
 			entityId: updatedTweet._id, 						// on which notification user liked ?
 			userFrom: userId, 											// Who liked it ?
-			userTo: updatedTweet.user._id, 					// this tweet created by whom ?
+			userTo: updatedTweet.user._id, 					// which user create this tweet ?
+			type: 'retweet', 												// ['like', 'retweet', 'replyTo', 'follow']
+			kind: 'tweet', 													// ['tweet', 'message' ]
 		})
 	}
-
-
-POST /api/messages/
-
-	let messageDoc = await Message.create( req.body )
-			messageDoc.pupulate('sender')
-			messageDoc.pupulate('chat')
-		messageDoc = await User.pupulate(messageDoc, 'chat.users')
-
-	const chatDoc = await chat.findByIdAndUpdate(req.body.chatId, { latestMessage: messageDoc._id })
-
-	chatDoc.users.forEach( userId => {
-		if( userId === message.sender._id.toString() ) return 		// don't send message to self
-	})
-
-	await Notification.insertNotification({ 
-		fromUser 				: messageDoc.sender._id, 
-		userTo 					: req.body.user._id, 						
-		notificationType: 'newMessage', 
-		entityId 				: messageDoc.chat._id, 									
-	})
-
-
-*/
-
+*/ 
 notificationSchema.statics.insertNotification = async function ( data ) {
-	// const { userFrom, userTo, notificationType, entityId } = data
-
-	await this.deleteOne(data) 				// if all 4 argument matched then delete that before clreate one
+	await this.deleteOne(data) 				// if already exist one, then delete that before create new one
 	return this.create(data)
 }
 

@@ -58,11 +58,11 @@ block content
 					p @#{profileUser.username}
 					div(class='flex gap-2 items-center')
 						a(href=`/profile/${profileUser.username}/following`) 
-							span(class='text-slate-700 font-medium') #{profileUser.following.length} 
+							span(id='following' class='text-slate-700 font-medium') #{profileUser.following.length} 
 							span(class='hover:text-blue-500 hover:underline hover:decoration-dotted hover:decoration-blue-500 ') following
 
 						a(href=`/profile/${profileUser.username}/followers`) 
-							span(class='text-slate-700 font-medium') #{profileUser.followers.length} 
+							span(id='followers' class='text-slate-700 font-medium') #{profileUser.followers.length} 
 							span(class='hover:text-blue-500 hover:underline hover:decoration-dotted hover:decoration-blue-500 ') followers
 
 			//- Posts & Reply Section 

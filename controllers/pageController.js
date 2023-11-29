@@ -83,8 +83,7 @@ exports.loginPageHandler = async (req, res) => {
 
 		// res.redirect('/profile')
 		// res.redirect('/docs')
-
-		res.redirect('/profile/riajulislam')
+		res.redirect('/notification')
 
 	} catch (err) {
 		const payload = {
