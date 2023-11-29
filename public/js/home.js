@@ -66,7 +66,18 @@ sendTweetButton.addEventListener('click', async(evt) => {
 		method: 'POST',
 		data: { tweet: inputValue }
 	})
-	if(error) return console.log(`add tweet failed: ${error.message}`)
+
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'add tweet failed',
+			action: true,
+		})
+
+		return console.log(`add tweet failed: ${error.message}`)
+	}
+
 
 	const tweet = data.data
 	textarea.value = ''
@@ -80,10 +91,18 @@ sendTweetButton.addEventListener('click', async(evt) => {
 const fetchTweets = async () => {
 	const { data, error } = await axios({ url: `/api/tweets?_sort=-createdAt&_limit=100`, method: 'GET', })
 	if(error) {
-		if(error.message) notFound.textContent = error.message
+		notFound.textContent = error.message
 		notFound.style.display = 'block'
 		loadingIcon.style.display = 'none'
-		return
+
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'cannot fetch all tweets',
+			action: true,
+		})
+
+		return console.log(`cannot fetch all tweets: ${error.message}`)
 	}
 
 	const tweets = data.data
@@ -114,8 +133,17 @@ tweetsContainer.addEventListener('click', async (evt) => {
 
 	if( evt.target.id !== 'chat') return
 
-	const { data, error } = await axios({ url: `/api/tweets/${tweetId}`, method: 'GET' })
-	if(error) return console.log(error)
+	const { data, error } = await axios({ url: `/api/tweets/${tweetId}`})
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'getTweetById failed',
+			action: true,
+		})
+
+		return console.log(`getTweetById failed: ${error.message}`)
+	}
 
 	const tweet = data.data
 	dialogEl.showModal()
@@ -132,7 +160,16 @@ tweetsContainer.addEventListener('click', async (evt) => {
 			method: 'POST',
 			data: { tweet: value, replyTo: tweetId }
 		})
-		if(error) return console.log(error)
+		if(error) {
+			Alert({
+				severity: 'error',
+				variant: 'filled',
+				message: error.message || 'replyTo tweet failed',
+				action: true,
+			})
+
+			return console.log(`replyTo tweet failed: ${error.message}`)
+		}
 
 		const updatedTweet = data.data
 		// tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(updatedTweet))
@@ -152,11 +189,17 @@ tweetsContainer.addEventListener('click', async (evt) => {
 
 	if( evt.target.id !== 'retweet') return
 
-	const { data, error } = await axios({ 
-		url: `/api/tweets/${tweetId}/retweet`, 
-		method: 'GET',
-	})
-	if(error) return console.log(error)
+	const { data, error } = await axios({ url: `/api/tweets/${tweetId}/retweet` })
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'retweet failed',
+			action: true,
+		})
+
+		return console.log(`retweet failed: ${error.message}`)
+	}
 
 	const updatedUser = data.updatedUser
 	const { updatedTweet, retweet } = data.data
@@ -179,11 +222,17 @@ tweetsContainer.addEventListener('click', async (evt) => {
 
 	if( evt.target.id !== 'heart') return
 
-	const { data, error } = await axios({ 
-		url: `/api/tweets/${tweetId}/like`, 
-		method: 'GET',
-	})
-	if(error) return console.log(error)
+	const { data, error } = await axios({ url: `/api/tweets/${tweetId}/like` })
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'toggle like tweet failed',
+			action: true,
+		})
+
+		return console.log(`toggle like tweet failed: ${error.message}`)
+	}
 
 	const tweet = data.data
 
@@ -213,7 +262,17 @@ tweetsContainer.addEventListener('click', async (evt) => {
 			method: 'PATCH',
 			data: { pinned: false }
 		})
-		if(error) return console.log(error)
+		if(error) {
+			Alert({
+				severity: 'error',
+				variant: 'filled',
+				message: error.message || 'unpin tweet failed',
+				action: true,
+			})
+
+			return console.log(`unpin tweet failed: ${error.message}`)
+		}
+
 		const tweet = data.data
 
 
@@ -238,7 +297,16 @@ tweetsContainer.addEventListener('click', async (evt) => {
 		method: 'PATCH',
 		data: { pinned: true }
 	})
-	if(error) return console.log(error)
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'pin tweet failed',
+			action: true,
+		})
+
+		return console.log(`pin tweet failed: ${error.message}`)
+	}
 
 	const tweet = data.data
 
@@ -269,13 +337,17 @@ tweetsContainer.addEventListener('click', async (evt) => {
 
 	if( deleteButton.id !== 'delete-button') return
 
-	// return
+	const { data, error } = await axios({ url: `/api/tweets/${tweetId}`, method: 'DELETE' })
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'delete tweet failed',
+			action: true,
+		})
 
-	const { data, error } = await axios({ 
-		url: `/api/tweets/${tweetId}`, 
-		method: 'DELETE',
-	})
-	if(error) return console.log(error)
+		return console.log(`delete tweet failed: ${error.message}`)
+	}
 
 	const tweet = data.data
 	console.log(tweet)

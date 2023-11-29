@@ -19,6 +19,12 @@ html(lang="en")
 		include ../components/@index.pug
 		include ../components/mui/@index.pug
 	body  
+		//- div#snackbar-error(class='hidden bg-white max-w-sm z-50 absolute top-2 right-2')
+		//- 	+Alert({
+		//- 		severity: 'error',
+		//- 		action: true
+		//- 	})
+
 		.container.m-auto
 			block content
 		
@@ -31,4 +37,11 @@ html(lang="en")
 			crossorigin="anonymous" 
 			referrerpolicy="no-referrer"
 		)
+
+		//- script(nonce=cspNonce).
+		//- 	$('button').addEventListener('click', (evt) => {
+		//- 		$('#snackbar-error').classList.add('hidden')
+		//- 	})
+
+
 		script(src="/js/socket-client.js") 

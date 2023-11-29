@@ -95,7 +95,12 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 				dialog.close()
 
 			} catch (error) {
-				console.log(error.message)
+				Alert({
+					severity: 'error',
+					variant: 'filled',
+					message: error.message || '',
+					action: true,
+				})
 				dialog.close()
 			}
 		})
@@ -197,7 +202,12 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 				dialog.close()
 
 			} catch (error) {
-				console.log(error.message)
+				Alert({
+					severity: 'error',
+					variant: 'filled',
+					message: error.message || 'toggle following failed',
+					action: true,
+				})
 				dialog.close()
 			}
 		})
@@ -231,7 +241,17 @@ followingButton.addEventListener('click', async (evt) => {
 		url: `/api/users/${profileUser._id}/following`, 
 		method: 'PATCH'
 	})
-	if(error) return console.log(`show alert in UI: ${error.message}`)
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'toggle following failed',
+			action: true,
+		})
+
+		return console.log(`toggle following failed: ${error.message}`)
+	}
+
 	const updatedProfileUser = data.data
 	// console.log(updatedProfileUser)
 
@@ -257,14 +277,21 @@ const fetchAllTweets = async () => {
 	const { data, error } = await axios({ url: `/api/tweets` })
 
 	if(error) {
-		console.log(`fetch all tweets is failed: ${error.message}`)
 		notFoundChild.classList.remove('hidden')
 		loadingChild.classList.add('hidden')
 
 		if(activeTab === 'replies') {
 			notFoundChild.textContent = notFoundChild.textContent.replace('tweets', 'replies')
 		}
-		return 
+
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'toggle following failed',
+			action: true,
+		})
+
+		return console.log(`GET /api/tweets failed: ${error.message}`)
 	}
 
 	loadingContainer.remove()

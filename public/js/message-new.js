@@ -35,7 +35,16 @@ messageInput.addEventListener('keydown', (evt) => {
 			url: `/api/users?_search=${inputValeue},${searchOnFields}`, 
 			method: 'GET' 
 		})
-		if(error) console.log(error.message)
+		if(error) {
+			Alert({
+				severity: 'error',
+				variant: 'filled',
+				message: error.message || 'search user failed',
+				action: true,
+			})
+
+			return console.log(`search user  failed: ${error.message}`)
+		}
 
 		const users = data?.data
 		if(!users) return console.log('users not found')
@@ -103,7 +112,16 @@ createChatButton.addEventListener('click', async (evt) => {
 		method: 'POST',
 		data: selectedUsersIds 
 	})
-	if(error) return console.log(error.message)
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'create chat failed',
+			action: true,
+		})
+
+		return console.log(`create chat  failed: ${error.message}`)
+	}
 
 	const chat = data.data
 	redirectTo(`/message/${chat._id}`)

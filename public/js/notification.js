@@ -10,9 +10,15 @@ const fetchInitialNotifications = async () => {
 
 	const { data, error } = await axios({ url: '/api/notifications' })	
 	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'fetch all notification failed',
+			action: true,
+		})
+
 		loadingIndicator.classList.add('hidden')
-		console.log(`show alert: ${error.message}`)
-		return 
+		return console.log(`fetch all notification failed: ${error.message}`)
 	}
 
 	loadingIndicator.classList.add('hidden')
@@ -67,7 +73,16 @@ notificationContainer.addEventListener('click', async (evt) => {
 		method: 'PATCH',
 		data: { isOpened: true } 		//=> true : viewed, 	[ flase: new, not views yet ]
 	})
-	if(error) return console.log(`error: ${error.message}`)
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'isOpened notification failed',
+			action: true,
+		})
+
+		return console.log(`isOpened notification failed: ${error.message}`)
+	}
 
 	// container.classList.remove('bg-slate-200','border-slate-300')
 	container.classList.add('bg-slate-50')
@@ -94,7 +109,16 @@ notificationContainer.addEventListener('click', async (evt) => {
 	const notificationId = container.id
 
 	const { data, error } = await axios({ url: `/api/notifications/${notificationId}`, method: 'DELETE', })
-	if(error) return console.log(`error: ${error.message}`)
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'delete notification failed',
+			action: true,
+		})
+
+		return console.log(`delete notification failed: ${error.message}`)
+	}
 
 	const a = evt.target.closest('a')
 	a.remove()
@@ -105,8 +129,14 @@ notificationContainer.addEventListener('click', async (evt) => {
 checkAllButton.addEventListener('click', async (evt) => {
 	const { error, data } = await axios({ url: '/api/notifications', method: 'PATCH' })
 	if(error) {
-		console.log(`show error in UI: ${error.message}`)
-		return
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'read all notification failed',
+			action: true,
+		})
+
+		return console.log(`read all notification failed: ${error.message}`)
 	}
 
 	evt.target.classList.toggle('active-check')
@@ -115,7 +145,6 @@ checkAllButton.addEventListener('click', async (evt) => {
 		list.style.backgroundColor = '#f8fafc'
 	})
 })
-
 
 
 

@@ -4,7 +4,16 @@ const chatListContainer = $('[name=chat-list-container]')
 
 const getAllChats = async () => {
 	const { data, error } = await axios({ url: '/api/chats' })
-	if(error) return console.log(`getAllChats error: ${error.message}`)
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'getAllChats failed',
+			action: true,
+		})
+
+		return console.log(`getAllChats  failed: ${error.message}`)
+	}
 
 
 	const chats = data.data
@@ -95,8 +104,17 @@ const showChat = (chat={}, elementContainer, logedInUser) => {
 		// console.log(button)
 
 		const { error } = await axios({ url: `/api/chats/${chat._id}`, method: 'DELETE' })
+		if(error) {
+			Alert({
+				severity: 'error',
+				variant: 'filled',
+				message: error.message || 'delete chat failed',
+				action: true,
+			})
 
-		if(error) return console.log(`delete chat failed: ${error.message}`)
+			return console.log(`delete chat  failed: ${error.message}`)
+		}
+
 		element.remove()
 	})
 }

@@ -25,9 +25,14 @@ const getAllMessagesOfSingleChat = async (chatId) => {
 
 	const { data, error } = await axios({ url: `/api/messages/${chatId}` })
 	if(error) {
-		console.log(`fetch all messages failed: ${error.message}`)
-		pageLoadingIndicator.classList.add('hidden') 	// Hide loading
-		return
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'fetch all messages failed',
+			action: true,
+		})
+
+		return console.log(`fetch all messages  failed: ${error.message}`)
 	}
 
 	const messageDocs = data.data
@@ -76,7 +81,16 @@ const scrollToBottom = (isFromBegining=true, speed=5, delay=1) => {
 // fetch chats in server-side in /authController.chatMessagePage not here
 const getChatById = async (chatId) => {
 	const { data, error } = await axios({ url: `/api/chats/${chatId}`, method: 'GET' })
-	if(error) return console.log(`getChatById error: ${error.message}`)
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'getChatById failed',
+			action: true,
+		})
+
+		return console.log(`getChatById  failed: ${error.message}`)
+	}
 
 	const chat = data.data
 	editChat.textContent = data?.data.name || 'Group Name'
@@ -135,7 +149,16 @@ dialogSubmitButton.addEventListener('click', async (evt) => {
 		method: 'PATCH',
 		data: { name: groupName.value, isGroup: true }
 	})
-	if(error) return console.log(`show update groupName: ${error.message}`)
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'show update groupName failed',
+			action: true,
+		})
+
+		return console.log(`show update groupName  failed: ${error.message}`)
+	}
 
 	editChat.textContent = data?.data.name || 'Group Name'
 
@@ -187,11 +210,16 @@ const sendMessageToBackend = async ( message ) => {
 		data: { message, sender: logedInUser._id, chat: chatId }
 	})
 
-	// if(error) {
-	// 	sendInput.value = message
-	// 	console.log(`POST /api/messages: ${error.message}`)
-	// 	return
-	// }
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'add message failed',
+			action: true,
+		})
+
+		return console.log(`add message  failed: ${error.message}`)
+	}
 	
 	const messageDoc = data.data
 	sendInput.value=''

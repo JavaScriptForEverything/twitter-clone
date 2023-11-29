@@ -23,7 +23,17 @@ $('[name=tab-content-container]').addEventListener('click', async (evt) => {
 			method: 'PATCH',
 		})
 
-		if(error) return console.log('show error in UI')
+		if(error) {
+			Alert({
+				severity: 'error',
+				variant: 'filled',
+				message: error.message || 'toggle following failed',
+				action: true,
+			})
+
+			return console.log(`toggle following failed: ${error.message}`)
+		}
+
 		const updatedLogiedInUser = data?.data
 		console.log(updatedLogiedInUser)
 
@@ -36,21 +46,3 @@ $('[name=tab-content-container]').addEventListener('click', async (evt) => {
 
 
 
-
-// const followingBtn = $('button[name=follow]')
-
-// followingBtn.classList.toggle('follow-active-button', logedInUser.following.includes(profileUser._id))
-
-// followingBtn.addEventListener('click', async (evt) => {
-// 	const { data, error } = await axios({
-// 		url: `/api/users/${profileUser._id}/following`,
-// 		method: 'PATCH',
-// 	})
-// 	if(error) return console.log('show error in UI')
-
-// 	const updatedLogedInUser = data.data
-// 	evt.target.textContent = updatedLogedInUser?.following.includes(profileUser._id) ? 'following' : 'follow'
-// 	evt.target.classList.toggle('follow-active-button')
-
-// 	$('[name=followers-value]').textContent = updatedLogedInUser.following.length + ' '
-// })

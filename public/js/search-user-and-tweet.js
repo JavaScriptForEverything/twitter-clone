@@ -18,7 +18,16 @@ const fetchInitialData = async (tab = 'tweets') => {
 	const url = tab !== 'tweets' ? '/api/users' : '/api/tweets'
 
 	const { data, error} = await axios({ url, method: 'GET' })
-	if(error) return console.log(`tweetError: ${error.message}`)
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'tweetError failed',
+			action: true,
+		})
+
+		return console.log(`tweetError failed: ${error.message}`)
+	}
 
 	const tabs = data.data
 	tabs?.forEach( doc => {
@@ -59,7 +68,16 @@ const fetchBySearchData = async ({ searchValue='', searchFor='' }) => {
 	const searchUrl = `${url}?_search=${searchValue},${searchOnFields}` 						// we doesn't create Searching machanisom yet
 	const { error, data } = await axios({ url: searchUrl, method: 'GET' })
 
-	if(error) return console.log(error.message)
+	if(error) {
+		Alert({
+			severity: 'error',
+			variant: 'filled',
+			message: error.message || 'SearchError failed',
+			action: true,
+		})
+
+		return console.log(`SearchError failed: ${error.message}`)
+	}
 
 	return data
 }
