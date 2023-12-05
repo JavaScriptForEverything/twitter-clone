@@ -1,3 +1,11 @@
+/* Global Variables
+		. logedInUser
+		. chat 	(Document)
+		. chatId
+
+
+*/
+
 const dialog = $('[name=change-group-name]')
 const dialogCloseButton = $('[name=dialog-close-button]')
 const dialogCancelButton = $('[name=dialog-cancel-button]')
@@ -13,11 +21,19 @@ const typingIndicator = $('[name=typing-indicator]')
 const pageLoadingIndicator = $('[name=page-loading-indicator]')
 const deleteChatButton = $('[name=delete-chat]')
 
-const url = new URL(location.href)
-const chatId = url.pathname.split('/').pop()
 let timer = undefined
 
 sendInput.value=''
+
+
+
+// To create private room by user._id instead of useless socket.id
+socket.emit('setup', logedInUser)
+socket.on('connected', () => isConnected = true)
+
+
+
+
 
 
 // GET /api/messages/:id 	
@@ -245,14 +261,14 @@ const addMessage = (currentDoc, classList={} ) => {
 		<div class='my-1 flex items-end gap-2 '>
 			<img src='${sender.avatar}' class='w-6 h-6 rounded-full' />
 			<p class='max-w-sm inline-block bg-slate-100 text-slate-600 px-2 py-1 rounded-lg'>
-				<span class='${className}'> ${currentDoc.message} </span>
+				<span class='${className}'> ${decodeHTML(currentDoc.message)} </span>
 			</p>
 		</div>
 	`
 	const myMessage = `
 		<div class='flex justify-end'>
 			<p class='my-1 max-w-sm inline-block bg-blue-500 text-slate-50 px-3 py-1.5 rounded-lg '>
-				<span class=' ${className}'> ${currentDoc.message} </span>
+				<span class=' ${className}'> ${decodeHTML(currentDoc.message)} </span>
 			</p>
 		<div>
 	`
@@ -265,12 +281,15 @@ const addMessage = (currentDoc, classList={} ) => {
 }
 
 
+/* We got message page via <a href='/message/chatId'>
+		So soon as we comes to message details page, that means
+		we are in group chat  (or if comes with user._id then private chat) */ 
 socket.emit('join-room', { chatId })
-socket.on('room-joined', ({ roomId: chatId }) => {
+socket.on('room-joined', ({ chatId }) => {
 	if( !chatId ) return console.log('room-joined failed')
 })
 
-socket.on('typing', ({ roomId }) => {
+socket.on('typing', ({ chatId, message }) => {
 	clearTimeout(timer)
 	typingIndicator.style.display = 'block'
 
@@ -279,9 +298,14 @@ socket.on('typing', ({ roomId }) => {
 	}, 3000);
 })
 
-// socket.on('stop-typing', ({ roomId }) => {
-// 	typingIndicator.style.display = 'none'
-// })
+
+/* We send message-received to every users so we have to handle this even globally
+		so we have 2 secition
+			1. if user exists in chat room then add the chat message on chat container
+			2. if user outside of chat room then show Alert that new messages comes.
+
+		Handle 1st senario here, and another on socket page or utils.js page which is globally available
+*/ 
 socket.on('message-received', ({ roomId, messageDoc }) => {
 	addMessage(messageDoc)
 	typingIndicator.style.display = 'none'

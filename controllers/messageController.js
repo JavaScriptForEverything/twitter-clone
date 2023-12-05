@@ -56,6 +56,7 @@ exports.createMessage = catchAsync( async (req, res, next) => {
 	let messageDoc = await Message.create( filteredBody )
 			messageDoc = await messageDoc.populate('sender')
 			messageDoc = await messageDoc.populate('chat')
+			await User.populate(messageDoc, 'chat.users')
 
 			// await User.populate(message, 'chat.users')
 			// // 1. `chat` is available in Message Schema, so it populate from Message.Query.populate()
@@ -65,7 +66,8 @@ exports.createMessage = catchAsync( async (req, res, next) => {
 	if(!messageDoc) return next( appError('create messae is failed') )
 
 	// Step-1: if user already exists then return that
-	let chat = await Chat.findOne({ _id: chatId, users: { $elemMatch: { $eq: senderId }} }).populate('users')
+	let chat = await Chat.findOne({ _id: chatId, users: { $elemMatch: { $eq: senderId }} })
+	.populate('users')
 
 	if(chat && messageDoc) {
 		chat.latestMessage = messageDoc._id

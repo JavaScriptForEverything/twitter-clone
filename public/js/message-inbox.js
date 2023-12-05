@@ -26,7 +26,7 @@ getAllChats()
 
 
 
-// Show Chat in UI
+// GET 		/api/chats 				: To Show Chat in UI
 // DELETE /api/chats/:id
 const showChat = (chat={}, elementContainer, logedInUser) => {
 	const filteredUsernames = chat.users
@@ -43,7 +43,7 @@ const showChat = (chat={}, elementContainer, logedInUser) => {
 	const latestMessage = sender ? `${sender.firstName} ${sender.lastName}: ${message}` : ''
 	
 	const	primary= chat.name || filteredUsernames.join(', ') || 'Group Chat'
-	const	secondary= latestMessage || 'new message'
+	const	secondary= decodeHTML(latestMessage) || 'new message'
 	const images = filteredImages || []
 	const	icon= ''
 	const	isHover= true

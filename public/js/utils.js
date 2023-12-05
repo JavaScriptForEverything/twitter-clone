@@ -1,6 +1,23 @@
 const $ = selector => document.querySelector(selector)
 const socket = io('/')
 
+// its not firing
+socket.on('message-received', ({ roomId, messageDoc }) => {
+
+	console.log(messageDoc.message)
+
+	Snackbar({
+		severity: 'info',
+		message: `${messageDoc.message}`,
+		// position: 'top-1 right-1' 						// tailwind class
+		variant: 'filled', 									// text | contained | filled
+		action: true,
+		// autoClose: true,
+		// closeTime: 20000,
+		// title: 'Testing'
+	})
+})
+
 
 // Convert '<p> hi </p>' 	=> .createElement('p').textContent = 'hi'
 const stringToElement = ( htmlString ) => {
@@ -455,17 +472,6 @@ document.addEventListener('DOMContentLoaded', activateMenUItem)
 
 
 
-// document.addEventListener('DOMContentLoaded', () => {
-
-// 	const dialog = $('dialog')
-// 	const dialogCloseButton = $('[name=dialog-close-button]')
-// 	const dialogCancelButton = $('[name=dialog-cancel-button]')
-
-// 	const closeHandler = () => dialog.close()
-	
-// 	dialogCloseButton?.addEventListener('click', closeHandler)
-// 	dialogCancelButton?.addEventListener('click', closeHandler)
-// })
 
 
 
@@ -765,3 +771,5 @@ const Snackbar = (props={}) => {
 	if( autoClose ) setTimeout(closeHandler, closeTime);
 	closeButton?.addEventListener('click', closeHandler)
 }
+
+

@@ -63,6 +63,8 @@ block middle-block
 
 	script(nonce=cspNonce).
 		const logedInUser = !{ JSON.stringify(logedInUser) } 	
+		const chat = !{JSON.stringify( chat )} 
+		const chatId = chat._id
 
 	script(src="/js/message-chat.js") 
 

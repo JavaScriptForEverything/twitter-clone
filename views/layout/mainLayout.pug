@@ -19,11 +19,6 @@ html(lang="en")
 		include ../components/@index.pug
 		include ../components/mui/@index.pug
 	body  
-		//- div#snackbar-error(class='hidden bg-white max-w-sm z-50 absolute top-2 right-2')
-		//- 	+Snackbar({
-		//- 		severity: 'error',
-		//- 		action: true
-		//- 	})
 
 		div.container.m-auto
 			block content
@@ -47,10 +42,6 @@ html(lang="en")
 			referrerpolicy="no-referrer"
 		)
 
-		//- script(nonce=cspNonce).
-		//- 	$('button').addEventListener('click', (evt) => {
-		//- 		$('#snackbar-error').classList.add('hidden')
-		//- 	})
-
-
-		script(src="/js/socket-client.js") 
+		//- useless because we attached other in DOM so it can't use that
+		//- use module type to solve that: type='module' don't care about order position
+		//- script(src="/js/socket.js") 

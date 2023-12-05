@@ -157,7 +157,7 @@ exports.messageInboxPage = (req, res) => {
 	res.render('message/inbox', payload)
 }
 
-// GET /message/:id
+// GET /message/:id 	id == chatId
 exports.chatMessagePage = async (req, res) => {
 	try {
 		const chatId = req.params.id
