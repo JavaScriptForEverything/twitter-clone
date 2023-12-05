@@ -189,6 +189,8 @@ const getUserHTML = (user, profileUser={}, fieldname = 'following') => {
 
 
 const getTweetHTML = (tweet, { isModal=false, showIcons=true, showPinLabel=true } = {}) => {
+	if( !tweet ) return console.log('tweet doc is empty ')
+
 	const isRetweetedByUser = logedInUser.retweets.includes(tweet._id)
 	const isLovedByUser = tweet.likes.includes(logedInUser._id)
 	const isLogedInUser = tweet.user._id === logedInUser._id

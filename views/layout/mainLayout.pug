@@ -25,9 +25,18 @@ html(lang="en")
 		//- 		action: true
 		//- 	})
 
-		.container.m-auto
+		div.container.m-auto
 			block content
+				div(class='grid grid-cols-12 p-2 divide-x min-h-screen')
+					block left-block
+						div(class='col-span-2')
+							include ../components/leftPanel
 		
+					block middle-block
+						p middle block
+
+					block right-block
+						//- p right block
 
 
 

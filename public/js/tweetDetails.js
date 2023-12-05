@@ -81,6 +81,8 @@ fetchTweetById()
 tweetsContainer.addEventListener('click', async (evt) => {
 	const submitButton = dialogEl.querySelector('[name=dialog-submit-button]')
 	const container = evt.target.closest('.tweet-container')
+	if(!container) return console.log('container is null')
+
 	const tweetId = container.id
 
 
@@ -138,6 +140,8 @@ tweetsContainer.addEventListener('click', async (evt) => {
 // GET /api/tweets/:id/retweet 		: Retweet Icon Click handling
 tweetsContainer.addEventListener('click', async (evt) => {
 	const container = evt.target.closest('.tweet-container')
+	if(!container) return console.log('container is null')
+
 	const tweetId = container.id
 
 	if( evt.target.id !== 'retweet') return
@@ -171,6 +175,8 @@ tweetsContainer.addEventListener('click', async (evt) => {
 // GET /api/tweets/:id/likes 		: Heart/Love Icon Click handling
 tweetsContainer.addEventListener('click', async (evt) => {
 	const container = evt.target.closest('.tweet-container')
+	if(!container) return console.log('container is null')
+
 	const tweetId = container.id
 
 	if( evt.target.id !== 'heart') return
@@ -202,6 +208,8 @@ tweetsContainer.addEventListener('click', async (evt) => {
 // PATCH /api/tweets/:id 					: Pin Icon Click handling
 tweetsContainer.addEventListener('click', async (evt) => {
 	const container = evt.target.closest('.tweet-container')
+	if(!container) return console.log('container is null')
+
 	const tweetId = container.id
 	const pinButton = evt.target
 
@@ -285,6 +293,8 @@ tweetsContainer.addEventListener('click', async (evt) => {
 // DELETE /api/tweets/:id 					: Cross Icon Click handling
 tweetsContainer.addEventListener('click', async (evt) => {
 	const container = evt.target.closest('.tweet-container')
+	if(!container) return console.log('container is null')
+
 	const tweetId = container.id
 	const deleteButton = evt.target
 

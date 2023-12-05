@@ -1,8 +1,116 @@
 extends ../layout/mainLayout
-block content
+
+block middle-block
+	style.
+		.tab-active {
+			border-bottom: 1px solid #3b82f6;
+			color: #3b82f6;
+			font-weight: bold;
+		}
+
+	div#forModalContainer(class='col-span-10 md:col-span-7')
+
+			h1(class='p-2 border-b border-slate-200 text-slate-900 font-bold') #{profileUser.username}
+
+			//- Image Section 
+			div(class='border border-slate-100 shadow-sm')
+				div(class='h-40 bg-blue-500 relative')
+					if profileUser.coverPhoto
+						img(name='cover-photo' src=profileUser.coverPhoto alt="coverPhoto missing" class='w-full h-40')
+					
+					div(name='edit-cover-photo-container'
+						class='bg-slate-50 rounded-full p-1 border border-slate-100 shadow-md'
+						class='absolute top-4 right-4 cursor-pointer hover:bg-blue-50'
+					)
+						<svg class='pointer-events-none text-blue-500 w-5 h-5 font-semibold' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83l3.75 3.75l1.83-1.83a.996.996 0 0 0 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/></svg>
+
+					div(name='avatar-container' class='group border-4 cursor-pointer border-slate-100 shadow-xl rounded-full absolute left-2 top-28')
+						img(name='avatar' class='pointer-events-none w-24 h-24 rounded-full' src=profileUser.avatar alt=profileUser.avatar )
+						//- div(class='bg-slate-800 w-20 h-20 hidden peer-hover:block rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2')
+						//- <svg class='hidden fill-slate-900/40 w-20 h-20 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 peer-hover:block' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256"><path d="M208 60h-29.87l-14.81-22.22A4 4 0 0 0 160 36H96a4 4 0 0 0-3.32 1.78L77.85 60H48a20 20 0 0 0-20 20v112a20 20 0 0 0 20 20h160a20 20 0 0 0 20-20V80a20 20 0 0 0-20-20Zm12 132a12 12 0 0 1-12 12H48a12 12 0 0 1-12-12V80a12 12 0 0 1 12-12h32a4 4 0 0 0 3.33-1.78L98.13 44h59.72l14.82 22.22A4 4 0 0 0 176 68h32a12 12 0 0 1 12 12ZM128 92a40 40 0 1 0 40 40a40 40 0 0 0-40-40Zm0 72a32 32 0 1 1 32-32a32 32 0 0 1-32 32Z"/></svg>
+						<svg class='pointer-events-none opacity-0 group-hover:opacity-100 transition duration-300 fill-slate-900/60 w-20 h-20 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ' xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><path  d="M864 260H728l-32.4-90.8a32.07 32.07 0 0 0-30.2-21.2H358.6c-13.5 0-25.6 8.5-30.1 21.2L296 260H160c-44.2 0-80 35.8-80 80v456c0 44.2 35.8 80 80 80h704c44.2 0 80-35.8 80-80V340c0-44.2-35.8-80-80-80zM512 716c-88.4 0-160-71.6-160-160s71.6-160 160-160s160 71.6 160 160s-71.6 160-160 160zm-96-160a96 96 0 1 0 192 0a96 96 0 1 0-192 0z"/></svg>
+					
+				- const isSelf = profileUser._id.toString() === logedInUser._id
+				div(class=`flex gap-4 justify-end items-center mt-3 ${isSelf ? 'invisible' : ''}`)
+					a(href=`/message/${profileUser._id}` class='px-3 py-1.5 border border-blue-500 rounded-3xl hover:bg-blue-50 active:bg-blue-100') 
+						<svg class='fill-blue-500' xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6m-2 0l-8 5l-8-5h16m0 12H4V8l8 5l8-5v10Z"/></svg>
+
+					- const isFollowing = profileUser.followers.includes( logedInUser._id )
+					button(type="button" id='following-button' data-user-id=profileUser._id
+					class='following px-6 py-1.5 rounded-3xl border border-blue-500 text-blue-500 font-medium'
+					class=' hover:bg-blue-50 hover:text-blue-600 active:bg-blue-100 active:text-blue-700'
+					class= isFollowing ? 'bg-blue-500 text-white hover:bg-blue-500/95 hover:text-white' : ''
+					)= isFollowing ? 'following' : 'follow' 
+
+				div(class=' text-slate-500 space-y-0.5 px-4 py-2')
+					p(class=' text-slate-700 font-medium') #{profileUser.username}
+					p @#{profileUser.username}
+					div(class='flex gap-2 items-center')
+						a(href=`/profile/${profileUser.username}/following`) 
+							span(id='following' class='text-slate-700 font-medium') #{profileUser.following.length} 
+							span(class='hover:text-blue-500 hover:underline hover:decoration-dotted hover:decoration-blue-500 ') following
+
+						a(href=`/profile/${profileUser.username}/followers`) 
+							span(id='followers' class='text-slate-700 font-medium') #{profileUser.followers.length} 
+							span(class='hover:text-blue-500 hover:underline hover:decoration-dotted hover:decoration-blue-500 ') followers
+
+			//- Posts & Reply Section 
+			div(class='border border-slate-100 shadow-sm mt-4')
+				nav(name='tab-container' class='grid grid-cols-2 ')
+					a(href="#tweets-tab") 
+						p(id=0 class='border border-slate-100 hover:bg-blue-100 text-center p-2 cursor-pointer') Tweets
+					a(href="#replies-tab") 
+						p(id=1 class='hover:bg-blue-100 border border-slate-100 text-center p-2 cursor-pointer') replies
+
+
+				div(name='tab-content-container' class='border-blue-500 py-1.5 px-3 mb-10')
+					//- each tweet in user.tweets
+						//- +Tweet(tweet)
+					
+					div(class='tab-item' name='tweets-container' hidden=false id='0') 
+						//- p Tweets
+					div(class='tab-item' name='replies-container' hidden id='1') 
+						//- p Replies
+
+					div(name='loading-container' class='h-full flex flex-col justify-center items-center') 
+						p(name='not-found' class='hidden text-slate-500') No tweets founds
+						span(name='loading-icon' class='text-blue-500')
+							<svg class='w-12 h-12' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="2" r="0" fill="currentColor"><animate attributeName="r" begin="0" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(45 12 12)"><animate attributeName="r" begin="0.125s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(90 12 12)"><animate attributeName="r" begin="0.25s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(135 12 12)"><animate attributeName="r" begin="0.375s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(180 12 12)"><animate attributeName="r" begin="0.5s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(225 12 12)"><animate attributeName="r" begin="0.625s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(270 12 12)"><animate attributeName="r" begin="0.75s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(315 12 12)"><animate attributeName="r" begin="0.875s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle></svg>
+
+	script(nonce=cspNonce).
+		const logedInUser = !{ JSON.stringify(logedInUser) } 	
+		const profileUser = !{ JSON.stringify(profileUser) } 	
+
+		$('[name=tab-container]').children[0].classList.add('tab-active')
+		if(location.hash === '#replies-tab') { 
+			$('[name=tab-container]').children[1].classList.add('tab-active')
+			$('[name=tab-container]').children[0].classList.remove('tab-active')
+		}
+
+		//-----[ Tabs container ]-----
+		$('[name=tab-container]').addEventListener('click', (evt) => {
+
+
+			// Step-1: add active tab style
+			Array.from(evt.currentTarget.children).forEach( (tab, index) => {
+				tab.classList.toggle('tab-active', +evt.target.id === index)
+			}) 
+
+			// Step-2: Show Active Tab content
+			Array.from( document.querySelectorAll('.tab-item') ).forEach((tabItem, index) => {
+				tabItem.hidden = evt.target.id !== index.toString()
+			})
+		})
+
+
+	script(src="/js/profile.js") 
+
+
+
+
+
+//- block content
 	include ../icon/icons
-	include ../components/mui/@index
-	include ../components/@index
 
 	style.
 		.tab-active {

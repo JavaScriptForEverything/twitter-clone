@@ -1,8 +1,113 @@
 extends ../../layout/mainLayout
-block content
+
+block middle-block
+	style.
+		body {
+			--blue-500: #3b82f6;
+			--blue-600: #2563eb;
+		}
+		.tab-active {
+			border-bottom: 1px solid var(--blue-500);
+			color: var(--blue-500);
+			font-weight: bold;
+		}
+
+	mixin followList(user, profileUser, fieldname='following')
+		//- 
+			if fieldname === 'following' => user === followingUser
+			if fieldname === 'followers' => user === followersUser
+
+			NB: These 2 user will be populated from ehghter from `following[]` or `followers[]` array
+
+		- const textContent = user?.[fieldname].includes(profileUser._id) ? 'followed' : 'Following'
+
+		div(name='follow-list' class='py-1.5 flex gap-2 ')
+			img(src=user.avatar alt=user.avatar class='w-10 h-10 rounded-full')
+			div(class='flex-1 flex items-baseline gap-2 text-slate-900')
+				span(class='font-medium') #{user.firstName} #{user.lastName}
+				span(class='text-slate-500 text-sm') @#{user.username}
+
+			button(type='button' id=user._id name=fieldname
+				class='h-8 px-3 py-1.5 rounded-3xl bg-blue-500 text-white font-medium text-sm capitalize'
+				class='hover:bg-blue-600 active:bg-blue-700'
+			) #{textContent}
+
+
+	div(class='col-span-10 md:col-span-7')
+			h1(class='p-2 border-b border-slate-200 text-slate-900 font-bold') #{profileUser.username}
+
+			//- Posts & Reply Section 
+			div(class='border border-slate-100 shadow-sm mt-4')
+				nav(name='tab-container' class='grid grid-cols-2 ')
+					p(id=0 class='tab-active border border-slate-100 hover:bg-blue-100 text-center p-2 cursor-pointer') Following
+					p(id=1 class='hover:bg-blue-100 border border-slate-100 text-center p-2 cursor-pointer') Followers
+
+
+				div(name='tab-content-container' class='py-1.5 px-3 mb-10')
+					
+					div(id='0' class='tab-item divide-y space-y' hidden=false ) 
+						each followingUser in profileUser.following
+							+followList(followingUser, profileUser, 'following')
+
+
+					div(id='1' class='tab-item' hidden ) 
+						each followerUser in profileUser.followers
+							+followList(followerUser, profileUser, 'followers')
+
+
+					//- - console.log(profileUser)
+
+	script(nonce=cspNonce).
+		const logedInUser = !{ JSON.stringify(logedInUser) } 	
+		const profileUser = !{ JSON.stringify(profileUser) } 	
+
+
+		const url = new URL(location.href) 
+		const tabName = url.pathname.split('/').pop()
+		if(tabName === 'followers') {
+			$('[name=tab-container]').children[0].classList.remove('tab-active')
+			$('[name=tab-container]').children[1].classList.add('tab-active')
+
+			$('[name=tab-content-container]').children[0].hidden=true
+			$('[name=tab-content-container]').children[1].hidden=false
+		}
+
+		//- // show follow button only others user, not self user
+		//- const followContainer = $('[name=follow-container]')
+		//- followContainer.classList.toggle('invisible', profileUser.username === logedInUser.username )
+
+
+		//-----[ Tabs container ]-----
+		$('[name=tab-container]').addEventListener('click', (evt) => {
+
+			// Step-1: add active tab style
+			Array.from(evt.currentTarget.children).forEach( (tab, index) => {
+				tab.classList.toggle('tab-active', +evt.target.id === index)
+			}) 
+
+			// Step-2: Show Active Tab content
+			Array.from( document.querySelectorAll('.tab-item') ).forEach((tabItem, index) => {
+				tabItem.hidden = evt.target.id !== index.toString()
+			})
+		})
+
+
+
+
+	script(src="/js/following-and-followers.js") 
+
+
+
+
+
+
+
+
+
+
+
+//- block content
 	include ../../icon/icons
-	include ../../components/mui/@index
-	include ../../components/@index
 
 	style.
 		body {
