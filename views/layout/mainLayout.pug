@@ -5,6 +5,8 @@ html(lang="en")
 		meta(name="viewport", content="width=device-width, initial-scale=1.0")
 		title #{pageTitle} Page
 		//- link(rel="stylesheet", href="/css/style.css")
+		script(src="/socket.io/socket.io.js") 
+		script(src="/js/tailwind_cdn.js") 
 		link(
 			rel="stylesheet" 
 			href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" 
@@ -13,9 +15,6 @@ html(lang="en")
 			referrerpolicy="no-referrer"
 		)
 
-		script(src="/socket.io/socket.io.js") 
-		script(src="/js/tailwind_cdn.js") 
-		script(src="/js/utils.js") 
 		include ../components/@index.pug
 		include ../components/mui/@index.pug
 	body  
@@ -33,15 +32,10 @@ html(lang="en")
 					block right-block
 						//- p right block
 
+			block script
+				//- script( type='module' src="./js/utils.js") 
+				//- script( type='module' src="./js/common.js") 
+				//- script( type='module' src="./js/socket.js") 
 
 
-		script(
-			src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" 
-			integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg==" 
-			crossorigin="anonymous" 
-			referrerpolicy="no-referrer"
-		)
 
-		//- useless because we attached other in DOM so it can't use that
-		//- use module type to solve that: type='module' don't care about order position
-		//- script(src="/js/socket.js") 

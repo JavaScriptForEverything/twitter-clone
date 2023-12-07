@@ -10,10 +10,11 @@ exports.homePage = (req, res, next) => {
 		pageTitle: 'Home',
 		timeSince,
 		user: req.session.user,
+		logedInUserJs: JSON.stringify(req.session.user)
 	}
 
 
-	res.render('home', payload)
+	res.render('page/home', payload)
 }
 
 
@@ -23,23 +24,20 @@ exports.registerPage = (req, res) => {
 		pageTitle: 'Register'
 	}
 
-	res.render('register', payload)
+	res.render('./page/register', payload)
 }
 
 // POST /register
 exports.registerPageHandler = async (req, res) => {
-
 	// console.log(req.body)
 	// return	res.render('register', { pageTitle: 'register' })
-		
-
 
 	try {
 		// throw new Error('do not have avatar')
 		const user = await User.create( req.body )
 		if(!user) throw new Error(`user nor found`)
 
-		res.redirect('/login')
+		res.redirect('./page/login')
 
 	} catch (err) {
 		
@@ -49,7 +47,7 @@ exports.registerPageHandler = async (req, res) => {
 			errorMessage: err.message,
 		}
 
-		res.render('register', payload)
+		res.render('./page/register', payload)
 	}
 }
 
@@ -61,7 +59,7 @@ exports.loginPage = (req, res) => {
 		pageTitle: 'Login'
 	}
 
-	res.render('login', payload)
+	res.render('./page/login', payload)
 }
 
 
@@ -79,11 +77,11 @@ exports.loginPageHandler = async (req, res) => {
 		user.password = undefined 		// Don't send password to user
 
 		req.session.user = user
-		// res.redirect('/')
+		res.redirect('/')
 
 		// res.redirect('/profile')
 		// res.redirect('/docs')
-		res.redirect('/notification')
+		// res.redirect('/notification')
 		// res.redirect('/tweet/655e4a531df7aefe26c80de8')
 		// res.redirect('message/65608f4ea47a8dfa30e846f7')
 
@@ -99,7 +97,7 @@ exports.loginPageHandler = async (req, res) => {
 			errorMessage: err.message,
 		}
 
-		res.render('login', payload)
+		res.render('./page/login', payload)
 		
 	}
 }
@@ -113,9 +111,20 @@ exports.logout = (req, res) => {
 	const payload = {
 		pageTitle: 'Login',
 	}
-	res.render('login', payload)
+	res.render('./page/login', payload)
 }
 
+
+// GET /search + protected
+exports.searchPage = (req, res) => {
+	const payload = {
+		pageTitle: 'Search',
+		logedInUser: req.session.user,
+		logedInUserJs: JSON.stringify(req.session.user),
+	}
+
+	res.render('./page/search', payload)
+}
 
 
 

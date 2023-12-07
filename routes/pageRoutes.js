@@ -31,7 +31,7 @@ router
 	.get('/profile/:id/following', authController.followingAndFollwers)
 	.get('/profile/:id/followers', authController.followingAndFollwers)
 	.get('/tweet/:id', authController.tweetDetailsPage)
-	.get('/search', authController.searchPage) // /search#tab-1 /search#tab-2
+	.get('/search', pageController.searchPage) // /search#tab-1 /search#tab-2
 
 	.get('/message', authController.messageInboxPage) 
 	.get('/message/new', authController.newMessageInboxPage) 

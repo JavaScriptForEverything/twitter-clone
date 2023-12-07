@@ -1,9 +1,50 @@
-/* Global Variables
-		logedInUser 						: comes from 	'/search' controller
+import { Snackbar, List, getTweetHTML } from '../module/components/index.js'
+import { $, axios } from '../module/utils.js'
 
-*/ 
-// console.log( getUserHTML(logedInUser) )
 
+/* Global Variables: 
+		. logedInUser 		: res.render('./page/search', payload)
+*/
+
+
+const url = new URL(location.href) 
+if(url.hash === '#users-tab') { 	 //- /search | /search/#tweets-tab | /search/#users-tab
+	$('[name=tab-container]').children[0].classList.remove('tab-active')
+	$('[name=tab-container]').children[1].classList.add('tab-active')
+
+	$('[name=tab-content-container]').children[0].hidden=true
+	$('[name=tab-content-container]').children[1].hidden=false
+} else {
+	$('[name=tab-container]').children[0].classList.add('tab-active')
+}
+
+//-----[ Tabs container ]-----
+$('[name=tab-container]').addEventListener('click', (evt) => {
+const url = new URL(location.href) 
+if(url.hash === '#users-tab') { 	 //- /search | /search/#tweets-tab | /search/#users-tab
+	$('[name=tab-container]').children[0].classList.remove('tab-active')
+	$('[name=tab-container]').children[1].classList.add('tab-active')
+
+	$('[name=tab-content-container]').children[0].hidden=true
+	$('[name=tab-content-container]').children[1].hidden=false
+} 
+
+
+	// Step-1: add active tab style
+	Array.from(evt.currentTarget.children).forEach( (tab, index) => {
+		tab.classList.toggle('tab-active', +evt.target.id === index)
+	}) 
+
+	// Step-2: Show Active Tab content
+	Array.from( document.querySelectorAll('.tab-item') ).forEach((tabItem, index) => {
+		tabItem.hidden = evt.target.id !== index.toString()
+	})
+})
+
+
+
+
+//-----[ other functionality ]-----
 const tabContentContainer = $('[name=tab-content-container]')
 const tweetsContentContainer = tabContentContainer.children[0]
 const usersContentContainer = tabContentContainer.children[1]
@@ -17,7 +58,7 @@ searchInput.value = '' // empty value on page refresh
 const fetchInitialData = async (tab = 'tweets') => {
 	const url = tab !== 'tweets' ? '/api/users' : '/api/tweets'
 
-	const { data, error} = await axios({ url, method: 'GET' })
+	const { data, error} = await axios({ url })
 	if(error) {
 		Snackbar({
 			severity: 'error',
@@ -32,7 +73,7 @@ const fetchInitialData = async (tab = 'tweets') => {
 	const tabs = data.data
 	tabs?.forEach( doc => {
 		if(tab === 'tweets') {
-			tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML(doc, { 
+			tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML(doc, logedInUser, { 
 				showIcons: false,
 				showPinLabel: false
 			}))
@@ -66,7 +107,7 @@ const fetchBySearchData = async ({ searchValue='', searchFor='' }) => {
 
 
 	const searchUrl = `${url}?_search=${searchValue},${searchOnFields}` 						// we doesn't create Searching machanisom yet
-	const { error, data } = await axios({ url: searchUrl, method: 'GET' })
+	const { error, data } = await axios({ url: searchUrl })
 
 	if(error) {
 		Snackbar({
@@ -81,8 +122,6 @@ const fetchBySearchData = async ({ searchValue='', searchFor='' }) => {
 
 	return data
 }
-
-
 fetchInitialData('tweets')
 fetchInitialData('users')
 
@@ -115,11 +154,11 @@ searchInput.addEventListener('input', (evt) => {
 
 		tabs?.forEach( doc => {
 			if(searchFor === 'tweets') {
-				tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML( doc))
+				tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML( doc, logedInUser))
 			}
 
 			if(searchFor === 'users') {
-				usersContentContainer.insertAdjacentHTML('beforeend', getUserHTML( doc))
+				usersContentContainer.insertAdjacentHTML('beforeend', getUserHTML( doc, logedInUser))
 			}
 		})
 

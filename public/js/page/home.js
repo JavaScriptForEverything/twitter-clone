@@ -1,9 +1,10 @@
-/* Global Variables 	: res.render('home', payload)
-		. logedInUser
+import { Snackbar, getTweetHTML } from '../module/components/index.js'
+import { $, axios, encodeHTML, stringToElement } from '../module/utils.js'
 
-	/public/js/utils.js:
-		. getTweetHTML( tweetDoc )
-		. stringToElement( htmlString )
+
+/* Global Variables: 
+		. logedInUser 		: res.render('./page/home', payload)
+
 */
 
 const sendTweetForm = $('#send-tweet-form')
@@ -23,6 +24,37 @@ const dialogCloseButton = $('[name=dialog-close-button]')
 const dialogTweetInput = $('[name=dialog-tweet-input]')
 const dialogCancelButton = $('[name=dialog-cancel-button]')
 const dialogSubmitButton = $('[name=dialog-submit-button]')
+
+
+
+
+// //                                           		// (1) user comes from Server-Side: res.render('/', payload)
+// let logedInUser = !{JSON.stringify( user )} 		// (2) Passing Server-Side variable to Client-Side
+// //- console.log(logedInUser) 										// (3) Now logedInUser is Client-side variable
+
+
+// //- styleOnTweetIconClick({ event: evt, tweet, user: logedInUser, selector: '#heart' })
+// const styleOnTweetIconClick = ({ event, tweet, user, selector='#heart' }) => {
+
+// 	const isLiked = tweet.likes.includes(user._id)
+// 	if( isLiked ) {
+// 		event.target.style.fill = 'red' 
+// 		//- event.target.classList.add('fill-red-500') 			// use self class TailwindClass not works
+// 		$(`:scope ${selector} + span`).textContent = tweet?.likes.length
+
+// 	} else {
+// 		event.target.style.fill = '' 
+// 		$(`:scope ${selector} + span`).textContent = tweet?.likes.length
+// 	}
+// }
+
+
+
+
+
+
+
+
 
 
 // disabled submit button at first time
@@ -83,7 +115,7 @@ sendTweetButton.addEventListener('click', async(evt) => {
 	textarea.value = ''
 
 	// tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(tweet))
-	pinnedTweetContainer.insertAdjacentHTML('afterend', getTweetHTML(tweet))
+	pinnedTweetContainer.insertAdjacentHTML('afterend', getTweetHTML(tweet, logedInUser))
 })
 
 
@@ -111,11 +143,11 @@ const fetchTweets = async () => {
 	tweets?.forEach((tweet) => {
 		if(!!tweet.pinned) {
 			pinnedTweetContainer.innerHTML = ''
-			pinnedTweetContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet))
+			pinnedTweetContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet, logedInUser))
 			return
 		}  
 
-		tweetsContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet))
+		tweetsContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet, logedInUser))
 		
 		
 	}) // End of getTweets loop
@@ -149,7 +181,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	dialogEl.showModal()
 	dialogEl.dataset.tweetId = tweetId
 
-	const htmlString = getTweetHTML(tweet, { isModal: true }) 	// public/js/utils.js
+	const htmlString = getTweetHTML(tweet, logedInUser, { isModal: true }) 	// public/js/utils.js
 	tweetContainer.insertAdjacentHTML('beforeend', htmlString )
 
 	submitButton.addEventListener('click', async (evt) => {
@@ -173,7 +205,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 
 		const updatedTweet = data.data
 		// tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(updatedTweet))
-		pinnedTweetContainer.insertAdjacentHTML('afterend', getTweetHTML(updatedTweet))
+		pinnedTweetContainer.insertAdjacentHTML('afterend', getTweetHTML(updatedTweet, logedInUser))
 		closeModal()
 
 	}) // end submit button click
@@ -211,7 +243,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	retweetEl.textContent = updatedTweet?.retweetUsers.length || ''
 	retweetButton.style.color = color
 
-	tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(retweet))
+	tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(retweet, logedInUser))
 })
 
 //-----[ Heart Handler ]-----
@@ -280,7 +312,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 		pinnedTweetEl.remove()
 
 		// pinnedTweetContainer.insertAdjacentElement('afterend', pinnedTweetEl)
-		const currentTweetEl = stringToElement( getTweetHTML(tweet) )
+		const currentTweetEl = stringToElement( getTweetHTML(tweet, logedInUser) )
 		pinnedTweetContainer.insertAdjacentElement('afterend', currentTweetEl)
 
 		return
@@ -314,7 +346,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	pinnedTweetEl?.remove()
 	container.remove()
 
-	const currentTweetEl = stringToElement( getTweetHTML(tweet) )
+	const currentTweetEl = stringToElement( getTweetHTML(tweet, logedInUser) )
 	pinnedTweetContainer.insertAdjacentElement('afterbegin', currentTweetEl)
 	if(pinnedTweetEl) pinnedTweetContainer.insertAdjacentElement('afterend', pinnedTweetEl)
 

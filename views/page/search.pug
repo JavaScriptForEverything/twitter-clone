@@ -1,88 +1,67 @@
-extends ../../layout/mainLayout
+extends ../layout/mainLayout
+
 block middle-block
-	style.
-		body {
-			--blue-500: #3b82f6;
-			--blue-600: #2563eb;
-		}
-		.tab-active {
-			border-bottom: 1px solid var(--blue-500);
-			color: var(--blue-500);
-			font-weight: bold;
-		}
-	div(class='col-span-10 md:col-span-7')
-		h1(class='p-2 border-b border-slate-200 text-slate-900 font-bold') Search
+	if !logedInUserJs
+		div(class='absolute top-0 left-0 right-0 bg-red-500 text-white') 
+			p(class='px-4 py-2 text-xl text-center') logedInUserJS is missing from backend
 
-		div(class='p-4')
-			div(class='relative')
-				label(for='search' class='text-blue-500 absolute top-2 left-1') 
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5l-1.5 1.5l-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16A6.5 6.5 0 0 1 3 9.5A6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14S14 12 14 9.5S12 5 9.5 5Z"/></svg>
-				input#search( type="search", name="search" placeholder='Searching'
-					class='w-full border border-slate-300 px-3 pl-8 py-1.5 rounded text-slate-800'
-				)
-
-		//- Posts & Reply Section 
-		div(class='border border-slate-100 shadow-sm mt-4')
-			nav(name='tab-container' class='grid grid-cols-2 ')
-				a(href="#tweets-tab") 
-					p(id=0 class=' border border-slate-100 hover:bg-blue-100 text-center p-2 cursor-pointer') Tweets
-				a(href="#users-tab") 
-					p(id=1 class='hover:bg-blue-100 border border-slate-100 text-center p-2 cursor-pointer') Users
+	else
+		script(nonce=cspNonce).
+			const logedInUser = !{logedInUserJs}
 
 
-			div(name='tab-content-container' class='py-1.5 px-3 mb-10')
-				
-				div(id='0' class='tab-item ' hidden=false ) 
-					//- each followingUser in profileUser.following
-					//- +followList(logedInUser, profileUser, 'following')
+		style.
+			body {
+				--blue-500: #3b82f6;
+				--blue-600: #2563eb;
+			}
+			.tab-active {
+				border-bottom: 1px solid var(--blue-500);
+				color: var(--blue-500);
+				font-weight: bold;
+			}
+
+		div(class='col-span-10 md:col-span-7')
+			h1(class='p-2 border-b border-slate-200 text-slate-900 font-bold') Search
+
+			div(class='p-4')
+				div(class='relative')
+					label(for='search' class='text-blue-500 absolute top-2 left-1') 
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5l-1.5 1.5l-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16A6.5 6.5 0 0 1 3 9.5A6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14S14 12 14 9.5S12 5 9.5 5Z"/></svg>
+					input#search( type="search", name="search" placeholder='Searching'
+						class='w-full border border-slate-300 px-3 pl-8 py-1.5 rounded text-slate-800'
+					)
+
+			//- Posts & Reply Section 
+			div(class='border border-slate-100 shadow-sm mt-4')
+				nav(name='tab-container' class='grid grid-cols-2 ')
+					a(href="#tweets-tab") 
+						p(id=0 class=' border border-slate-100 hover:bg-blue-100 text-center p-2 cursor-pointer') Tweets
+					a(href="#users-tab") 
+						p(id=1 class='hover:bg-blue-100 border border-slate-100 text-center p-2 cursor-pointer') Users
 
 
-				div(id='1' class='tab-item' hidden ) 
+				div(name='tab-content-container' class='py-1.5 px-3 mb-10')
+					
+					div(id='0' class='tab-item ' hidden=false ) 
+						//- each followingUser in profileUser.following
+						//- +followList(logedInUser, profileUser, 'following')
 
 
-block right-block
-
-	script(nonce=cspNonce).
-		const logedInUser = !{ JSON.stringify(logedInUser) } 	
-
-		const url = new URL(location.href) 
-		if(url.hash === '#users-tab') { 	 //- /search | /search/#tweets-tab | /search/#users-tab
-			$('[name=tab-container]').children[0].classList.remove('tab-active')
-			$('[name=tab-container]').children[1].classList.add('tab-active')
-
-			$('[name=tab-content-container]').children[0].hidden=true
-			$('[name=tab-content-container]').children[1].hidden=false
-		} else {
-			$('[name=tab-container]').children[0].classList.add('tab-active')
-		}
-
-		//-----[ Tabs container ]-----
-		$('[name=tab-container]').addEventListener('click', (evt) => {
-		const url = new URL(location.href) 
-		if(url.hash === '#users-tab') { 	 //- /search | /search/#tweets-tab | /search/#users-tab
-			$('[name=tab-container]').children[0].classList.remove('tab-active')
-			$('[name=tab-container]').children[1].classList.add('tab-active')
-
-			$('[name=tab-content-container]').children[0].hidden=true
-			$('[name=tab-content-container]').children[1].hidden=false
-		} 
+					div(id='1' class='tab-item' hidden ) 
 
 
-			// Step-1: add active tab style
-			Array.from(evt.currentTarget.children).forEach( (tab, index) => {
-				tab.classList.toggle('tab-active', +evt.target.id === index)
-			}) 
+		block right-block
 
-			// Step-2: Show Active Tab content
-			Array.from( document.querySelectorAll('.tab-item') ).forEach((tabItem, index) => {
-				tabItem.hidden = evt.target.id !== index.toString()
-			})
-		})
+block script
+	if logedInUserJs
+		script( type='module' src="./js/page/search.js" ) 
 
 
 
 
-	script(src="/js/search-user-and-tweet.js") 
+
+
 
 
 

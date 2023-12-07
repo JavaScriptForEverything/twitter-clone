@@ -135,16 +135,6 @@ exports.tweetDetailsPage = async(req, res, next) => {
 }
 
 
-// GET /search
-exports.searchPage = (req, res) => {
-	const payload = {
-		pageTitle: 'Search',
-		logedInUser: req.session.user,
-	}
-
-	res.render('user/profile/search-user-and-tweet', payload)
-}
-
 
 // GET /message
 exports.messageInboxPage = (req, res) => {

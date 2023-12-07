@@ -1,6 +1,6 @@
-extends layout/mainLayout
+extends ../layout/mainLayout
 block content
-	include icon/icons
+	include ../icon/icons
 
 	.h-screen.flex.justify-center.items-center
 		.w-96.bg-slate-100.m-auto.px-4.py-3.shadow-md.rounded.border.border-slate-200
@@ -50,8 +50,6 @@ block content
 						startIcon : item.icon,
 					})
 
-	script(nonce=cspNonce).
-		// Just for development perpose to auto-login
-		//- $('button[type=submit]').click()
+	script( type='module' src="./js/page/login.js") 
 
 
