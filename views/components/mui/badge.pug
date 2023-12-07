@@ -26,7 +26,7 @@ mixin Badge (props = {})
 			iconColor = 'secondary', 			// primary | secondary | info  | error | warning
 		} = props
 	
-	span(name='badge-container' class=`inline-block relative 
+	span(id=id name= name || 'badge-container' class=`inline-block relative 
 		${
 			iconColor === 'primary' ? 'text-blue-500' 
 			: iconColor === 'info' ? 'text-sky-500' 
@@ -36,22 +36,24 @@ mixin Badge (props = {})
 			: 'text-slate-700'
 		}`)
 		#{icon}
-		span(name='badge-content' class=`absolute  rounded-full text-white 
-			${
-				badgeSize === 'medium' ? '-top-2 -right-2 px-1.5 py-0.5 text-xs' 
-				: badgeSize === 'small' ? '-top-1 -right-1 px-1 py-[1] text-[length:10px]' 
-				: badgeSize === 'large' ? '-top-3 -right-3 px-2 py-0.5 text-sm' 
-				: badgeSize === 'dot' ? '-top-1 -right-1 p-1 text-[length:1px]' 
-				: '-top-3 -right-3 px-2 py-0.5 text-sm'
-			}
+		if +badgeContent
+			span(name=`${name}-content` class=`absolute  rounded-full text-white 
+				${
+					!+badgeContent ? 'text-[length:0px]' 
+					: badgeSize === 'medium' ? '-top-2 -right-2 px-1.5 py-0.5 text-xs' 
+					: badgeSize === 'small' ? '-top-1 -right-1 px-1 py-[1] text-[length:10px]' 
+					: badgeSize === 'large' ? '-top-3 -right-3 px-2 py-0.5 text-sm' 
+					: badgeSize === 'dot' ? '-top-1 -right-1 p-1 text-[length:1px]' 
+					: '-top-3 -right-3 px-2 py-0.5 text-sm'
+				}
 
-			${
-				badgeColor === 'primary' ? 'bg-blue-500' 
-				: badgeColor === 'info' ? 'bg-sky-500' 
-				: badgeColor === 'error' ? 'bg-red-500' 
-				: badgeColor === 'warning' ? 'bg-orange-500' 
-				: badgeColor === 'secondary' ? 'bg-slate-500' 
-				: 'text-slate-500'
-			}
-		`) #{badgeContent}
+				${
+					badgeColor === 'primary' ? 'bg-blue-500' 
+					: badgeColor === 'info' ? 'bg-sky-500' 
+					: badgeColor === 'error' ? 'bg-red-500' 
+					: badgeColor === 'warning' ? 'bg-orange-500' 
+					: badgeColor === 'secondary' ? 'bg-slate-500' 
+					: 'text-slate-500'
+				}
+			`) #{badgeContent}
 

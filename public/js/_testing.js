@@ -22,3 +22,11 @@ const getAllTweets = async () => {
 	`
 }
 getAllTweets()
+
+
+const htmlstring = `
+	<button class='text-red-500'>
+		Hi Button
+	</button>
+`
+$('#root').insertAdjacentHTML('beforebegin', htmlstring)

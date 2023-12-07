@@ -1,12 +1,22 @@
 extends layout/mainLayout
 
 block middle-block
+	style.
+		.color {
+			@apply text-blue-500;
+		}
+
+
+	button(class='text-blue-500') button
+	button(class='color') button
+
 	div#forModalContainer(class='col-span-10 md:col-span-7')
 
 		h1(class='p-2 border-b border-slate-200 text-slate-900 font-bold') Testing Page
 
 		section(id='root')
 			h2 Heading goes here
+
 
 	script(nonce=cspNonce).
 	script(src="/js/_testing.js") 

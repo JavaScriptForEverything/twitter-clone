@@ -4,6 +4,7 @@ const { appError, catchAsync } = require('./errorController')
 const Message = require('../models/messageModal')
 const Chat = require('../models/chatModel')
 const User = require('../models/userModel')
+const Notification = require('../models/notificationModel')
 
 
 // GET /api/messages
@@ -90,6 +91,9 @@ exports.createMessage = catchAsync( async (req, res, next) => {
 	}
 
 
+	// finally send notification to users
+	insertNotification(messageDoc, chat, next)
+
 
 	res.status(201).json({
 		status: 'success',
@@ -118,4 +122,26 @@ const getChatByUsersId = (userId, senderId) => {
 			}
 		}
 	).populate('users') 														// finally populated users array
+}
+
+
+// used in POST /api/messages above
+const insertNotification = (message, chat, next) => {
+	// if same user send more than one notification then it will delete old one and create new one 
+
+	chat.users.forEach( async (user) => {
+		if(!user.id) return next( appError('POST /api/messages: chat.users not populated'))
+		if(!message.sender.id) return next( appError('POST /api/messages: message.sender not populated'))
+
+		// if( user._id.toString() === message.sender._id.toString() ) return 		// don't nofity self
+		if( user.id === message.sender.id ) return 		// don't nofity self
+
+		await Notification.insertNotification({
+			entityId: message.chat._id, 						// on which message it will triggered
+			userFrom: user._id, 										// Who message it ?
+			userTo: message.sender._id, 						// which user create this tweet ?
+			type: 'new-message', 										// ['like', 'retweet', 'replyTo', 'follow', 'new-message']
+			kind: 'message', 												// ['user', 'tweet', 'message' ]
+		})
+	})
 }

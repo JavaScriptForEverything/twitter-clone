@@ -5,6 +5,9 @@ const notificationController = require('../controllers/notificationController')
 
 //=> /api/notifications
 const router = Router()
+	router
+		.use(authController.protect)
+		.get('/badge', notificationController.getAllNotificationsForBadge)
 
 	router
 		.use(authController.protect)

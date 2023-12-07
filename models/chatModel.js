@@ -9,4 +9,5 @@ const chatSchema = new Schema({
 
 }, { timestamps: true })
 
+
 module.exports = models.Chat || model('Chat', chatSchema)

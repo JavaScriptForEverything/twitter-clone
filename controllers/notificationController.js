@@ -1,15 +1,45 @@
+const { Types } = require('mongoose')
 const Notification = require('../models/notificationModel')
 const { filterObjectByArray, apiFeatures } = require('../utils')
 const { catchAsync, appError } = require('./errorController')
 
+
+// GET 	/api/notifications/badge
+exports.getAllNotificationsForBadge = catchAsync(async (req, res, next) => {
+	const userId = req.session.user._id
+	// const userId = '655e019f890666a9ec090931'
+
+	const notifications = await Notification.aggregate([
+		{ $match : { 
+			isOpened: { $eq: false }, 
+			userTo: { $eq: new Types.ObjectId(userId)  }
+		}},
+		{ $count: 'count' }
+	])
+
+	res.status(200).json({
+		status: 'success',
+		// data: notifications
+		data: notifications[0]
+	})
+}) 
+
 // GET 	/api/notifications
 exports.getAllNotifications = catchAsync(async (req, res, next) => {
-	const notifications = await apiFeatures(Notification, req.query)
+	const userId = req.session.user._id
+	const filter = { 
+		// isOpened: false,
+		userTo: new Types.ObjectId( userId ), 
+		type: { $ne: 'new-message' }
+	}
+
+	const notifications = await apiFeatures(Notification, req.query, filter)
 	if(!notifications) return next(appError('notification update failed'))
+
 
 	setTimeout(() => {
 
-	res.status(201).json({
+	res.status(200).json({
 		status: 'success',
 		count: notifications.length,
 		data: notifications

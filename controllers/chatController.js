@@ -20,14 +20,39 @@ exports.getAllChats = catchAsync( async (req, res, next) => {
 	// 		$elemMatch: { $eq: userId } 	// of currentUser
 	// 	} 
 	// }
-	const chats = await apiFeatures(Chat, req.query, filter).populate('users latestMessage') 	
+	let chats = await apiFeatures(Chat, req.query, filter).populate('users latestMessage') 	
+
 
 	// // Find which users has logedIn user._id ==> Find Group of user self exists
 	// const chats = await Chat.find({ users: { $elemMatch: { $eq: userId }} })
 	// 	.sort('createdAt: -1')
 	// 	.populate('users latestMessage') 								// direct property
+	
 
-	await Message.populate(chats, 'latestMessage.sender') 	// populated by others, then get sender
+	// chats = await Message.populate(chats, 'latestMessage.sender') 	// populated by others, then get sender
+
+
+
+	//- We need chats[0].latestMessage.users, But why ?
+
+
+	/* For Notification Badge: 	fetch('/api/chats?unreadOnly="true"')
+			those latestMessage (message) don't have us, just ignore those messages for notification badge
+	*/ 
+	// if(req.query.unreadOnly === 'true') {
+	// 	// chats = chats.filter( chat => chat.latestMessage.users.includes( userId ))
+
+	// 	chats.filter( (chat) => {
+	// 		chat.latestMessage.users.includes( userId )
+	// 		console.log(chat.latestMessage.users, userId)
+	// 		// return
+	// 	})
+	// }
+	// console.log(chats)
+
+	// console.log(chats[0].latestMessage.users)
+	// console.log(chats)
+
 
 	res.status(200).json({
 		status: 'success',

@@ -1,7 +1,7 @@
 const $ = selector => document.querySelector(selector)
 const socket = io('/')
 
-// its not firing
+// its not firing from outside of /notification page
 socket.on('message-received', ({ roomId, messageDoc }) => {
 
 	console.log(messageDoc.message)
@@ -17,6 +17,54 @@ socket.on('message-received', ({ roomId, messageDoc }) => {
 		// title: 'Testing'
 	})
 })
+
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+	updateNotificationBadge()
+	updateMessageBadge()
+})
+const updateNotificationBadge = async () => {
+	const notificationBadge = $('[name=notification-badge]')
+	if(!notificationBadge) return 		// not every page has menu: like login, signup,  error, /docs
+
+	const { data, error } = await axios({ url: '/api/notifications '})
+	if(error) {
+		Snackbar({
+			severity: 'error', 											// success | info | warning | error
+			message: error.message || 'Notification Badge: /api/chats?unreadOnly=true failed',
+		})
+	}
+
+	// console.log(data.data.count)
+	// const { count } = data.data
+
+	notificationBadge.textContent = data.count
+	notificationBadge.style.opacity = data.count ? 1 : 0 	// boolean value not work
+}
+
+const updateMessageBadge = async () => {
+	// Call this function before page loade once
+	// Call this in 'new-message' event so that update this badge on new message too
+
+	const messageBadge = $('[name=message-badge]')
+	if(!messageBadge) return 		// not every page has menu: like login, signup,  error, /docs
+
+	const { data, error } = await axios({ url: '/api/chats?unreadOnly=true'})
+	// const { data, error } = await axios({ url: '/api/messages'})
+	if(error) {
+		Snackbar({
+			severity: 'error', 											// success | info | warning | error
+			message: error.message || 'messageBadge : /api/chats?unreadOnly=true failed',
+		})
+	}
+
+	messageBadge.textContent = data.count
+	messageBadge.style.opacity = +!!data.count 		// Number => Boolean => 1/0
+}
+
+
+
 
 
 // Convert '<p> hi </p>' 	=> .createElement('p').textContent = 'hi'
@@ -646,7 +694,7 @@ const Snackbar = (props={}) => {
 		action=props.position || true,
 		showSeverity=true,
 		autoClose=true,
-		closeTime = 5000,
+		closeTime = 10000,
 	} = props
 
 	const successHtmlString = `

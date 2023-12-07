@@ -76,6 +76,10 @@ const getAllMessagesOfSingleChat = async (chatId) => {
 }
 getAllMessagesOfSingleChat(chatId)
 
+// window.addEventListener('DOMContentLoaded', () => {
+// 	console.log(chatId)
+// })
+
 
 const scrollToBottom = (isFromBegining=true, speed=5, delay=1) => {
 	const messageContainerHeight = messageContainer.scrollHeight
@@ -312,6 +316,7 @@ socket.on('message-received', ({ roomId, messageDoc }) => {
 	sendInput.value=''
 	sendInput.focus()
 
+	updateMessageBadge() 	// comes from utils.js
 })
 
 

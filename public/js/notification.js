@@ -4,11 +4,15 @@ const listContainer = $('[name=list-container]')
 const loadingIndicator = $('[name=page-loading-indicator]')
 const checkAllButton = $('[name=check-all]')
 
+// addEventListener('pageshow', (evt) => {
+// 	if(evt.persisted) location.reload()
+// 	console.log('you come back by clicking back button')
+// })
 
 const fetchInitialNotifications = async () => {
 	loadingIndicator.classList.remove('hidden')
 
-	const { data, error } = await axios({ url: '/api/notifications' })	
+	const { data, error } = await axios({ url: '/api/notifications?_limit=50' })	
 	if(error) {
 		Snackbar({
 			severity: 'error',
@@ -39,18 +43,13 @@ const fetchInitialNotifications = async () => {
 			`: ''
 		})
 
-		const url = kind === 'tweet' ? `/tweet/${entityId}` : `/profile/${userFrom.username}`
-
+		let url = '#'
+		if( kind === 'tweet' ) 	url = `/tweet/${entityId}`
+		if( kind === 'message') url = `/message/${entityId}`
+		if( kind === 'user' ) 	url = `/profile/${entityId}`
+		
 		const listWrapper = ` <a href='${url}'> ${listHtmlString} </a>`
-		const listEl = stringToElement(listWrapper)
-
-		listEl?.querySelector('button')?.addEventListener('click', (evt) => {
-			evt.preventDefault()
-
-			console.log('close icon')
-		})
-
-		notificationContainer.insertAdjacentElement('beforeend', listEl )
+		notificationContainer.insertAdjacentHTML('beforeend', listWrapper )
 	})
 }
 fetchInitialNotifications()
@@ -65,8 +64,6 @@ notificationContainer.addEventListener('click', async (evt) => {
 	const container = evt.target.closest('[name=list-container]')
 	const notificationId = container.id
 
-	// console.log(notificationId)
-	// return
 
 	const { data, error } = await axios({ 
 		url: `/api/notifications/${notificationId}`, 
@@ -86,10 +83,9 @@ notificationContainer.addEventListener('click', async (evt) => {
 
 	// container.classList.remove('bg-slate-200','border-slate-300')
 	container.classList.add('bg-slate-50')
-	// console.log(data.data)
 
-	// const a = evt.target.closest('a')
-	// redirectTo(a.href)
+	const a = evt.target.closest('a')
+	redirectTo(a.href)
 
 	// NB.
 	// 	. Browser history.back() === BackButton : 

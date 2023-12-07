@@ -21,8 +21,8 @@ const { Schema, models, model } = require('mongoose')
 	entityId: '',
 	userFrom: '',
 	userTo: '',
-	type: 'like', 			// ['like', 'retweet', 'replyTo', 'follow']
-	kind: 'tweet', 			// ['tweet', 'message' ]
+	type: 'like', 			// ['like', 'retweet', 'replyTo', 'follow', 'new-message']
+	kind: 'tweet', 			// ['user', 'tweet', 'message' ]
 	isOpened: false
 }
 
@@ -47,7 +47,7 @@ const notificationSchema = new Schema({
 	
 	type: { 																			// for which task this notification this
 		type: String,
-		enum: ['like', 'retweet', 'replyTo', 'follow'],
+		enum: ['like', 'retweet', 'replyTo', 'follow', 'new-message'],
 		required: true,
 	},
 
