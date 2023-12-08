@@ -1,7 +1,15 @@
 extends ../layout/mainLayout
 
 block middle-block
-	div(class='col-span-10 md:col-span-7')
+	if !logedInUserJs
+		div(class='absolute top-0 left-0 right-0 bg-red-500 text-white') 
+			p(class='px-4 py-2 text-xl text-center') logedInUserJS is missing from backend
+
+	else
+		script(nonce=cspNonce).
+			const logedInUser = !{logedInUserJs}
+
+		div(class='col-span-10 md:col-span-7')
 			h1(class='p-2 border-b border-slate-200 text-slate-900 font-bold') New Message
 
 			div(class='px-2 py-3  text-slate-900 flex items-center gap-2 flex-wrap') 
@@ -38,36 +46,13 @@ block middle-block
 					class='disabled:shadow-sm disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-300'
 				) Create Chat
 
-block right-block
-
-	script(nonce=cspNonce).
-		const logedInUser = !{JSON.stringify(logedInUser)}
-
-		//- Disable button if input is empty
-		const messageInput = $('[name=message-input]')
-		const createChatButton = $('[name=create-chat]')
-		const crossInputButton = $('[name=cross-input-button]')
-		const usersContainer = $('#users-container')
-
-		createChatButton.disabled = true
-
-		//- messageInput.addEventListener('input', (evt) => {
-		//- 	createChatButton.disabled = !evt.target.value.trim()  
-		//- })
-
-		messageInput.value = '' 	// reset input value on page refresh
-		crossInputButton.addEventListener('click', (evt) => {
-			messageInput.value = ''
-			usersContainer.innerHTML = ''
-			document.querySelectorAll('.selected-username').forEach(el => el.remove())
-			createChatButton.disabled = true
-		})
+		block right-block
 
 
+block prepend script
+	if logedInUserJs
+		script( type='module' src="/js/page/messageNew.js" ) 
 
-
-
-	script(src="/js/message-new.js") 
 
 //- block content
 	include ../icon/icons

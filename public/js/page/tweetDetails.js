@@ -1,7 +1,12 @@
+import { Snackbar, getTweetHTML } from '/js/module/components/index.js'
+import { $, axios, encodeHTML, stringToElement } from '/js/module/utils.js'
+
 /* Global Variables
 		. logedInUser 	// comes from backend
 		. tweetId  			// comes from backend 	: aslo checked is valid tweetId or not
 */
+
+
 
 const sendTweetForm = $('#send-tweet-form')
 const sendTweetButton = $('#send-tweet-form button')
@@ -65,12 +70,15 @@ const fetchTweetById = async () => {
 	loadingContainer.remove()
 		
 	if(!!tweet.pinned) {
-		pinnedTweetContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet))
+		pinnedTweetContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet, logedInUser))
 	}  
 
-	tweetsContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet.replyTo))
+	if(tweet.replyTo) 
+		tweetsContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet.replyTo, logedInUser))
+
 	tweet.user.retweets.forEach( retweet => {
-		tweetsContainer.insertAdjacentHTML('beforeend', getTweetHTML(retweet))
+		if(retweet)
+			tweetsContainer.insertAdjacentHTML('beforeend', getTweetHTML(retweet, logedInUser))
 	})
 }
 fetchTweetById()

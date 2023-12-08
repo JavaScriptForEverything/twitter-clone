@@ -1,5 +1,5 @@
-import { Snackbar, getTweetHTML } from '../module/components/index.js'
-import { $, axios, encodeHTML, stringToElement } from '../module/utils.js'
+import { Snackbar, getTweetHTML } from '/js/module/components/index.js'
+import { $, axios, encodeHTML, stringToElement } from '/js/module/utils.js'
 
 
 /* Global Variables: 

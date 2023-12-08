@@ -1,3 +1,12 @@
+import { Snackbar } from '/js/module/components/index.js'
+import $, { axios, decodeHTML, stringToElement } from '/js/module/utils.js'
+
+/* Global Variables
+		. logedInUser
+*/
+
+
+
 const chatListContainer = $('[name=chat-list-container]')
 
 // console.log(logedInUser)

@@ -1,10 +1,31 @@
+import { Snackbar } from '/js/module/components/index.js'
+import { $, axios } from '/js/module/utils.js'
+
 /* Global Variables 
 		. logedInUser
-
-	from pug: 
-		. usersContainer
-		. messageInput
 */
+
+//- Disable button if input is empty
+const messageInput = $('[name=message-input]')
+const createChatButton = $('[name=create-chat]')
+const crossInputButton = $('[name=cross-input-button]')
+const usersContainer = $('#users-container')
+
+createChatButton.disabled = true
+
+//- messageInput.addEventListener('input', (evt) => {
+//- 	createChatButton.disabled = !evt.target.value.trim()  
+//- })
+
+messageInput.value = '' 	// reset input value on page refresh
+crossInputButton.addEventListener('click', (evt) => {
+	messageInput.value = ''
+	usersContainer.innerHTML = ''
+	document.querySelectorAll('.selected-username').forEach(el => el.remove())
+	createChatButton.disabled = true
+})
+
+
 
 let timer 
 const selectedUsers = [] 	// from user selection

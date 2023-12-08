@@ -1,4 +1,4 @@
-import { $, isFormValidated } from '../module/utils.js'
+import $, { isFormValidated } from '/js/module/utils.js'
 
 $('input[name=confirmPassword]').addEventListener('input', (evt) => {
 		const password = $('input[name=password]').value

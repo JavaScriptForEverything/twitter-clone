@@ -26,17 +26,17 @@ router.route('/logout')
 
 router
 	.use(authController.protect)
-	.get('/profile', authController.profilePage)
-	.get('/profile/:id', authController.profilePage)
-	.get('/profile/:id/following', authController.followingAndFollwers)
-	.get('/profile/:id/followers', authController.followingAndFollwers)
-	.get('/tweet/:id', authController.tweetDetailsPage)
+	.get('/profile', pageController.profilePage)
+	.get('/profile/:id', pageController.profilePage)
+	.get('/profile/:id/following', pageController.followingAndFollwers)
+	.get('/profile/:id/followers', pageController.followingAndFollwers)
+	.get('/tweet/:id', pageController.tweetDetailsPage)
 	.get('/search', pageController.searchPage) // /search#tab-1 /search#tab-2
 
-	.get('/message', authController.messageInboxPage) 
-	.get('/message/new', authController.newMessageInboxPage) 
-	.get('/message/:id', authController.chatMessagePage) 
+	.get('/message', pageController.messageInboxPage) 
+	.get('/message/new', pageController.newMessageInboxPage) 
+	.get('/message/:id', pageController.chatMessagePage) 
 
-	.get('/notification', authController.notificationPage) 
+	.get('/notification', pageController.notificationPage) 
 
 module.exports = router

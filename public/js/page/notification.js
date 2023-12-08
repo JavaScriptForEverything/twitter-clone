@@ -1,3 +1,13 @@
+import { Snackbar, List } from '../module/components/index.js'
+import { $, axios, redirectTo } from '../module/utils.js'
+
+
+/* Global Variables: 
+		. logedInUser 		: res.render('./page/search', payload)
+*/
+
+
+
 let isAllOpened = false
 const notificationContainer = $('[name=notification-container]')
 const listContainer = $('[name=list-container]')

@@ -1,12 +1,37 @@
+import { Snackbar, getTweetHTML } from '/js/module/components/index.js'
+import $, { axios } from '/js/module/utils.js'
+
 /* Global Variables
 		. logedInUser
 		. profileUser
-
-	utils.js:
-		. $
 		. Cropper 		from cropper CDN
-
 */
+
+
+
+
+		$('[name=tab-container]').children[0].classList.add('tab-active')
+		if(location.hash === '#replies-tab') { 
+			$('[name=tab-container]').children[1].classList.add('tab-active')
+			$('[name=tab-container]').children[0].classList.remove('tab-active')
+		}
+
+		//-----[ Tabs container ]-----
+		$('[name=tab-container]').addEventListener('click', (evt) => {
+
+
+			// Step-1: add active tab style
+			Array.from(evt.currentTarget.children).forEach( (tab, index) => {
+				tab.classList.toggle('tab-active', +evt.target.id === index)
+			}) 
+
+			// Step-2: Show Active Tab content
+			Array.from( document.querySelectorAll('.tab-item') ).forEach((tabItem, index) => {
+				tabItem.hidden = evt.target.id !== index.toString()
+			})
+		})
+// ---------
+
 
 const followingButton = $('#following-button')
 const tweetsContentContainer = $('[name=tweets-container]')
@@ -299,7 +324,7 @@ const fetchAllTweets = async () => {
 	data.data?.forEach( (tweet) =>  {
 		// Tweets-Tab: 
 		if( tweet.replyTo === undefined) {
-			tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet, { 
+			tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML(tweet, profileUser, { 
 				showIcons: false,
 				showPinLabel: false
 			}))
@@ -308,7 +333,7 @@ const fetchAllTweets = async () => {
 		// Replies-Tab: 
 		if( tweet.replyTo !== undefined) {
 			const reply = tweet
-			repliesContentContainer.insertAdjacentHTML('beforeend', getTweetHTML(reply, { 
+			repliesContentContainer.insertAdjacentHTML('beforeend', getTweetHTML(reply, profileUser, { 
 				showIcons: false,
 				showPinLabel: false
 			}))

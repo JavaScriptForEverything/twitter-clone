@@ -75,35 +75,11 @@ export const axios = async(option) => {
 
 
 
-
-
-
-const socket = io('/')
-
-// its not firing from outside of /notification page
-socket.on('message-received', ({ roomId, messageDoc }) => {
-
-	console.log(messageDoc.message)
-
-	Snackbar({
-		severity: 'info',
-		message: `${messageDoc.message}`,
-		// position: 'top-1 right-1' 						// tailwind class
-		variant: 'filled', 									// text | contained | filled
-		action: true,
-		// autoClose: true,
-		// closeTime: 20000,
-		// title: 'Testing'
-	})
-})
-
-
-
 document.addEventListener('DOMContentLoaded', async () => {
 	updateNotificationBadge()
 	updateMessageBadge()
 })
-const updateNotificationBadge = async () => {
+export const updateNotificationBadge = async () => {
 	const notificationBadge = $('[name=notification-badge]')
 	if(!notificationBadge) return 		// not every page has menu: like login, signup,  error, /docs
 
@@ -122,7 +98,7 @@ const updateNotificationBadge = async () => {
 	notificationBadge.style.opacity = data.count ? 1 : 0 	// boolean value not work
 }
 
-const updateMessageBadge = async () => {
+export const updateMessageBadge = async () => {
 	// Call this function before page loade once
 	// Call this in 'new-message' event so that update this badge on new message too
 

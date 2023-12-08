@@ -1,26 +1,30 @@
-extends layout/mainLayout
+extends ../layout/mainLayout
 
 block middle-block
-	style.
-		.active-check {
-			color: #3b82f6;
-			border-color: #3b82f6;
-			font-weight: 700;
-		}
+	if !logedInUserJs
+		div(class='absolute top-0 left-0 right-0 bg-red-500 text-white') 
+			p(class='px-4 py-2 text-xl text-center') logedInUserJS is missing from backend
 
-	div(class='col-span-10 md:col-span-7 min-h-screen relative')
+	else
+		script(nonce=cspNonce).
+			const logedInUser = !{logedInUserJs}
+			const chat = !{JSON.stringify( chat )} 
+			const chatId = chat._id
+
+		+GroupNameChangeModal()
+		div(class='col-span-10 md:col-span-7 min-h-screen relative')
 			div(class='p-2 min-h-full flex flex-col justify-between ')
 				div
 					div(class='flex items-center justify-between p-2 border-b border-slate-200 text-slate-900')
-						h1(class=' font-bold') Notification
-						button(name='check-all' type='button' 
+						h1(class=' font-bold') Chat
+						button(name='delete-chat' title='Delete All messages' type='button' 
 							class='shadow-2xl border border-slate-300 p-0.5 bg-slate-50 text-slate-500 rounded-md'
 							class='hover:bg-slate-100 hover:border-slate-400 hover:text-slate-600'
 							class='active:bg-blue-100 active:border-blue-500 active:text-blue-600'
 						)
-							<svg class='w-4 h-4 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M.41 13.41L6 19l1.41-1.42L1.83 12m20.41-6.42L11.66 16.17L7.5 12l-1.43 1.41L11.66 19l12-12M18 7l-1.41-1.42l-6.35 6.35l1.42 1.41L18 7Z"/></svg>
+							<svg class='w-4 h-4 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M8 9h8v10H8z" opacity=".3"/><path fill="currentColor" d="m15.5 4l-1-1h-5l-1 1H5v2h14V4zM6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9z"/></svg>
 
-					//- div(class='flex items-center gap-2 p-2 border-b border-slate-200 text-slate-900')
+					div(class='flex items-center gap-2 p-2 border-b border-slate-200 text-slate-900')
 						div( name='chat-image-container'
 							class='flex [&>img]:w-8 [&>img]:h-8 [&>img]:rounded-full '
 							class='[&>*:not(:first-child)]:-ml-3'
@@ -32,73 +36,72 @@ block middle-block
 						span(name='edit-chat' class='text-slate-600 cursor-pointer') Group Name
 
 					//- ----[ Show Message section ]-----
-					div(name='notification-container' class='text-slate-500')
-						//- each notification in notifications
-						//- 	- const fullName = notification?.userFrom.fullName
-						//- 	- const type = notification.type
-						//- 	- const kind = notification.kind
+					div(name='message-container' class='p-2 text-slate-500')
+						//- p(class='text-slate-500/80 text-sm') riajulIslam
 
-						//- 	a(href=`/tweet/${notification.entityId}`)
-						//- 		+List({
-						//- 			id: notification._id,
-						//- 			isHover: true,
-						//- 			isActive: !notification.isOpened,
-						//- 			secondary: `${fullName} ${type} your ${kind}`,
-						//- 			avatar: notification.userFrom.avatar,
-						//- 			icon: `svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6l-5.6 5.6Z"`
-						//- 		})
+						//- div(class='my-1 flex items-center gap-2')
+						//- 	img(src='/images/users/default.jpg' class='w-6 h-6 rounded-full')
+						//- 	p(class='bg-slate-100 text-slate-600 px-2 py-1 rounded-lg') thier message
+
+						//- div(class='my-1 flex justify-end items-center gap-2')
+						//- 	p(class='bg-blue-500 text-slate-50 px-2 py-1 rounded-lg') my message
+
+				button(name='typing-indicator' type="button" class='hidden mt-auto px-2 text-slate-600 font-thin') 
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="4" cy="12" r="3" fill="currentColor"><animate id="svgSpinners3DotsFade0" fill="freeze" attributeName="opacity" begin="0;svgSpinners3DotsFade1.end-0.25s" dur="0.75s" values="1;.2"/></circle><circle cx="12" cy="12" r="3" fill="currentColor" opacity=".4"><animate fill="freeze" attributeName="opacity" begin="svgSpinners3DotsFade0.begin+0.15s" dur="0.75s" values="1;.2"/></circle><circle cx="20" cy="12" r="3" fill="currentColor" opacity=".3"><animate id="svgSpinners3DotsFade1" fill="freeze" attributeName="opacity" begin="svgSpinners3DotsFade0.begin+0.3s" dur="0.75s" values="1;.2"/></circle></svg>
+
+				//- ----[ Send Message section ]-----
+				div#send-message-form( class='p-2 text-slate-500 flex items-center')
+
+					input#send-input(type="text", name="send-input" autofocus=true
+						class='flex-1 border border-slate-200 rounded-md px-2 py-1 text-slate-600'
+						class='focus:outline-none focus:border-slate-400'
+					)
+					button#send-button(type="button"
+						class='text-blue-500 px-2 py-1 rounded-md border border-slate-200'
+						class='hover:bg-slate-50 hover:text-blue-600'
+						class='active:bg-white active:text-blue-500 active:border-slate-300'
+					) 
+						<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="currentColor" d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26l.001.002l4.995 3.178l3.178 4.995l.002.002l.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215l7.494-7.494l1.178-.471l-.47 1.178Z"/></svg>
 
 
 
-
-
-
-
-
-
-			div(name='page-loading-indicator' class='absolute inset-0 hidden')
+			div(name='page-loading-indicator' class='hidden absolute inset-0')
 				div(class='h-full flex justify-center items-center text-slate-500')
 					<svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24"><circle cx="12" cy="2" r="0" fill="currentColor"><animate attributeName="r" begin="0" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(45 12 12)"><animate attributeName="r" begin="0.125s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(90 12 12)"><animate attributeName="r" begin="0.25s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(135 12 12)"><animate attributeName="r" begin="0.375s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(180 12 12)"><animate attributeName="r" begin="0.5s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(225 12 12)"><animate attributeName="r" begin="0.625s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(270 12 12)"><animate attributeName="r" begin="0.75s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(315 12 12)"><animate attributeName="r" begin="0.875s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle></svg>
 
-block right-block
 
-	script(nonce=cspNonce).
-		const logedInUser = !{ JSON.stringify(logedInUser) } 	
+		block right-block
 
-	script(src="/js/notification.js") 
-
+block prepend script
+	if logedInUserJs
+		script( type='module' src="/js/page/messageChat.js" ) 
 
 
 //- block content
-	include icon/icons
+	include ../icon/icons
 
-	style.
-		.active-check {
-			color: #3b82f6;
-			border-color: #3b82f6;
-			font-weight: 700;
-		}
 
 	div(class='grid grid-cols-12 divide-x')
 		//- left-section
 		div(class='col-span-2 p-2')
 			+NavComponent()
 
+
 		//- middle-section
-		//- +GroupNameChangeModal()
+		+GroupNameChangeModal()
 		div(class='col-span-10 md:col-span-7 min-h-screen relative')
 			div(class='p-2 min-h-full flex flex-col justify-between ')
 				div
 					div(class='flex items-center justify-between p-2 border-b border-slate-200 text-slate-900')
-						h1(class=' font-bold') Notification
-						button(name='check-all' type='button' 
+						h1(class=' font-bold') Chat
+						button(name='delete-chat' title='Delete All messages' type='button' 
 							class='shadow-2xl border border-slate-300 p-0.5 bg-slate-50 text-slate-500 rounded-md'
 							class='hover:bg-slate-100 hover:border-slate-400 hover:text-slate-600'
 							class='active:bg-blue-100 active:border-blue-500 active:text-blue-600'
 						)
-							<svg class='w-4 h-4 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M.41 13.41L6 19l1.41-1.42L1.83 12m20.41-6.42L11.66 16.17L7.5 12l-1.43 1.41L11.66 19l12-12M18 7l-1.41-1.42l-6.35 6.35l1.42 1.41L18 7Z"/></svg>
+							<svg class='w-4 h-4 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M8 9h8v10H8z" opacity=".3"/><path fill="currentColor" d="m15.5 4l-1-1h-5l-1 1H5v2h14V4zM6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9z"/></svg>
 
-					//- div(class='flex items-center gap-2 p-2 border-b border-slate-200 text-slate-900')
+					div(class='flex items-center gap-2 p-2 border-b border-slate-200 text-slate-900')
 						div( name='chat-image-container'
 							class='flex [&>img]:w-8 [&>img]:h-8 [&>img]:rounded-full '
 							class='[&>*:not(:first-child)]:-ml-3'
@@ -110,31 +113,36 @@ block right-block
 						span(name='edit-chat' class='text-slate-600 cursor-pointer') Group Name
 
 					//- ----[ Show Message section ]-----
-					div(name='notification-container' class='text-slate-500')
-						//- each notification in notifications
-						//- 	- const fullName = notification?.userFrom.fullName
-						//- 	- const type = notification.type
-						//- 	- const kind = notification.kind
+					div(name='message-container' class='p-2 text-slate-500')
+						//- p(class='text-slate-500/80 text-sm') riajulIslam
 
-						//- 	a(href=`/tweet/${notification.entityId}`)
-						//- 		+List({
-						//- 			id: notification._id,
-						//- 			isHover: true,
-						//- 			isActive: !notification.isOpened,
-						//- 			secondary: `${fullName} ${type} your ${kind}`,
-						//- 			avatar: notification.userFrom.avatar,
-						//- 			icon: `svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6l-5.6 5.6Z"`
-						//- 		})
+						//- div(class='my-1 flex items-center gap-2')
+						//- 	img(src='/images/users/default.jpg' class='w-6 h-6 rounded-full')
+						//- 	p(class='bg-slate-100 text-slate-600 px-2 py-1 rounded-lg') thier message
+
+						//- div(class='my-1 flex justify-end items-center gap-2')
+						//- 	p(class='bg-blue-500 text-slate-50 px-2 py-1 rounded-lg') my message
+
+				button(name='typing-indicator' type="button" class='hidden mt-auto px-2 text-slate-600 font-thin') 
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="4" cy="12" r="3" fill="currentColor"><animate id="svgSpinners3DotsFade0" fill="freeze" attributeName="opacity" begin="0;svgSpinners3DotsFade1.end-0.25s" dur="0.75s" values="1;.2"/></circle><circle cx="12" cy="12" r="3" fill="currentColor" opacity=".4"><animate fill="freeze" attributeName="opacity" begin="svgSpinners3DotsFade0.begin+0.15s" dur="0.75s" values="1;.2"/></circle><circle cx="20" cy="12" r="3" fill="currentColor" opacity=".3"><animate id="svgSpinners3DotsFade1" fill="freeze" attributeName="opacity" begin="svgSpinners3DotsFade0.begin+0.3s" dur="0.75s" values="1;.2"/></circle></svg>
+
+				//- ----[ Send Message section ]-----
+				div#send-message-form( class='p-2 text-slate-500 flex items-center')
+
+					input#send-input(type="text", name="send-input" autofocus=true
+						class='flex-1 border border-slate-200 rounded-md px-2 py-1 text-slate-600'
+						class='focus:outline-none focus:border-slate-400'
+					)
+					button#send-button(type="button"
+						class='text-blue-500 px-2 py-1 rounded-md border border-slate-200'
+						class='hover:bg-slate-50 hover:text-blue-600'
+						class='active:bg-white active:text-blue-500 active:border-slate-300'
+					) 
+						<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="currentColor" d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26l.001.002l4.995 3.178l3.178 4.995l.002.002l.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215l7.494-7.494l1.178-.471l-.47 1.178Z"/></svg>
 
 
 
-
-
-
-
-
-
-			div(name='page-loading-indicator' class='absolute inset-0 hidden')
+			div(name='page-loading-indicator' class='hidden absolute inset-0')
 				div(class='h-full flex justify-center items-center text-slate-500')
 					<svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24"><circle cx="12" cy="2" r="0" fill="currentColor"><animate attributeName="r" begin="0" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(45 12 12)"><animate attributeName="r" begin="0.125s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(90 12 12)"><animate attributeName="r" begin="0.25s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(135 12 12)"><animate attributeName="r" begin="0.375s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(180 12 12)"><animate attributeName="r" begin="0.5s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(225 12 12)"><animate attributeName="r" begin="0.625s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(270 12 12)"><animate attributeName="r" begin="0.75s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(315 12 12)"><animate attributeName="r" begin="0.875s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle></svg>
 
@@ -152,7 +160,6 @@ block right-block
 
 
 
-			script(src="/js/notification.js") 
-
+			script(src="/js/message-chat.js") 
 
 

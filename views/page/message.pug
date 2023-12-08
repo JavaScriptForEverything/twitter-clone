@@ -1,7 +1,15 @@
 extends ../layout/mainLayout
 
 block middle-block
-	div(class='col-span-10 md:col-span-7')
+	if !logedInUserJs
+		div(class='absolute top-0 left-0 right-0 bg-red-500 text-white') 
+			p(class='px-4 py-2 text-xl text-center') logedInUserJS is missing from backend
+
+	else
+		script(nonce=cspNonce).
+			const logedInUser = !{logedInUserJs}
+
+		div(class='col-span-10 md:col-span-7')
 			div(class='flex items-center justify-between p-2 border-b border-slate-200 text-slate-900')
 				h1(class=' font-bold') Inbox
 				a(href='/message/new') 
@@ -32,12 +40,13 @@ block middle-block
 				//- 		images: ['/logo.png', '/images/users/default.jpg'],
 				//- 	})
 
-block right-block
+		block right-block
 
-	script(nonce=cspNonce).
-		const logedInUser = !{JSON.stringify(logedInUser) } 	
 
-	script(src="/js/message-inbox.js") 
+block prepend script
+	if logedInUserJs
+		script( type='module' src="/js/page/message.js" ) 
+
 
 
 

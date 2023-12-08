@@ -1,10 +1,16 @@
+// import { joinUserByChatId } from '/js/socket.js'
+import { Snackbar } from '/js/module/components/index.js'
+import $, { axios, decodeHTML, updateMessageBadge } from '/js/module/utils.js'
+
+
 /* Global Variables
 		. logedInUser
 		. chat 	(Document)
 		. chatId
-
-
 */
+
+
+
 
 const dialog = $('[name=change-group-name]')
 const dialogCloseButton = $('[name=dialog-close-button]')
@@ -27,9 +33,6 @@ sendInput.value=''
 
 
 
-// To create private room by user._id instead of useless socket.id
-socket.emit('setup', logedInUser)
-socket.on('connected', () => isConnected = true)
 
 
 
@@ -288,19 +291,20 @@ const addMessage = (currentDoc, classList={} ) => {
 /* We got message page via <a href='/message/chatId'>
 		So soon as we comes to message details page, that means
 		we are in group chat  (or if comes with user._id then private chat) */ 
-socket.emit('join-room', { chatId })
-socket.on('room-joined', ({ chatId }) => {
-	if( !chatId ) return console.log('room-joined failed')
-})
+// joinUserByChatId(chatId)
+export const onJoinSussess = ({ error, message }) => {
+	if(error) console.log(error)
+	console.log(`show in UI instead of log: `, message)
+}
 
-socket.on('typing', ({ chatId, message }) => {
+export const showTypingIndicatorInUI = (chatId, message) => {
 	clearTimeout(timer)
 	typingIndicator.style.display = 'block'
 
 	timer = setTimeout(() => {
 		typingIndicator.style.display = 'none'
 	}, 3000);
-})
+}
 
 
 /* We send message-received to every users so we have to handle this even globally
@@ -310,15 +314,14 @@ socket.on('typing', ({ chatId, message }) => {
 
 		Handle 1st senario here, and another on socket page or utils.js page which is globally available
 */ 
-socket.on('message-received', ({ roomId, messageDoc }) => {
+export const handleMessageReceiveUI = (roomId, messageDoc) => {
 	addMessage(messageDoc)
 	typingIndicator.style.display = 'none'
 	sendInput.value=''
 	sendInput.focus()
 
 	updateMessageBadge() 	// comes from utils.js
-})
-
+}
 
 deleteChatButton.addEventListener('click', (evt) => {
 	messageContainer.innerHTML = ''

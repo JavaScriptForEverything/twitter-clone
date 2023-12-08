@@ -1,6 +1,7 @@
-const User = require('../models/userModel')
-const authController = require('./authController')
+const { isValidObjectId } = require('mongoose')
 const { timeSince } = require('../utils')
+const User = require('../models/userModel')
+const Chat = require('../models/chatModel')
 
 
 // GET /
@@ -115,7 +116,7 @@ exports.logout = (req, res) => {
 }
 
 
-// GET /search + protected
+// GET /search 		+ protected
 exports.searchPage = (req, res) => {
 	const payload = {
 		pageTitle: 'Search',
@@ -126,7 +127,160 @@ exports.searchPage = (req, res) => {
 	res.render('./page/search', payload)
 }
 
+// GET /notification + protect
+exports.notificationPage = async (req, res) => {
+	const payload = {
+		pageTitle: 'Notification',
+		logedInUser: req.session.user,
+		logedInUserJs: JSON.stringify(req.session.user),
+	}
 
+	res.render('./page/notification', payload)
+}
+
+
+// GET /message 	+ protect
+exports.messageInboxPage = (req, res) => {
+
+	const payload = {
+		pageTitle: 'Inbox',
+		logedInUser: req.session.user,
+		logedInUserJs: JSON.stringify(req.session.user),
+	}
+
+	res.render('./page/message', payload)
+}
+
+// GET /message/:id 	id == chatId 		+ protect
+exports.chatMessagePage = async (req, res) => {
+	try {
+		const chatId = req.params.id
+		const logedInUserId = req.session.user._id
+
+		const chat = await Chat.findOne({ 
+			_id: chatId, 
+			users: { $elemMatch: { $eq: logedInUserId }} 
+		})
+
+		const payload = {
+			pageTitle: 'Chat',
+			logedInUser: req.session.user,
+			logedInUserJs: JSON.stringify(req.session.user),
+			chat
+		}
+
+		res.render('./page/messageChat', payload)
+
+	} catch (error) {
+		const payload = {
+			pageTitle: 'Chat',
+			errorMessage: error.message
+		}
+		redirect('error', payload)
+	}
+}
+
+// GET /message/new 	+ protect
+exports.newMessageInboxPage = (req, res) => {
+
+	const payload = {
+		pageTitle: 'New Message',
+		logedInUser: req.session.user,
+		logedInUserJs: JSON.stringify(req.session.user),
+	}
+
+	res.render('./page/messageNew', payload)
+}
+
+
+
+// GET /profile 				: self-profile 
+// GET /profile/${id}  	: Other users profile
+exports.profilePage = async (req, res, next) => {
+	try {
+		const logedInUser = req.session.user
+		const userId = req.params.id
+		const filter = userId ? { username: userId } : { _id: logedInUser._id, }  
+
+		const profileUser = await User.findOne( filter )
+		if(!profileUser) return next(appError('profile user not found'))
+
+		const payload = {
+			pageTitle: `${profileUser.firstName} ${profileUser.lastName} Profile`,
+			logedInUser,
+			profileUser,
+			logedInUserJs: JSON.stringify(logedInUser),
+			profileUserJs: JSON.stringify(profileUser),
+			timeSince
+		}
+
+		res.render('./page/profile', payload)
+		
+	} catch (err) {
+		console.log(err)
+		res.render('./page/notFound')	
+	}
+}
+
+
+
+// GET 	/profile/:id/following  	+ 	GET /profile/:id/followers
+exports.followingAndFollwers = async (req, res, next) => {
+	try {
+		const username = req.params.id
+		
+		const profileUser = await User.findOne({ username }).populate('following followers')
+		if(!profileUser) return next(appError('profile user not found'))
+
+		const payload = {
+			pageTitle: 'following-and-followers',
+			username,
+			logedInUser: req.session.user,
+			profileUser,
+			logedInUserJs: JSON.stringify(req.session.user),
+			profileUserJs: JSON.stringify(profileUser),
+		}
+
+		res.render(`./page/follow`, payload)
+
+	} catch (err) {
+		const payload = {
+			errorMessage: err.message
+		}
+		res.render('./page/error', payload)	
+	}
+}
+
+
+
+
+
+// GET /tweets/${tweetId}
+exports.tweetDetailsPage = async(req, res, next) => {
+	try {
+		const tweetId = req.params.id
+		const isValidTweetId = isValidObjectId(tweetId)
+		if(!isValidTweetId) throw new Error('tweetId is invalid')
+
+		const payload = {
+			pageTitle: 'Tweet Details',
+			tweetId,
+			timeSince,
+			logedInUser: req.session.user,
+			logedInUserJs: JSON.stringify(req.session.user),
+		}
+
+		res.render('./page/tweetDetails', payload)
+
+	} catch (error) {
+		const payload = {
+			pageTitle: 'Error',
+			errorMessage: error.message
+		}
+		
+		res.render('./page/error', payload)
+	}
+}
 
 // GET /testing
 exports.testing = (req, res) => {
