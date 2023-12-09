@@ -53,7 +53,7 @@ exports.following = catchAsync(async (req, res, next) => {
 	req.session.user = updatedUser 
 
 	// Step-2: add logedInUser._id to followers array of profileUser
-	await User.findByIdAndUpdate(profileUserId, { [operator]: { followers: logedInUser._id }} )
+	const updatedProfileUser = await User.findByIdAndUpdate(profileUserId, { [operator]: { followers: logedInUser._id }} )
 	
 	if( !isFollowing ) {
 		await Notification.insertNotification({
@@ -68,6 +68,7 @@ exports.following = catchAsync(async (req, res, next) => {
 	res.status(201).json({
 		status: 'success',
 		data: updatedUser
+		// data: updatedProfileUser
 	})
 })
 

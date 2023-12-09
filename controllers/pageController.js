@@ -1,8 +1,10 @@
 const { isValidObjectId } = require('mongoose')
 const { timeSince } = require('../utils')
+const { appError } = require('./errorController')
 const User = require('../models/userModel')
 const Chat = require('../models/chatModel')
-
+// const Tweet = require('../models/tweetModel')
+// const Notification = require('../models/notificationModel')
 
 // GET /
 exports.homePage = (req, res, next) => {
@@ -78,12 +80,13 @@ exports.loginPageHandler = async (req, res) => {
 		user.password = undefined 		// Don't send password to user
 
 		req.session.user = user
-		res.redirect('/')
+		// res.redirect('/')
 
 		// res.redirect('/profile')
+		res.redirect('/profile/user1user')
 		// res.redirect('/docs')
 		// res.redirect('/notification')
-		// res.redirect('/tweet/655e4a531df7aefe26c80de8')
+		// res.redirect('/tweet/655e49891df7aefe26c80ddf')
 		// res.redirect('message/65608f4ea47a8dfa30e846f7')
 
 		// res.redirect('/message')

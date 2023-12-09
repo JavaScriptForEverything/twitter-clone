@@ -46,9 +46,14 @@ block middle-block
 
 					- const isFollowing = profileUser.followers.includes( logedInUser._id )
 					button(type="button" id='following-button' data-user-id=profileUser._id
-					class='following px-6 py-1.5 rounded-3xl border border-blue-500 text-blue-500 font-medium'
-					class=' hover:bg-blue-50 hover:text-blue-600 active:bg-blue-100 active:text-blue-700'
-					class= isFollowing ? 'bg-blue-500 text-white hover:bg-blue-500/95 hover:text-white' : ''
+					class=`following 
+						px-6 py-1.5 rounded-3xl border border-blue-500 font-medium
+ 						active:bg-blue-100 active:text-blue-700
+						${isFollowing 
+							? 'bg-blue-500 text-white hover:bg-blue-500/95 hover:text-white'
+							: 'text-blue-500 hover:text-blue-600 hover:bg-blue-50 '
+						}
+					`
 					)= isFollowing ? 'following' : 'follow' 
 
 				div(class=' text-slate-500 space-y-0.5 px-4 py-2')

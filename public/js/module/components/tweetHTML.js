@@ -1,4 +1,4 @@
-import { timeSince } from '../utils.js'
+import { timeSince, decodeHTML } from '/js/module/utils.js'
 
 export const getTweetHTML = (tweet, logedInUser, { isModal=false, showIcons=true, showPinLabel=true } = {}) => {
 	if( !tweet ) return console.log('tweet doc is empty ')
@@ -69,7 +69,7 @@ export const getTweetHTML = (tweet, logedInUser, { isModal=false, showIcons=true
 					<span class='text-blue-700'>@${tweet.replyTo.user.username}</span>
 				</p> ` :''}
 
-				<p class='text-slate-600 text-sm'> ${tweet.tweet || 'no message'}</p> 
+				<p class='text-slate-600 text-sm'> ${decodeHTML(tweet.tweet || 'no message')}</p> 
 
 				${showIcons ? `
 				<div class='mt-3 pointer-events-none'>

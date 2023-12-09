@@ -11,10 +11,10 @@ block middle-block
 			const tweetId = !{JSON.stringify(tweetId)}
 
 		div(class='col-span-10 md:col-span-7')
-		p(class='p-2 border-b border-slate-200') #{pageTitle}
-		div(class='p-2 text-slate-700 flex flex-col')
+			p(class='p-2 border-b border-slate-200') #{pageTitle}
+			div(class='p-2 text-slate-700 flex flex-col')
 
-		section#reply-dialog-container
+			section#reply-dialog-container
 			+RetweetModal({
 				fullName: 'Riajul Islam',
 				username: 'riajulislam',

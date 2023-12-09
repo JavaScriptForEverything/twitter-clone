@@ -11,13 +11,13 @@ block content
 
 				div(class='flex gap-3')
 					+TextField({
-						label: 'Name',
+						label: 'First Name',
 						name: 'firstName',
 						placeholder: 'First Name',
 						value: firstName || 'Fiaz',
 					})
 					+TextField({
-						label: 'Tribe',
+						label: 'Last Name',
 						name: 'lastName',
 						placeholder: 'Last Name',
 						value: lastName || 'Sofone',
@@ -67,6 +67,7 @@ block content
 			.text-center
 				a.text-blue-500.underline.decoration-dotted(href="/login") Already have an account ? login here
 
+block script
 	script(type="module", src="/js/page/register.js") 
 
 

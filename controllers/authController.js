@@ -1,10 +1,3 @@
-const Tweet = require('../models/tweetModel')
-const User = require('../models/userModel')
-const Chat = require('../models/chatModel')
-const Notification = require('../models/notificationModel')
-const { appError } = require('./errorController')
-const { timeSince, filterObjectByArray } = require('../utils')
-const { isValidObjectId } = require('mongoose')
 
 
 exports.protect = (req, res, next) => {

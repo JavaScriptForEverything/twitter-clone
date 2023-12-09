@@ -8,30 +8,9 @@ import $, { axios } from '/js/module/utils.js'
 */
 
 
-
-
-		$('[name=tab-container]').children[0].classList.add('tab-active')
-		if(location.hash === '#replies-tab') { 
-			$('[name=tab-container]').children[1].classList.add('tab-active')
-			$('[name=tab-container]').children[0].classList.remove('tab-active')
-		}
-
-		//-----[ Tabs container ]-----
-		$('[name=tab-container]').addEventListener('click', (evt) => {
-
-
-			// Step-1: add active tab style
-			Array.from(evt.currentTarget.children).forEach( (tab, index) => {
-				tab.classList.toggle('tab-active', +evt.target.id === index)
-			}) 
-
-			// Step-2: Show Active Tab content
-			Array.from( document.querySelectorAll('.tab-item') ).forEach((tabItem, index) => {
-				tabItem.hidden = evt.target.id !== index.toString()
-			})
-		})
-// ---------
-
+const tabContainer = $('[name=tab-container]')
+const tweetTab = tabContainer.children[0]
+const repliesTab = tabContainer.children[1]
 
 const followingButton = $('#following-button')
 const tweetsContentContainer = $('[name=tweets-container]')
@@ -40,6 +19,30 @@ const loadingContainer = $('[name=loading-container]')
 const notFoundChild = loadingContainer.children[0]
 const loadingChild = loadingContainer.children[1]
 const followersSpan = $('#followers')
+
+//-----[ Tabs container ]-----
+tweetTab.classList.add('tab-active')
+if(location.hash === '#replies-tab') { 
+	repliesTab.classList.add('tab-active')
+	tweetTab.classList.remove('tab-active')
+}
+
+tabContainer.addEventListener('click', (evt) => {
+	// Step-1: add active tab style
+	Array.from(evt.currentTarget.children).forEach( (tab, index) => {
+		tab.classList.toggle('tab-active', +evt.target.id === index)
+	}) 
+
+	// Step-2: Show Active Tab content
+	Array.from( document.querySelectorAll('.tab-item') ).forEach((tabItem, index) => {
+		tabItem.hidden = evt.target.id !== index.toString()
+	})
+})
+// ---------
+
+
+
+
 
 const activeTab = location.hash === '#replies-tab' ? 'replies' : 'tweets' 
 if(activeTab === 'replies') {
@@ -277,8 +280,8 @@ followingButton.addEventListener('click', async (evt) => {
 		return console.log(`toggle following failed: ${error.message}`)
 	}
 
-	const updatedProfileUser = data.data
-	// console.log(updatedProfileUser)
+	// const updatedProfileUser = data.data
+	const updatedUser = data.data
 
 	const isFollowed = followingButton.textContent === 'follow'
 
@@ -287,7 +290,8 @@ followingButton.addEventListener('click', async (evt) => {
 	followingButton.classList.toggle('text-white', isFollowed)
 
 	// logedInUser is the followers, and profile users are following
-	followersSpan.textContent = updatedProfileUser.following.length + ' '
+	followersSpan.textContent = updatedUser.followers.length + ' '
+	// followersSpan.textContent = updatedProfileUser.followers.length + ' '
 })
 
 
@@ -299,7 +303,7 @@ followingButton.addEventListener('click', async (evt) => {
 
 // GET /api/tweets
 const fetchAllTweets = async () => {
-	const { data, error } = await axios({ url: `/api/tweets` })
+	const { data, error } = await axios({ url: `/api/tweets?mine=${profileUser._id}` })
 
 	if(error) {
 		notFoundChild.classList.remove('hidden')
