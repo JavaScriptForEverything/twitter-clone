@@ -50,7 +50,7 @@ if(activeTab === 'replies') {
 }
 
 
-// -------[ avatar photo ]-------
+// -------[ avatar ]-------
 $('[name=avatar-container]').addEventListener('click', (evt) => {
 
 	const uploadProfilePictureDialog = `
@@ -95,9 +95,9 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 	const closeButton = $('[name=dialog-close-button]')
 	const cancelButton = $('[name=dialog-cancel-button]')
 	const submitButton = $('[name=dialog-submit-button]')
-	const avatarFile = $('[name=avatar-file]')
-	const avatar = $('[name=avatar]')
-	const image = $('[name=image-preview]')
+	const avatarFile = $('[name=avatar-file]') 		// input:file
+	const avatar = $('[name=avatar]') 						// To show avatar in UI
+	const image = $('[name=image-preview]') 			// To show avatar in Dialog
 
 	dialog.style.transition = 'opacity 0.5s ease-out'
 	setTimeout(() => dialog.style.opacity = 1, 0)
@@ -111,6 +111,25 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 	}
 	closeButton.addEventListener('click', closeHandler )
 	cancelButton.addEventListener('click', closeHandler)
+
+	avatarFile.addEventListener('change', (evt) => {
+		const ImageFile = evt.target.files[0]
+		if(!ImageFile.type.match('image/*')) console.log('it is not image')
+
+		const reader = new FileReader()
+		reader.readAsDataURL(ImageFile)
+
+		reader.addEventListener('loadend', () => {
+			image.src = reader.result
+
+			cropper = new Cropper(image, {
+				aspectRatio: 1/1,
+				background: false
+			})
+		})
+
+	})
+
 	submitButton.addEventListener('click', () => {
 		if(!cropper) return console.log('please choose image and save that')
 
@@ -145,27 +164,10 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 		})
 	})
 
-	avatarFile.addEventListener('change', (evt) => {
-		const ImageFile = evt.target.files[0]
-		if(!ImageFile.type.match('image/*')) console.log('it is not image')
-
-		const reader = new FileReader()
-		reader.readAsDataURL(ImageFile)
-
-		reader.addEventListener('loadend', () => {
-			image.src = reader.result
-
-			cropper = new Cropper(image, {
-				aspectRatio: 1/1,
-				background: false
-			})
-		})
-
-	})
 })
 
 // -------[ cover photo ]-------
-$('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
+$('[name=edit-cover-photo-container]')?.addEventListener('click', (evt) => {
 
 	const uploadCoverPhotoDialog = `
 		<dialog open=false name="coverPhoto-dialog" class="opacity-0 z-10 w-2/3 md:max-w-md text-slate-700 rounded border border-slate-300 shadow">
@@ -226,6 +228,25 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 	}
 	closeButton.addEventListener('click', closeHandler)
 	cancelButton.addEventListener('click', closeHandler)
+
+	coverPhoto.addEventListener('change', (evt) => {
+		const ImageFile = evt.target.files[0]
+		if(!ImageFile.type.match('image/*')) console.log('it is not image')
+
+		const reader = new FileReader()
+		reader.readAsDataURL(ImageFile)
+
+		reader.addEventListener('loadend', () => {
+			image.src = reader.result
+
+			cropper = new Cropper(image, {
+				aspectRatio: 16/9,
+				background: false
+			})
+		})
+
+	})
+
 	submitButton.addEventListener('click', () => {
 		if(!cropper) return console.log('please choose image and save that')
 
@@ -262,23 +283,6 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 		})
 	})
 
-	coverPhoto.addEventListener('change', (evt) => {
-		const ImageFile = evt.target.files[0]
-		if(!ImageFile.type.match('image/*')) console.log('it is not image')
-
-		const reader = new FileReader()
-		reader.readAsDataURL(ImageFile)
-
-		reader.addEventListener('loadend', () => {
-			image.src = reader.result
-
-			cropper = new Cropper(image, {
-				aspectRatio: 16/9,
-				background: false
-			})
-		})
-
-	})
 })
 
 
