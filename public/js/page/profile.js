@@ -7,7 +7,6 @@ import $, { axios } from '/js/module/utils.js'
 		. Cropper 		from cropper CDN
 */
 
-
 const tabContainer = $('[name=tab-container]')
 const tweetTab = tabContainer.children[0]
 const repliesTab = tabContainer.children[1]
@@ -66,7 +65,7 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 				</div>
 
 				<div class="px-4 py-2">
-					<input type="file" name="avatar-input" accept='image/*'>
+					<input type="file" name="avatar-file" accept='image/*'>
 					<div class="flex justify-center mt-1 rounded shadow">
 						<img 
 							name='image-preview' 
@@ -96,7 +95,7 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 	const closeButton = $('[name=dialog-close-button]')
 	const cancelButton = $('[name=dialog-cancel-button]')
 	const submitButton = $('[name=dialog-submit-button]')
-	const avatarInput = $('[name=avatar-input]')
+	const avatarFile = $('[name=avatar-file]')
 	const avatar = $('[name=avatar]')
 	const image = $('[name=image-preview]')
 
@@ -141,12 +140,12 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 					message: error.message || '',
 					action: true,
 				})
-				dialog.close()
+				closeHandler()
 			}
 		})
 	})
 
-	avatarInput.addEventListener('change', (evt) => {
+	avatarFile.addEventListener('change', (evt) => {
 		const ImageFile = evt.target.files[0]
 		if(!ImageFile.type.match('image/*')) console.log('it is not image')
 
@@ -168,8 +167,8 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 // -------[ cover photo ]-------
 $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 
-	const uploadProfilePictureDialog = `
-		<dialog open=false name="avatar-dialog" class="opacity-0 z-10 w-2/3 md:max-w-md text-slate-700 rounded border border-slate-300 shadow">
+	const uploadCoverPhotoDialog = `
+		<dialog open=false name="coverPhoto-dialog" class="opacity-0 z-10 w-2/3 md:max-w-md text-slate-700 rounded border border-slate-300 shadow">
 			<div class="flex flex-col divide-y">
 
 				<div class="flex justify-between items-center px-4 py-2 " id="header">
@@ -180,7 +179,7 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 				</div>
 
 				<div class="px-4 py-2">
-					<input type="file" name="avatar-input" accept='image/*'>
+					<input type="file" name="coverPhoto-file" accept='image/*'>
 					<div class="flex justify-center mt-1 rounded shadow">
 						<img 
 							name='image-preview' 
@@ -200,18 +199,20 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 			</div>
 		</dialog>
 	`
-	$('#forModalContainer').insertAdjacentHTML('afterbegin', uploadProfilePictureDialog)
+	$('#forModalContainer').insertAdjacentHTML('afterbegin', uploadCoverPhotoDialog)
 
 	let cropper;
 	let timer = 0
 
-	const dialog = $('[name=avatar-dialog]')
+	const dialog = $('[name=coverPhoto-dialog]')
 	const closeButton = $('[name=dialog-close-button]')
 	const cancelButton = $('[name=dialog-cancel-button]')
 	const submitButton = $('[name=dialog-submit-button]')
-	const avatarInput = $('[name=avatar-input]')
-	const coverPhoto = $('[name=cover-photo]')
+	// const avatarFile = $('[name=coverPhoto-file]')
+	const coverPhoto = $('[name=coverPhoto-file]')
+	// const coverPhoto = $('[name=cover-photo]')
 	const image = $('[name=image-preview]')
+
 
 	dialog.style.transition = 'opacity 0.5s ease-out'
 	setTimeout(() => dialog.style.opacity = 1, 0)
@@ -256,12 +257,12 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 					message: error.message || 'toggle following failed',
 					action: true,
 				})
-				dialog.close()
+				closeHandler()
 			}
 		})
 	})
 
-	avatarInput.addEventListener('change', (evt) => {
+	coverPhoto.addEventListener('change', (evt) => {
 		const ImageFile = evt.target.files[0]
 		if(!ImageFile.type.match('image/*')) console.log('it is not image')
 
