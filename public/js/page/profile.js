@@ -291,7 +291,6 @@ followingButton.addEventListener('click', async (evt) => {
 
 	// logedInUser is the followers, and profile users are following
 	followersSpan.textContent = updatedUser.followers.length + ' '
-	// followersSpan.textContent = updatedProfileUser.followers.length + ' '
 })
 
 
