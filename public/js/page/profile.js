@@ -210,10 +210,9 @@ $('[name=edit-cover-photo-container]')?.addEventListener('click', (evt) => {
 	const closeButton = $('[name=dialog-close-button]')
 	const cancelButton = $('[name=dialog-cancel-button]')
 	const submitButton = $('[name=dialog-submit-button]')
-	// const avatarFile = $('[name=coverPhoto-file]')
-	const coverPhoto = $('[name=coverPhoto-file]')
-	// const coverPhoto = $('[name=cover-photo]')
-	const image = $('[name=image-preview]')
+	const coverPhotoFile = $('[name=coverPhoto-file]') 			// input:file
+	const image = $('[name=image-preview]') 								// To show image preview in Modal
+	const coverPhoto = $('[name=cover-photo]') 							// To show image in UI
 
 
 	dialog.style.transition = 'opacity 0.5s ease-out'
@@ -229,7 +228,7 @@ $('[name=edit-cover-photo-container]')?.addEventListener('click', (evt) => {
 	closeButton.addEventListener('click', closeHandler)
 	cancelButton.addEventListener('click', closeHandler)
 
-	coverPhoto.addEventListener('change', (evt) => {
+	coverPhotoFile.addEventListener('change', (evt) => {
 		const ImageFile = evt.target.files[0]
 		if(!ImageFile.type.match('image/*')) console.log('it is not image')
 
@@ -259,13 +258,11 @@ $('[name=edit-cover-photo-container]')?.addEventListener('click', (evt) => {
 				// Don't Send headers, else in backend file will not be caputed by Multer
 				const res = await fetch('/api/users/cover-photo', {
 					method: 'POST',
-					data: formData
+					body: formData
 				})
 				if(!res.ok) throw res.json()
 
 				const data = await res.json()
-				console.log(data.data)
-
 				const user = data.data
 				coverPhoto.src = user.coverPhoto
 
