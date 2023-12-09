@@ -9,7 +9,7 @@ const { apiFeatures, filterObjectByArray, encodeHTML } = require('../utils')
 
 // GET /api/tweets
 exports.getTweets = catchAsync(async (req, res, next) => {
-	console.log(req.query)
+	// console.log(req.query)
 	// const tweets = await Tweet.find().populate('user retweetData replyTo')
 	// await User.populate(tweets, 'retweetData.user replyTo.user')
 	const filter = {}

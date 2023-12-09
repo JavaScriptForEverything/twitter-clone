@@ -55,11 +55,11 @@ if(activeTab === 'replies') {
 $('[name=avatar-container]').addEventListener('click', (evt) => {
 
 	const uploadProfilePictureDialog = `
-		<dialog open=false name="avatar-dialog" class="z-10 w-2/3 md:max-w-md text-slate-700 rounded border border-slate-300 shadow">
+		<dialog open=false name="avatar-dialog" class="opacity-0 z-10 w-2/3 md:max-w-md text-slate-700 rounded border border-slate-300 shadow">
 			<div class="flex flex-col divide-y">
 
 				<div class="flex justify-between items-center px-4 py-2 " id="header">
-					<h1 class="font-semibold text-slate-800">Upload new profile picture</h1> 
+					<h1 class="font-semibold text-slate-800">Profile Picture</h1> 
 					<button name='dialog-close-button' class="p-1 rounded-full" type="button">
 						<svg class='w-3 h-3 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="M2.93 17.07A10 10 0 1 1 17.07 2.93A10 10 0 0 1 2.93 17.07zM11.4 10l2.83-2.83l-1.41-1.41L10 8.59L7.17 5.76L5.76 7.17L8.59 10l-2.83 2.83l1.41 1.41L10 11.41l2.83 2.83l1.41-1.41L11.41 10z"/></svg>
 					</button>
@@ -88,7 +88,9 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 	`
 	$('#forModalContainer').insertAdjacentHTML('afterbegin', uploadProfilePictureDialog)
 
+
 	let cropper;
+	let timer = 0
 
 	const dialog = $('[name=avatar-dialog]')
 	const closeButton = $('[name=dialog-close-button]')
@@ -98,8 +100,18 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 	const avatar = $('[name=avatar]')
 	const image = $('[name=image-preview]')
 
-	closeButton.addEventListener('click', () => dialog.close())
-	cancelButton.addEventListener('click', () => dialog.close())
+	dialog.style.transition = 'opacity 0.5s ease-out'
+	setTimeout(() => dialog.style.opacity = 1, 0)
+
+	const closeHandler = () => {
+		clearTimeout( timer ) 	
+		// remove 500ms delay if user click quickly so that next time transition works properly
+
+		dialog.style.opacity = 0
+		timer = setTimeout(() => dialog.close(), 500)
+	}
+	closeButton.addEventListener('click', closeHandler )
+	cancelButton.addEventListener('click', closeHandler)
 	submitButton.addEventListener('click', () => {
 		if(!cropper) return console.log('please choose image and save that')
 
@@ -120,7 +132,7 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 				const user = data.data
 				avatar.src = user.avatar
 
-				dialog.close()
+				closeHandler()
 
 			} catch (error) {
 				Snackbar({
@@ -157,11 +169,11 @@ $('[name=avatar-container]').addEventListener('click', (evt) => {
 $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 
 	const uploadProfilePictureDialog = `
-		<dialog open=false name="avatar-dialog" class="z-10 w-2/3 md:max-w-md text-slate-700 rounded border border-slate-300 shadow">
+		<dialog open=false name="avatar-dialog" class="opacity-0 z-10 w-2/3 md:max-w-md text-slate-700 rounded border border-slate-300 shadow">
 			<div class="flex flex-col divide-y">
 
 				<div class="flex justify-between items-center px-4 py-2 " id="header">
-					<h1 class="font-semibold text-slate-800">Upload new profile picture</h1> 
+					<h1 class="font-semibold text-slate-800">Cover Photo</h1> 
 					<button name='dialog-close-button' class="p-1 rounded-full" type="button">
 						<svg class='w-3 h-3 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="M2.93 17.07A10 10 0 1 1 17.07 2.93A10 10 0 0 1 2.93 17.07zM11.4 10l2.83-2.83l-1.41-1.41L10 8.59L7.17 5.76L5.76 7.17L8.59 10l-2.83 2.83l1.41 1.41L10 11.41l2.83 2.83l1.41-1.41L11.41 10z"/></svg>
 					</button>
@@ -191,6 +203,7 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 	$('#forModalContainer').insertAdjacentHTML('afterbegin', uploadProfilePictureDialog)
 
 	let cropper;
+	let timer = 0
 
 	const dialog = $('[name=avatar-dialog]')
 	const closeButton = $('[name=dialog-close-button]')
@@ -200,18 +213,25 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 	const coverPhoto = $('[name=cover-photo]')
 	const image = $('[name=image-preview]')
 
-	closeButton.addEventListener('click', () => dialog.close())
-	cancelButton.addEventListener('click', () => dialog.close())
+	dialog.style.transition = 'opacity 0.5s ease-out'
+	setTimeout(() => dialog.style.opacity = 1, 0)
+
+	const closeHandler = () => {
+		clearTimeout( timer ) 	
+		// remove 500ms delay if user click quickly so that next time transition works properly
+
+		dialog.style.opacity = 0
+		timer = setTimeout(() => dialog.close(), 500)
+	}
+	closeButton.addEventListener('click', closeHandler)
+	cancelButton.addEventListener('click', closeHandler)
 	submitButton.addEventListener('click', () => {
 		if(!cropper) return console.log('please choose image and save that')
-
 
 		const canvas = cropper.getCroppedCanvas()
 		canvas.toBlob( async (blob) => {
 			const formData = new FormData()
 			formData.append('coverPhoto', blob)
-
-
 
 			try {
 				// Don't Send headers, else in backend file will not be caputed by Multer
@@ -227,7 +247,7 @@ $('[name=edit-cover-photo-container]').addEventListener('click', (evt) => {
 				const user = data.data
 				coverPhoto.src = user.coverPhoto
 
-				dialog.close()
+				closeHandler()
 
 			} catch (error) {
 				Snackbar({
