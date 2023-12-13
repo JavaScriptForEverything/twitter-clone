@@ -67,8 +67,8 @@ exports.following = catchAsync(async (req, res, next) => {
 	
 	res.status(201).json({
 		status: 'success',
-		data: updatedUser
-		// data: updatedProfileUser
+		// data: updatedUser
+		data: updatedProfileUser
 	})
 })
 

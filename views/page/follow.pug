@@ -28,7 +28,8 @@ block middle-block
 
 				NB: These 2 user will be populated from ehghter from `following[]` or `followers[]` array
 
-			- const textContent = user?.[fieldname].includes(profileUser._id) ? 'followed' : 'Following'
+			//- - const textContent = user?.[fieldname].includes(profileUser._id) ? 'followed' : 'Following'
+			- const textContent = user?.[fieldname].includes(profileUser._id) ? 'followed' : 'Unfollow'
 
 			div(name='follow-list' class='py-1.5 flex gap-2 ')
 				img(src=user.avatar alt=user.avatar class='w-10 h-10 rounded-full')

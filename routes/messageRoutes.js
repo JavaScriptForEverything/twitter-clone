@@ -13,5 +13,6 @@ router
 
 router
 	.get('/:userId', messageController.getAllMessagesOfSingleUser)
+	.delete('/:userId', messageController.deleteAllMessagesByUserId)
 
 module.exports = router

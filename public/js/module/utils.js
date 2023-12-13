@@ -91,11 +91,12 @@ export const updateNotificationBadge = async () => {
 		})
 	}
 
-	// console.log(data.data.count)
-	// const { count } = data.data
+	// console.log(data.data)
 
-	notificationBadge.textContent = data.count
-	notificationBadge.style.opacity = data.count ? 1 : 0 	// boolean value not work
+	// notificationBadge.textContent = data.count
+	const unReadedNotifications = data.data.filter( (notification) => !notification.isOpened )
+	notificationBadge.textContent = unReadedNotifications.length
+	notificationBadge.style.opacity = unReadedNotifications.length ? 1 : 0 	// boolean value not work
 }
 
 export const updateMessageBadge = async () => {

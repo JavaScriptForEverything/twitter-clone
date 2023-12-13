@@ -286,6 +286,7 @@ $('[name=edit-cover-photo-container]')?.addEventListener('click', (evt) => {
 
 // PATCH /api/users/:id/following
 followingButton.addEventListener('click', async (evt) => {
+	followingButton.disabled = true
 
 	const { data, error } = await axios({ 
 		url: `/api/users/${profileUser._id}/following`, 
@@ -302,17 +303,16 @@ followingButton.addEventListener('click', async (evt) => {
 		return console.log(`toggle following failed: ${error.message}`)
 	}
 
-	// const updatedProfileUser = data.data
-	const updatedUser = data.data
+	const updatedProfileUser = data.data
 
+	followingButton.disabled = false
 	const isFollowed = followingButton.textContent === 'follow'
-
 	followingButton.textContent = isFollowed ? 'following' : 'follow'
-	followingButton.classList.toggle('bg-blue-500', isFollowed)
-	followingButton.classList.toggle('text-white', isFollowed)
+	followingButton.classList.toggle('follow-active', isFollowed)
 
 	// logedInUser is the followers, and profile users are following
-	followersSpan.textContent = updatedUser.followers.length + ' '
+		$('#followers').textContent = updatedProfileUser.followers.length 
+
 })
 
 

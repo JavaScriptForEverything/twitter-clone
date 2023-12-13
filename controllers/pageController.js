@@ -80,15 +80,16 @@ exports.loginPageHandler = async (req, res) => {
 		user.password = undefined 		// Don't send password to user
 
 		req.session.user = user
+
 		// res.redirect('/')
 
-		// res.redirect('/profile')
-		res.redirect('/profile/user1user')
-		// res.redirect('/docs')
-		// res.redirect('/notification')
-		// res.redirect('/tweet/655e49891df7aefe26c80ddf')
-		// res.redirect('message/65608f4ea47a8dfa30e846f7')
+		// res.redirect('/message/6574a7e7f18b5f7c5bc2cf1f') 		// Group Chat
+		// res.redirect('/message/655e019f890666a9ec090931') 		// private chat
 
+
+
+		// res.redirect('/docs')
+		res.redirect('/notification')
 		// res.redirect('/message')
 		// res.redirect('/message/new')
 

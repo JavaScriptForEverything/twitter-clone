@@ -1,10 +1,8 @@
-// import { 
-// 	onJoinSussess, 
-// 	showTypingIndicatorInUI,
-// 	handleMessageReceiveUI 
-// } from '/js/page/messageChat.js'
-
-
+import { 
+	onJoinSussess, 
+	showTypingIndicatorInUI,
+	handleMessageReceiveUI 
+} from '/js/page/messageChat.js'
 
 /* Global Variables
 		. io 								// socket.io.js script file
@@ -13,39 +11,54 @@
 */
 
 const socket = io()
-// console.log(socket, logedInUser)
-
 let isConnected = false
 
-// To create private room by user._id instead of useless socket.id
-socket.emit('setup', logedInUser)
-socket.on('connected', () => isConnected = true)
 
 
+/* To create a connection with server we need to send user._id
+		. user._id will be available after loged in, in home page
+		. so we have call this function to home page and take logedInUser and send to backend
 
-if( logedInUser ) socket.emit('setup', logedInUser)
-socket.on('connected', () => isConnected = true)
+	 And Create private room for every logedInUser, instead of default private rooms by socket.id */
+export const joinedToPrivateRoom = (logedInUser) => {
+	socket.emit('setup', logedInUser)
+}
+
+// Step-2: after server get user._id send this event.
+socket.on('connected', () => {
+	isConnected = true
+	console.log('connected to server successfull')
+})
 
 
-/* When user click on group chat list, join that chat to custom room */ 
+// Step-3: From client Send chatId from message/chatId  page to Server to create custom room for group chat
 export const joinUserByChatId = (chatId) => {
 	socket.emit('join-room', { chatId })
 }
 
-// socket.on('room-joined', ({ chatId }) => {
-// 	if( !chatId ) return onJoinSussess({ error: 'room-joined failed' })
-// 	onJoinSussess({ message: 'room-joined succeed' })
-// })
+// Step-4: If this event (comes from server) is successfull that means group chat room is created
+socket.on('room-joined', ({ chatId }) => {
+	if( !chatId ) return onJoinSussess({ error: 'room-joined failed' })
+	onJoinSussess({ message: 'room-joined succeed' })
+})
 
 
 
-// socket.on('typing', ({ chatId, message }) => {
-// 	showTypingIndicatorInUI(chatId, message ) 			// defined in /js/message-chat.js
-// })
+export const sendTypingEvent = (chatId, message ) => {
+	socket.emit('typing', { chatId, message })
+}
+
+socket.on('typing', ({ chatId, message }) => {
+	showTypingIndicatorInUI(chatId, message ) 			// defined in /js/message-chat.js
+})
 
 
-socket.on('message-received', ({ roomId, messageDoc }) => {
-	// handleMessageReceiveUI(roomId, messageDoc)
+export const sendingNewMessageEvent = (chatId, messageDoc) => {
+	socket.emit('new-message', { chatId, messageDoc })
+}
+
+socket.on('message-received', ({ chatId, messageDoc }) => {
+	handleMessageReceiveUI(chatId, messageDoc)
 })
 
 

@@ -1,14 +1,15 @@
-// import { joinUserByChatId } from '/js/socket.js'
+import { joinUserByChatId, sendTypingEvent, sendingNewMessageEvent } from '/js/socket.js'
 import { Snackbar } from '/js/module/components/index.js'
-import $, { axios, decodeHTML, updateMessageBadge } from '/js/module/utils.js'
+import $, { axios, encodeHTML, decodeHTML, updateMessageBadge } from '/js/module/utils.js'
 
 
 /* Global Variables
 		. logedInUser
-		. chat 	(Document)
-		. chatId
 */
 
+// We can't get chatId from backend, because here we can have chatId == chatId || userId
+const url = new URL(location.href)
+const chatId = url.pathname.split('/').pop()
 
 
 
@@ -28,7 +29,6 @@ const pageLoadingIndicator = $('[name=page-loading-indicator]')
 const deleteChatButton = $('[name=delete-chat]')
 
 let timer = undefined
-
 sendInput.value=''
 
 
@@ -205,7 +205,7 @@ sendInput.addEventListener('keydown', (evt) => {
 
 	clearTimeout(timer)
 	const message = evt.target.value.trim()
-	socket.emit('typing', { chatId, message })
+	sendTypingEvent(chatId, message)
 
 	timer = setTimeout(() => {
 		const isPressedEnteredKey = evt.keyCode === enteredKey
@@ -250,7 +250,7 @@ const sendMessageToBackend = async ( message ) => {
 	sendInput.focus()
 
 		
-	socket.emit('new-message', { chatId, messageDoc })
+	sendingNewMessageEvent(chatId, messageDoc)
 	addMessage(messageDoc)
 }
 
@@ -291,7 +291,7 @@ const addMessage = (currentDoc, classList={} ) => {
 /* We got message page via <a href='/message/chatId'>
 		So soon as we comes to message details page, that means
 		we are in group chat  (or if comes with user._id then private chat) */ 
-// joinUserByChatId(chatId)
+joinUserByChatId(chatId)
 export const onJoinSussess = ({ error, message }) => {
 	if(error) console.log(error)
 	console.log(`show in UI instead of log: `, message)
@@ -323,7 +323,21 @@ export const handleMessageReceiveUI = (roomId, messageDoc) => {
 	updateMessageBadge() 	// comes from utils.js
 }
 
-deleteChatButton.addEventListener('click', (evt) => {
-	messageContainer.innerHTML = ''
-	// console.log(children)
+deleteChatButton.addEventListener('click', async (evt) => {
+	
+	const userId = logedInUser._id
+
+	const { error } = await axios({
+		url: `/api/messages/${userId}`,
+		method: 'DELETE'
+	})
+
+	if(error) return Snackbar({
+		severity: 'error',
+		variant: 'filled',
+		message: error.message || 'deleteding all messages by userId is failed',
+		action: true,
+	})
+
+	// messageContainer.innerHTML = ''
 })

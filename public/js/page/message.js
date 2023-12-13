@@ -6,7 +6,6 @@ import $, { axios, decodeHTML, stringToElement } from '/js/module/utils.js'
 */
 
 
-
 const chatListContainer = $('[name=chat-list-container]')
 
 // console.log(logedInUser)

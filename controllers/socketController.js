@@ -1,3 +1,5 @@
+
+
 module.exports = (io) => (socket) => {
 	console.log('connection established: ', socket.id)
 
@@ -12,7 +14,7 @@ module.exports = (io) => (socket) => {
 	// Step-1: Creating Private Room for every user.
 	socket.on('setup', (logedInUser) => {
 		socket.join(logedInUser._id) 			
-		socket.emit('connected')
+		socket.emit('connected', { userId: logedInUser._id })
 	})
 
 	// Step-2: Creating Custom Room for Group Chat
@@ -27,6 +29,9 @@ module.exports = (io) => (socket) => {
 	})
 
 	socket.on('new-message', ({ chatId, messageDoc }) => {
+
+		if( !messageDoc ) return socket.to(chatId).emit('error', { message: `messageDoc not found` })
+		socket.to(chatId).emit('message-received', { chatId, messageDoc })
 
 		/* Method-1: (in-correct) Send to all user in chat room
 		
@@ -48,18 +53,19 @@ module.exports = (io) => (socket) => {
 			again and again for multiple chat by finding on that. Instead send message to user's private room
 		*/
 
-		const chat = messageDoc.chat
-		if( !chat.users ) return console.log('messageDoc.chat.users is undefined')
+		// const chat = messageDoc.chat
+		// if( !chat.users ) return console.log('messageDoc.chat.users is undefined')
 
-		chat.users.forEach( (user) => {
-			if( !user._id ) return console.log(`messageDoc.chat.users are not populated`)
-			if( !messageDoc.sender._id ) return console.log(`messageDoc.sender not populated`)
 
-			// Don't send message to me self or Don't broadcast to self room
-			if( user._id == messageDoc.sender._id ) return 
+		// chat.users.forEach( (user) => {
+		// 	if( !user._id ) return console.log(`messageDoc.chat.users are not populated`)
+		// 	if( !messageDoc.sender._id ) return console.log(`messageDoc.sender not populated`)
 
-			socket.to(user._id).emit('message-received', { chatId, messageDoc })
-		})
+		// 	// Don't send message to me self or Don't broadcast to self room
+		// 	if( user._id == messageDoc.sender._id ) return 
+
+		// 	socket.to(user._id).emit('message-received', { chatId, messageDoc })
+		// })
 
 
 	})

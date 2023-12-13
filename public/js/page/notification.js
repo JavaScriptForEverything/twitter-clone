@@ -1,11 +1,10 @@
 import { Snackbar, List } from '../module/components/index.js'
-import { $, axios, redirectTo } from '../module/utils.js'
+import { $, axios, redirectTo, updateNotificationBadge } from '../module/utils.js'
 
 
 /* Global Variables: 
 		. logedInUser 		: res.render('./page/search', payload)
 */
-
 
 
 let isAllOpened = false
@@ -91,6 +90,8 @@ notificationContainer.addEventListener('click', async (evt) => {
 		return console.log(`isOpened notification failed: ${error.message}`)
 	}
 
+	// Show updated Notification badge here
+
 	// container.classList.remove('bg-slate-200','border-slate-300')
 	container.classList.add('bg-slate-50')
 
@@ -128,6 +129,7 @@ notificationContainer.addEventListener('click', async (evt) => {
 
 	const a = evt.target.closest('a')
 	a.remove()
+	updateNotificationBadge()
 })
 
 

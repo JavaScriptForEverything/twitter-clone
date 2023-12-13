@@ -1,5 +1,5 @@
 import { Snackbar, getTweetHTML } from '/js/module/components/index.js'
-import { $, axios, encodeHTML, stringToElement } from '/js/module/utils.js'
+import { $, axios, encodeHTML, stringToElement, updateNotificationBadge  } from '/js/module/utils.js'
 
 /* Global Variables
 		. logedInUser 	// comes from backend
@@ -177,6 +177,8 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	retweetButton.style.color = color
 
 	tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(retweet))
+
+	updateNotificationBadge()
 })
 
 //-----[ Heart Handler ]-----
@@ -209,6 +211,8 @@ tweetsContainer.addEventListener('click', async (evt) => {
 
 	heartSpan.textContent = tweet?.likes.length || ''
 	heartButton.style.color = color
+
+	updateNotificationBadge()
 })
 
 
@@ -323,6 +327,8 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	const tweet = data.data
 	console.log(tweet)
 	container.remove()
+
+	updateNotificationBadge()
 })
 
 

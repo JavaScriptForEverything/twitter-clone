@@ -131,13 +131,13 @@ exports.deleteTweetById = catchAsync( async(req, res, next) => {
 	if(!tweet) return next(appError('deleting Twite is failed', 400))
 
 	// Step-2: Remove tweet._id form users.likes or users.retweets array 
-	await User.findByIdAndUpdate( userId, { 
+	const user = await User.findByIdAndUpdate( userId, { 
 		$pull: { 
 			likes: tweetId, 
 			retweets: tweetId 
 		} 
 	})
-
+	if(!user) return next(appError('deleting user.id form tweet.likes and tweet.retweets'))
 
 	res.status(201).json({
 		status: 'success',
@@ -224,13 +224,15 @@ exports.updateTweetLike = catchAsync(async (req, res, next) => {
 	req.session.user = updatedUser
 
 	if( !isLiked ) { 														// Show notification only when liked, skip unlike senerio
-		await Notification.insertNotification({
+		const notification = await Notification.insertNotification({
 			entityId: updatedTweet._id, 						// on which notification user liked ?
 			userFrom: userId, 											// Who liked it ?
 			userTo: updatedTweet.user._id, 					// which user create this tweet ?
 			type: 'like', 													// ['like', 'retweet', 'replyTo', 'follow']
 			kind: 'tweet', 													// ['tweet', 'message' ]
 		})
+
+		if(!notification) return next(appError('Notification failed'))
 	}
 
 	res.status(201).json({

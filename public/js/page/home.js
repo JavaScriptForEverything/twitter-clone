@@ -1,11 +1,10 @@
 import { Snackbar, getTweetHTML } from '/js/module/components/index.js'
-import { $, axios, encodeHTML, stringToElement } from '/js/module/utils.js'
-
+import { $, axios, encodeHTML, stringToElement, updateNotificationBadge } from '/js/module/utils.js'
 
 /* Global Variables: 
 		. logedInUser 		: res.render('./page/home', payload)
-
 */
+
 
 const sendTweetForm = $('#send-tweet-form')
 const sendTweetButton = $('#send-tweet-form button')
@@ -208,6 +207,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 		pinnedTweetContainer.insertAdjacentHTML('afterend', getTweetHTML(updatedTweet, logedInUser))
 		closeModal()
 
+		updateNotificationBadge()
 	}) // end submit button click
 	
 })
@@ -244,6 +244,8 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	retweetButton.style.color = color
 
 	tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(retweet, logedInUser))
+
+	updateNotificationBadge()
 })
 
 //-----[ Heart Handler ]-----
@@ -274,6 +276,8 @@ tweetsContainer.addEventListener('click', async (evt) => {
 
 	heartSpan.textContent = tweet?.likes.length || ''
 	heartButton.style.color = color
+
+	updateNotificationBadge()
 })
 
 
@@ -385,6 +389,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	console.log(tweet)
 	container.remove()
 
+	updateNotificationBadge()
 })
 
 

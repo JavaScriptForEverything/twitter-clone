@@ -28,7 +28,7 @@ export const Snackbar = (props={}) => {
 		position='top-1 right-1',
 		action=props.position || true,
 		showSeverity=true,
-		autoClose=true,
+		autoClose=false,
 		closeTime = 10000,
 	} = props
 

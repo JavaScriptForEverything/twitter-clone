@@ -41,10 +41,27 @@ exports.getAllMessagesOfSingleUser = catchAsync( async (req, res, next) => {
 
 // POST /api/messages
 exports.createMessage = catchAsync( async (req, res, next) => {
-	/* chat can be userId or chatId
-			1. if chatId === chatId 			: 
-			2. if chatId === userId 			: 
-			 */
+	/* req.body:
+			{
+				message: 'aa',
+				sender: '65722b62c3fca2503dc7c793', 			// logedInUser._id
+				chat: '655e019f890666a9ec090931' 					// chat._id  || user._id of private chat
+			}
+			chatId == chat._id || userId
+				1. if chatId === chatId 			: 
+				2. if chatId === userId 			: */
+
+	// console.log(req.body)
+
+	// return res.json({
+	// 	status: 'success',
+	// 	data: req.body
+	// })
+
+
+
+
+
 	const allowedFields = ['message', 'chat', 'sender']
 	const filteredBody = filterObjectByArray(req.body, allowedFields)
 
@@ -56,8 +73,9 @@ exports.createMessage = catchAsync( async (req, res, next) => {
 
 	let messageDoc = await Message.create( filteredBody )
 			messageDoc = await messageDoc.populate('sender')
-			messageDoc = await messageDoc.populate('chat')
-			await User.populate(messageDoc, 'chat.users')
+			messageDoc = await messageDoc.populate('chat') 		// if chat === userId 	=> populate null
+			await User.populate(messageDoc, 'chat.users') 		// null.users 					=> null
+
 
 			// await User.populate(message, 'chat.users')
 			// // 1. `chat` is available in Message Schema, so it populate from Message.Query.populate()
@@ -91,8 +109,8 @@ exports.createMessage = catchAsync( async (req, res, next) => {
 	}
 
 
-	// finally send notification to users
-	insertNotification(messageDoc, chat, next)
+	// // finally send notification to users
+	// insertNotification(messageDoc, chat, next)
 
 
 	res.status(201).json({
@@ -145,3 +163,27 @@ const insertNotification = (message, chat, next) => {
 		})
 	})
 }
+
+
+
+// DELETE 	/api/messages/:userId
+exports.deleteAllMessagesByUserId = catchAsync(async (req, res, next) => {
+	const userId = req.params.userId
+
+	const chat = await Chat.findOne({ 
+		isGroup: false,
+		users: {
+			$size: 2,
+			$all : { $elemMatch: { $eq: new Types.ObjectId(userId) } } 
+		}
+	})
+	if(!chat) return next(appError('Sorry it is not a group chat, it is private chat'))
+
+	const messages = await Message.deleteMany({ sender: userId })
+	console.log({ length: messages.length })
+
+	res.status(200).json({
+		status: 'success',
+		data: null
+	})
+})

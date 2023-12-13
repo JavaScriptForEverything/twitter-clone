@@ -1,5 +1,6 @@
-import { Snackbar } from '/js/module/components/index.js'
-import { $, axios } from '/js/module/utils.js'
+import { Snackbar, getUserHTML } from '/js/module/components/index.js'
+import { $, axios, stringToElement, redirectTo } from '/js/module/utils.js'
+
 
 /* Global Variables 
 		. logedInUser
