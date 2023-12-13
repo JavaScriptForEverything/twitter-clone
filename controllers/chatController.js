@@ -125,8 +125,9 @@ exports.getChatById = catchAsync( async (req, res, next) => {
 exports.createChat = catchAsync( async (req, res, next) => {
 	if(!req.body.length) return next(appError('please send user._id as array '))
 	
-	const userIds = [ ...req.body, req.session.user._id ]
-	const body = { users: userIds, isGroup: true }
+	const selectedUsersIds = req.body 		// body: [ user1._id, user2._id, ... ]
+	const userIds = [ ...selectedUsersIds, req.session.user._id ]
+	const body = { users: userIds, isGroup: true, isOpened: true }
 
 	const chat = await Chat.create( body )
 
@@ -144,8 +145,10 @@ exports.updateChatById = catchAsync( async (req, res, next) => {
 	const chatId = req.params.id
 	if( !isValidObjectId(chatId) ) return next(appError('invalid id'))
 
-	const filteredBody = filterObjectByArray(req.body, ['name', 'isGroup'] )
+
+	const filteredBody = filterObjectByArray(req.body, ['name', 'isGroup', 'isOpened'] )
 	const groupChat = await Chat.findByIdAndUpdate( chatId, filteredBody, { new: true } )
+	console.log({ isOpened: filteredBody.isOpened })
 
 	res.status(200).json({
 		status: 'success',

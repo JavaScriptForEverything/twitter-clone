@@ -11,8 +11,6 @@ import $, { axios, encodeHTML, decodeHTML, updateMessageBadge } from '/js/module
 const url = new URL(location.href)
 const chatId = url.pathname.split('/').pop()
 
-
-
 const dialog = $('[name=change-group-name]')
 const dialogCloseButton = $('[name=dialog-close-button]')
 const dialogCancelButton = $('[name=dialog-cancel-button]')
@@ -34,8 +32,28 @@ sendInput.value=''
 
 
 
+window.addEventListener('DOMContentLoaded', (evt) => {
+	handleChatViewed(chatId)
 
+	getAllMessagesOfSingleChat(chatId)
+	getChatById( chatId )
+})
 
+// GET /api/messages/:id 	
+const handleChatViewed = async (chatId) => {
+	const { data, error } = await axios({ 
+		url: `/api/chats/${chatId}`,
+		method: 'PATCH',
+		data: { isOpened: true } 	// 
+	})
+	if(error) return Snackbar({
+		severity: 'error',
+		variant: 'filled',
+		message: error.message || 'fetch all messages failed',
+		action: true,
+	})
+
+}
 
 
 
@@ -77,11 +95,7 @@ const getAllMessagesOfSingleChat = async (chatId) => {
 
 	scrollToBottom()
 }
-getAllMessagesOfSingleChat(chatId)
 
-// window.addEventListener('DOMContentLoaded', () => {
-// 	console.log(chatId)
-// })
 
 
 const scrollToBottom = (isFromBegining=true, speed=5, delay=1) => {
@@ -144,7 +158,6 @@ const getChatById = async (chatId) => {
 
 
 }
-getChatById( chatId )
 
 
 
@@ -252,6 +265,7 @@ const sendMessageToBackend = async ( message ) => {
 		
 	sendingNewMessageEvent(chatId, messageDoc)
 	addMessage(messageDoc)
+	updateMessageBadge()
 }
 
 

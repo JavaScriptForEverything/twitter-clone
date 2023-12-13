@@ -54,7 +54,7 @@ exports.updateAllNotifications = catchAsync(async (req, res, next) => {
 
 	const notifications = await Notification.updateMany(
 		{ userTo: userId },
-		{ isOpened: true }
+		{ isOpened: true } 	// => true 	: 
 	)
 	if(!notifications) return next(appError('notification update failed'))
 

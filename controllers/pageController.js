@@ -89,8 +89,7 @@ exports.loginPageHandler = async (req, res) => {
 
 
 		// res.redirect('/docs')
-		res.redirect('/notification')
-		// res.redirect('/message')
+		res.redirect('/message')
 		// res.redirect('/message/new')
 
 		// res.redirect('/testing')

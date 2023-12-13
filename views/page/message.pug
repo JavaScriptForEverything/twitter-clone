@@ -1,6 +1,18 @@
 extends ../layout/mainLayout
 
 block middle-block
+	style.
+		html {
+			--slate-50: #f8fafc;
+			--slate-100: #f1f5f9;
+			--slate-200: #e2e8f0;
+		}
+		.active-list {
+			background-color: var(--slate-100);
+			border-color: var(--slate-200);
+		}
+
+
 	if !logedInUserJs
 		div(class='absolute top-0 left-0 right-0 bg-red-500 text-white') 
 			p(class='px-4 py-2 text-xl text-center') logedInUserJS is missing from backend

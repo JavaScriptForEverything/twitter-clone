@@ -8,7 +8,9 @@ import $, { axios, decodeHTML, stringToElement } from '/js/module/utils.js'
 
 const chatListContainer = $('[name=chat-list-container]')
 
-// console.log(logedInUser)
+window.addEventListener('DOMContentLoaded', () => {
+	getAllChats()
+})
 
 const getAllChats = async () => {
 	const { data, error } = await axios({ url: '/api/chats' })
@@ -30,7 +32,6 @@ const getAllChats = async () => {
 		showChat(chat, chatListContainer, logedInUser)
 	})
 }
-getAllChats()
 
 
 
@@ -64,9 +65,9 @@ const showChat = (chat={}, elementContainer, logedInUser) => {
 	const htmlString = `
 		<a href='/message/${chat._id}'>
 			<div
-				class='group border-b border-slate-200 px-3 py-1.5 rounded-sm bg-slate-50/50 hover:bg-slate-100/80 active:bg-slate-200' 
-				id=${id}
-				name=${name}
+				class='${chat.isOpened ? '' : 'active-list'} group border-b border-slate-200 px-3 py-1.5 rounded-sm bg-slate-50/50 hover:bg-slate-100/80 active:bg-slate-200' 
+				id='${id}'
+				name='${name}'
 			>
 				<div class='flex items-center gap-2'>
 					${ isMultipleImages ? `
@@ -126,3 +127,18 @@ const showChat = (chat={}, elementContainer, logedInUser) => {
 		element.remove()
 	})
 }
+
+// // GET 	/message/:chatId|userId 	: chat list click handler
+// chatListContainer.addEventListener('click', (evt) => {
+// 	evt.preventDefault()
+// 	// if(evt.target.name !== 'list-container') return
+
+// 	const listContainer = evt.target.closest('[name=list-container]')
+// 	const a = listContainer.closest('a')
+// 	// a.click()
+// 	const link = document.createElement('a')
+// 	link.href = a.href
+// 	link.click()
+
+// 	// console.log( a )
+// })

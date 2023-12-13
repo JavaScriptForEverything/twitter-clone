@@ -90,6 +90,7 @@ exports.createMessage = catchAsync( async (req, res, next) => {
 
 	if(chat && messageDoc) {
 		chat.latestMessage = messageDoc._id
+		chat.isOpened = false
 		await chat.save()
 	}
 
@@ -105,6 +106,7 @@ exports.createMessage = catchAsync( async (req, res, next) => {
 		chat = await getChatByUsersId(userId, senderId)
 
 		chat.latestMessage = messageDoc._id
+		chat.isOpened = false
 		await chat.save()
 	}
 

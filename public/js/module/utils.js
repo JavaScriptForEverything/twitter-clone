@@ -1,3 +1,6 @@
+import { Snackbar } from './components/index.js'
+
+
 export const $ = selector => document.querySelector(selector)
 export default $
 
@@ -85,10 +88,11 @@ export const updateNotificationBadge = async () => {
 
 	const { data, error } = await axios({ url: '/api/notifications '})
 	if(error) {
-		Snackbar({
-			severity: 'error', 											// success | info | warning | error
-			message: error.message || 'Notification Badge: /api/chats?unreadOnly=true failed',
-		})
+		// Snackbar({
+		// 	severity: 'error', 											// success | info | warning | error
+		// 	message: error.message || 'Notification Badge: /api/chats?unreadOnly=true failed',
+		// })
+		return
 	}
 
 	// console.log(data.data)
@@ -115,8 +119,9 @@ export const updateMessageBadge = async () => {
 		})
 	}
 
-	messageBadge.textContent = data.count
-	messageBadge.style.opacity = +!!data.count 		// Number => Boolean => 1/0
+	const unReadedMessages = data.data.filter( (messageDoc) => !messageDoc.isOpened )
+	messageBadge.textContent = unReadedMessages.length
+	messageBadge.style.opacity = unReadedMessages.length ? 1 : 0 	// boolean value not work
 }
 
 

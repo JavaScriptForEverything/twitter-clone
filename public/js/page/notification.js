@@ -13,10 +13,16 @@ const listContainer = $('[name=list-container]')
 const loadingIndicator = $('[name=page-loading-indicator]')
 const checkAllButton = $('[name=check-all]')
 
-// addEventListener('pageshow', (evt) => {
-// 	if(evt.persisted) location.reload()
-// 	console.log('you come back by clicking back button')
+
+//	// input(type="hidden" id='refresh' value='no')
+// window.addEventListener('pageshow', async (evt) => {
+// 	const input = $('#refresh')
+// 	input.value === 'yes' ? window.location.reload(true) : input.value = 'yes'
 // })
+
+
+
+
 
 const fetchInitialNotifications = async () => {
 	loadingIndicator.classList.remove('hidden')
@@ -96,7 +102,11 @@ notificationContainer.addEventListener('click', async (evt) => {
 	container.classList.add('bg-slate-50')
 
 	const a = evt.target.closest('a')
-	redirectTo(a.href)
+	// redirectTo(a.href)
+
+	const link = document.createElement('a')
+	link.href = a.href
+	link.click()
 
 	// NB.
 	// 	. Browser history.back() === BackButton : 
@@ -136,6 +146,7 @@ notificationContainer.addEventListener('click', async (evt) => {
 // PATCH 	/api/notifications/ 				: check-all button handler
 checkAllButton.addEventListener('click', async (evt) => {
 	const { error, data } = await axios({ url: '/api/notifications', method: 'PATCH' })
+
 	if(error) {
 		Snackbar({
 			severity: 'error',
