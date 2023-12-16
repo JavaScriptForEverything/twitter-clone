@@ -1,3 +1,4 @@
+import { updateMessageBadge } from './module/utils.js'
 import { 
 	onJoinSussess, 
 	showTypingIndicatorInUI,
@@ -59,6 +60,7 @@ export const sendingNewMessageEvent = (chatId, messageDoc) => {
 
 socket.on('message-received', ({ chatId, messageDoc }) => {
 	handleMessageReceiveUI(chatId, messageDoc)
+	updateMessageBadge()
 })
 
 

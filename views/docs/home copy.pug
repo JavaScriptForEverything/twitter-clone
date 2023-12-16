@@ -1,0 +1,25 @@
+doctype html
+html(lang="en")
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		title Docs
+
+		link(rel="stylesheet" href="/plugin/highlight/tomorrow-night-blue.min.css")
+
+		script(defer src="/js/tailwind_cdn.js")
+		script(defer src="/plugin/highlight/highlight.min.js")
+		script(defer src="/js/highlight.js")
+		script(defer src="/js/docs/home.js")
+		
+
+	body 
+		h1 docs Home Page
+
+		button(type='button') 1
+
+		
+		pre(style='tab-size: 4;')
+			code(class='language-javascript').
+				const $ = ( selector ) => document.querySelector( selector )
+		

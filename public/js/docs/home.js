@@ -1,1 +1,2 @@
-hljs.highlightAll()
+// const $ = (selector) => document.querySelector( selector )
+// console.log($)

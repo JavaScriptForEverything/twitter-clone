@@ -334,7 +334,7 @@ export const handleMessageReceiveUI = (roomId, messageDoc) => {
 	sendInput.value=''
 	sendInput.focus()
 
-	updateMessageBadge() 	// comes from utils.js
+	// updateMessageBadge() 	// comes from utils.js
 }
 
 deleteChatButton.addEventListener('click', async (evt) => {
