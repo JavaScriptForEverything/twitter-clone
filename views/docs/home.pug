@@ -1,44 +1,53 @@
-doctype html
-html(lang="en")
-	head
-		meta(charset="UTF-8")
-		meta(name="viewport", content="width=device-width, initial-scale=1.0")
-		title #{pageTitle}
+extends ../layout/docLayout
 
-		link(rel="stylesheet" href="/plugin/highlight/tomorrow-night-blue.min.css")
+block left-panel-content
+	ul
+		li(class='w-full bg-slate-50 px-2 py-1 border-b border-slate-200 hover:bg-slate-100/80') 
+			a(href='#' class='block') Pages Routes
 
-		script(src="/js/tailwind_cdn.js")
-		script(defer src="/plugin/highlight/highlight.min.js")
-		script(defer src="/js/docs/common.js")
-		script(defer src="/js/docs/home.js")
-		
-		style.
-			aside.hide-left-panel {
-				display: block;
-				width: 0;
-				padding: 0;
-			}
-		//- aside:not(.hide-left-panel) + #middle-section button[name=hamburger] {
-				display: none;
-			}
+		li(class='w-full bg-slate-50 px-2 py-1 border-b border-slate-200 hover:bg-slate-100/80') 
+			a(href='#' class='block') API Routes
 
-	body 
-		div(class='flex min-h-screen divide-x')
-			aside#left-panel(class='hidden sm:block w-1/2 max-w-xs bg-slate-50 transition-all duration-500') 
-				div(class='h-16 flex items-center justify-between border-b border-slate-200 px-2 py-3')
-					span(class='font-medium text-lg ') Documentation
-					button(name='left-arrow' class='hover:bg-slate-100 border border-slate-200/50 active:bg-slate-200 p-1 rounded-full')
-						<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14 17.308L8.692 12L14 6.692l.708.708l-4.6 4.6l4.6 4.6z"/></svg>
+		li(class='w-full bg-slate-50 px-2 py-1 border-b border-slate-200 hover:bg-slate-100/80'): a(href='#' class='block') Pages Routes
 
-				div(class='px-2 py-3')
-					p Some text
+block main-section-content
+	include ../others/data
 
-			section#middle-section(class='flex-1 bg-slate-50') 
-				div(class='h-16 flex items-center gap-2 border-b border-slate-200 px-2 py-3')
-					button(name='hamburger' class='block sm:hidden hover:bg-slate-100 border border-slate-200/50 active:bg-slate-200 p-1 rounded-full')
-						<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
-					span(class='font-medium text-lg ') Title
+	h2(class='font-medium mb-4 text-blue-600 border-b pb-1 border-slate-200') Pages Routes
+	//- comes from: ../others/data
+	+RouteTable(pageRoutes)
 
-				div(class='px-2 py-3')
-					p Some text
-		
+
+	h2(class='font-medium mb-4 mt-12 text-blue-600 border-b pb-1 border-slate-200') API Routes
+	p(class='text-slate-700 font-light mb-4') 
+			| We have some end points and they support 
+			a(href='#' class='hover:text-slate-900 underline decoration-dotted decoration-blue-600') pagination
+			|, 
+			a(href='#' class='hover:text-slate-900 underline decoration-dotted decoration-blue-600') sorting
+			|, 
+			a(href='#' class='hover:text-slate-900 underline decoration-dotted decoration-blue-600') filtering
+			|  and 
+			a(href='#' class='hover:text-slate-900 underline decoration-dotted decoration-blue-600') searching
+
+
+	h3(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') User Routes
+	+RouteTable(userRoutes)
+	//- comes from: ../others/data
+
+	h3(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') Tweet Routes
+	+RouteTable(tweetRoutes)
+	//- comes from: ../others/data
+
+	h3(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') Notification Routes
+	+RouteTable(notificationRoutes)
+	//- comes from: ../others/data
+
+	h3(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') Message Routes
+	+RouteTable(messageRoutes)
+	//- comes from: ../others/data
+
+	h3(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') Chat Routes (Group | Private)
+	+RouteTable(chatRoutes)
+	//- comes from: ../others/data
+
+

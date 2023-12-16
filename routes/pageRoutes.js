@@ -4,6 +4,7 @@ const authController = require('../controllers/authController')
 
 const router = Router()
 
+//=> / 	(root route)
 router
 	.get('/testing', 
 		authController.protect, 

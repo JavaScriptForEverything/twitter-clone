@@ -1,0 +1,75 @@
+
+-
+	const pageRoutes = [
+		{ method: 'GET', route: '/', role: 'home' },
+		{ method: 'GET', route: '/tweet/:id', role: 'details' },
+
+		{ method: 'GET', route: '/register', role: 'register' },
+		{ method: 'POST', route: '/register', role: 'handler' },
+		{ method: 'GET', route: '/login', role: 'login' },
+		{ method: 'POST', route: '/login', role: 'handler' },
+		{ method: 'GET', route: '/logout', role: 'logout' },
+
+		{ method: 'GET', route: '/profile', role: 'self' },
+		{ method: 'GET', route: '/profile/:id', role: 'other' },
+		{ method: 'GET', route: '/profile/:id/following', role: 'self' },
+		{ method: 'GET', route: '/profile/:id/followers', role: 'other' },
+
+		{ method: 'GET', route: '/message', role: 'list' },
+		{ method: 'GET', route: '/message/new', role: 'group chat' },
+		{ method: 'GET', route: '/message/id', role: 'chatting' },
+
+		{ method: 'GET', route: '/search', role: 'tweets/users' },
+		{ method: 'GET', route: '/notification', role: 'notification' },
+	]
+
+
+- 
+	const userRoutes = [
+		{ method: 'GET', route: '/api/users', role: 'getAllUsers' },
+		{ method: 'POST', route: '/api/users/avatar', role: 'upload avatar' },
+		{ method: 'POST', route: '/api/users/cover-photo', role: 'upload banner' },
+		{ method: 'PATCH', route: '/api/users/:id/following', role: 'follow/unfollow' },
+	]
+
+- 
+	const tweetRoutes = [
+		{ method: 'GET', route: '/api/tweets', role: 'getAllTweets' },
+		{ method: 'POST', route: '/api/tweets', role: 'create tweet' },
+		{ method: 'GET', route: '/api/tweets/:id', role: 'getTweetById' },
+		{ method: 'PATCH', route: '/api/tweets/:id', role: 'updateTweetById' },
+		{ method: 'DELETE', route: '/api/tweets/:id', role: 'deleteTweetById' },
+
+		{ method: 'GET', route: '/api/tweets/:id/retweet', role: 'handle retweet' },
+		{ method: 'GET', route: '/api/tweets/:id/like', role: 'handle like/unlike' },
+	]
+
+
+- 
+	const notificationRoutes = [
+		{ method: 'GET', route: '/api/notifications', role: 'get all' },
+		{ method: 'PATCH', route: '/api/notifications', role: 'update all' },
+		{ method: 'PATCH', route: '/api/notifications/:id', role: 'update one' },
+		{ method: 'DELETE', route: '/api/notifications/:id', role: 'delete one' },
+		{ method: 'GET', route: '/api/notifications/badge', role: 'update badge' },
+	]
+
+
+- 
+	const messageRoutes = [
+		{ method: 'GET', route: '/api/messages', role: 'get all' },
+		{ method: 'POST', route: '/api/messages', role: 'create one' },
+		{ method: 'GET', route: '/api/messages/:userId', role: 'get all messages of one user' },
+		{ method: 'DELETE', route: '/api/messages/:userId', role: 'delete all messages of one user' },
+	]
+
+- 
+	const chatRoutes = [
+		{ method: 'GET', route: '/api/chats', role: 'list all' },
+		{ method: 'POST', route: '/api/chats', role: 'create group chat/private chat' },
+		{ method: 'GET', route: '/api/chats/:id', role: 'get chat for messaging ' },
+		{ method: 'PATCH', route: '/api/chats/:id', role: 'update chat for last message ' },
+		{ method: 'DELETE', route: '/api/chats/:id', role: 'delete chat and related messages' },
+	]
+
+
