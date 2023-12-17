@@ -24,43 +24,49 @@ html(lang="en")
 			aside.hide-left-panel {
 				transform: translateX(-100vw);
 			}
-		//- @media(min-width: 768px) {
+			@media(min-width: 768px) {
 				aside.hide-left-panel {
 					transform: translateX(0);
-					border-right: 0;
 				}
 				div#main-section {
-				/*
 					transform: translateX(var(--sm));
-				*/	
+					position: absolute;
+					top: 0;
+					left: 0;
+					bottom: 0;
+					right: var(--sm);
 				}
 			}
 
+	//- class='hide-left-panel'
 	body 
-		div(class='min-h-screen flex divide-x')
+		div(class='min-h-screen flex divide-x ')
 			aside#left-panel(
-				class='bg-slate-50 w-1/2 max-w-xs min-h-screen fixed top-0 left-0 hide-left-panel'
+				class='bg-slate-50 w-1/2 max-w-xs min-h-screen fixed top-0 left-0 '
 				class='md:translate-x-0 transition-transform border-r border-slate-200'
+				class='z-30 hide-left-panel'
 			)
 				div(class='h-16 flex items-center justify-between border-b border-slate-200 px-2 py-3')
 					span(class='font-medium text-lg ') Documentation
-					button(name='left-arrow' class=' hover:bg-slate-100 border border-slate-200/50 active:bg-slate-200 p-1 rounded-full')
+					button(name='left-arrow' class='md:hidden block hover:bg-slate-100 border border-slate-200/50 active:bg-slate-200 p-1 rounded-full')
 						<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14 17.308L8.692 12L14 6.692l.708.708l-4.6 4.6l4.6 4.6z"/></svg>
 
 				block left-panel-content
 					div(class='px-2 py-3')
-						p Some text
+						p Left Panel
 
-			div#main-section(class='bg-slate-50 flex-1 transition-transform')
-				div(class='h-16 flex items-center gap-2 border-b border-slate-200 px-2 py-3')
-					button(name='hamburger' class='hover:bg-slate-100 border border-slate-200/50 active:bg-slate-200 p-1 rounded-full')
+			div#main-section(
+				class='bg-slate-50 flex-1 transition-transform'
+			)
+				div(class='sticky top-0 bg-slate-50 h-16 flex items-center gap-2 border-b border-slate-200 px-2 py-3')
+					button(name='hamburger' class='md:hidden block hover:bg-slate-100 border border-slate-200/50 active:bg-slate-200 p-1 rounded-full')
 						<svg class='pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
 					span(class='font-medium text-lg ') Documentation
 
 				main.container.mx-auto.px-2.py-3 
 					block main-section-content
 						div(class='px-2 py-3')
-							p Some text
+							p Main Section
 			
 
 

@@ -1,24 +1,54 @@
 extends ../layout/docLayout
+block append script
+	script(defer src="/js/docs/home.js")
 
 block left-panel-content
-	ul
-		li(class='w-full bg-slate-50 px-2 py-1 border-b border-slate-200 hover:bg-slate-100/80') 
-			a(href='#' class='block') Pages Routes
+	include ../others/data
+	style.
+		.hide {
+			opacity: 0;
+			transition: opacity 0.5s;
+		}
+		.show {
+			opacity: 1;
+		}
 
+		.rotate-list-button {
+			transform: rotate(0deg);
+			transition: transform 0.2s;
+		}
+		.rotate-list-button-rotate {
+			transform: rotate(-90deg);
+		}
+
+	ul#left-panel-list(class='text-slate-800')
 		li(class='w-full bg-slate-50 px-2 py-1 border-b border-slate-200 hover:bg-slate-100/80') 
-			a(href='#' class='block') API Routes
+			a(href='#page-routes' class='block') Pages Routes
+
+		li(class='flex justify-between w-full bg-slate-50 px-2 py-1 border-b border-slate-200 hover:bg-slate-100/80') 
+			a(href='#api-routes' class='flex-1') API Routes
+			button(name='list-left-arrow' class='rotate-list-button hover:bg-slate-200 border border-slate-200/50 active:bg-slate-200 p-1 rounded-full')
+				<svg class='pointer-events-none w-4 h-4' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14 17.308L8.692 12L14 6.692l.708.708l-4.6 4.6l4.6 4.6z"/></svg>
+			
+		div(name='api-routes-container', class='hidden')
+			ul(class='ml-6 list-[square] text-slate-700 text-sm bg-slate-50 px-2 py-0.5')
+				//- comes from: ../others/data
+				each route of apiRoutes
+					li(class='px-2 py-0.5 hover:bg-blue-100 hover:marker:text-blue-600') 
+						a(href=route.path class='block') #{route.label}
+
 
 		li(class='w-full bg-slate-50 px-2 py-1 border-b border-slate-200 hover:bg-slate-100/80'): a(href='#' class='block') Pages Routes
 
 block main-section-content
-	include ../others/data
 
-	h2(class='font-medium mb-4 text-blue-600 border-b pb-1 border-slate-200') Pages Routes
-	//- comes from: ../others/data
-	+RouteTable(pageRoutes)
+	h2#page-routes(class=' font-medium mb-4 text-blue-600 border-b pb-1 border-slate-200') Pages Routes
+	div(class='hide')
+		+RouteTable(pageRoutes)
+		//- comes from: ../others/data
 
 
-	h2(class='font-medium mb-4 mt-12 text-blue-600 border-b pb-1 border-slate-200') API Routes
+	h2#api-routes(class='font-medium mb-4 mt-12 text-blue-600 border-b pb-1 border-slate-200') API Routes
 	p(class='text-slate-700 font-light mb-4') 
 			| We have some end points and they support 
 			a(href='#' class='hover:text-slate-900 underline decoration-dotted decoration-blue-600') pagination
@@ -31,23 +61,28 @@ block main-section-content
 
 
 	h3(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') User Routes
-	+RouteTable(userRoutes)
-	//- comes from: ../others/data
+	div#user-routes(class='hide')
+		+RouteTable(userRoutes)
+		//- comes from: ../others/data
 
 	h3(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') Tweet Routes
-	+RouteTable(tweetRoutes)
-	//- comes from: ../others/data
+	div#tweet-routes(class='hide')
+		+RouteTable(tweetRoutes)
+		//- comes from: ../others/data
 
 	h3(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') Notification Routes
-	+RouteTable(notificationRoutes)
-	//- comes from: ../others/data
+	div#notification-routes(class='hide')
+		+RouteTable(notificationRoutes)
+		//- comes from: ../others/data
 
 	h3(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') Message Routes
-	+RouteTable(messageRoutes)
-	//- comes from: ../others/data
+	div#message-routes(class='hide')
+		+RouteTable(messageRoutes)
+		//- comes from: ../others/data
 
 	h3(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') Chat Routes (Group | Private)
-	+RouteTable(chatRoutes)
-	//- comes from: ../others/data
+	div#chat-routes(class='hide')
+		+RouteTable(chatRoutes)
+		//- comes from: ../others/data
 
 

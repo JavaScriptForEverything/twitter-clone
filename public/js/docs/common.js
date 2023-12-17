@@ -14,6 +14,9 @@ hljs.highlightAll()
 	const leftPanel = $('#left-panel')
 	const hamburgerIcon = $('button[name=hamburger]')
 	const leftArrowIcon = $('button[name=left-arrow]')
+	const leftPanelList = $('#left-panel-list')
+	const apiRouteButton = $('a[href="#api-routes"] + [name=list-left-arrow]')
+	const apiRoutesContainer = $('[name=api-routes-container]')
 
 	hamburgerIcon.addEventListener('click', (evt) => {
 		leftPanel.classList.remove('hide-left-panel')
@@ -21,6 +24,36 @@ hljs.highlightAll()
 	leftArrowIcon.addEventListener('click', (evt) => {
 		leftPanel.classList.add('hide-left-panel')
 	})
+
+	leftPanelList.querySelectorAll('a').forEach(list => {
+		list.addEventListener('click', () => {
+			leftPanel.classList.add('hide-left-panel')
+		})
+	})
+
+	// rotate API Routes's button
+	apiRouteButton.addEventListener('click', (evt) => {
+		const isRotated = evt.target.classList.contains('rotate-list-button-rotate')
+		evt.target.classList.toggle('rotate-list-button-rotate', !isRotated)
+
+		if(!isRotated) {
+			apiRoutesContainer.style.display = 'block'
+			apiRoutesContainer.style.opacity = 0
+			apiRoutesContainer.style.transition = 'all'
+			setTimeout(() => {
+				apiRoutesContainer.style.opacity = 1
+			}, 100);
+
+		} else {
+			apiRoutesContainer.style.opacity = 0
+			setTimeout(() => {
+				apiRoutesContainer.style.display = 'none'
+			}, 100);
+		}
+
+	})
+
+
 })();
 
 // ;(() => {
