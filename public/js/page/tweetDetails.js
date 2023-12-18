@@ -112,7 +112,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	dialogEl.showModal()
 	dialogEl.dataset.tweetId = tweetId
 
-	const htmlString = getTweetHTML(tweet, { isModal: true }) 	// public/js/utils.js
+	const htmlString = getTweetHTML(tweet, logedInUser, { isModal: true }) 	// public/js/utils.js
 	tweetContainer.insertAdjacentHTML('beforeend', htmlString )
 
 	submitButton.addEventListener('click', async (evt) => {

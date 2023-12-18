@@ -23,6 +23,8 @@ block left-panel-content
 
 	ul#left-panel-list(class='text-slate-800')
 		li(class='w-full bg-slate-50 px-2 py-1 border-b border-slate-200 hover:bg-slate-100/80') 
+			a(href='#key-features' class='block') Key Features
+		li(class='w-full bg-slate-50 px-2 py-1 border-b border-slate-200 hover:bg-slate-100/80') 
 			a(href='#page-routes' class='block') Pages Routes
 
 		li(class='flex justify-between w-full bg-slate-50 px-2 py-1 border-b border-slate-200 hover:bg-slate-100/80') 
@@ -37,17 +39,48 @@ block left-panel-content
 					li(class='px-2 py-0.5 hover:bg-blue-100 hover:marker:text-blue-600') 
 						a(href=route.path class='block') #{route.label}
 
-
 		li(class='w-full bg-slate-50 px-2 py-1 border-b border-slate-200 hover:bg-slate-100/80')
 			a(href='/docs/api-features' class='block') API Features
 
+
 block main-section-content
+
+	h1#key-features Key features: 
+		span(class='ml-4 text-sm') [ by users point of view ]
+
+		ul(class='list-[square] list-inside ml-2 mb-8 px-4 py-2 text-slate-800')
+			li Social media app like twitter
+			li Follow and unfollow other users
+			li Create tweet, like/unlike tweet, and also retweet 
+			li Upload profile photo, Cover photo.
+			li Real Time chatting: Group chat, private chat
+			li To create Group chat search users by name and shows selected users list before create chat
+			li in chat page will show all users on that chat room, in top with user avatar
+			li Users will see typing indicator of other users while chating.
+
+
+	h1 Key features: 
+		span(class='ml-4 text-sm') [ by Developers point of view ]
+
+		ul(class='list-[square] list-inside ml-2 mb-8 px-4 py-2 text-slate-800')
+			li Hydration Rendering : ServerSide rendering + ClientSide rendering
+			li API features : pagination, sorting, filtering, searching
+			li Image upload : crop image, image with private route
+			li Error handling : Express Globar Error handler + ClientSide error handler
+			li Real-Time chat, notification By socket.io private or custom room
+			li Project Setup: Node-Express, MongoDB (mongoose), Pug-templete tailwind-css, 
+				| Browser refresh on file change, Session based authentication.
+			li Handle some security machanism, like: Content Security Policy for XSS attack,
+				| HTML parser
+			li Animation/Transition: scrolling animation, dialog transition, ...etc
+			li Searcing APIs when user stop typing
+
+
 
 	h2#page-routes(class=' font-medium mb-4 text-blue-600 border-b pb-1 border-slate-200') Pages Routes
 	div(class='hide')
 		+RouteTable(pageRoutes)
 		//- comes from: ../others/data
-
 
 	h2#api-routes(class='font-medium mb-4 mt-12 text-blue-600 border-b pb-1 border-slate-200') API Routes
 	p(class='text-slate-700 font-light mb-4') 
