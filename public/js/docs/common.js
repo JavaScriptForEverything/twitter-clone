@@ -32,7 +32,7 @@ hljs.highlightAll()
 	})
 
 	// rotate API Routes's button
-	apiRouteButton.addEventListener('click', (evt) => {
+	apiRouteButton?.addEventListener('click', (evt) => {
 		const isRotated = evt.target.classList.contains('rotate-list-button-rotate')
 		evt.target.classList.toggle('rotate-list-button-rotate', !isRotated)
 

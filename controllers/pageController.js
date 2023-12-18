@@ -86,7 +86,8 @@ exports.loginPageHandler = async (req, res) => {
 		// res.redirect('/message/6574a7e7f18b5f7c5bc2cf1f') 		// Group Chat
 		// res.redirect('/message/655e019f890666a9ec090931') 		// private chat
 
-		res.redirect('/docs')
+		// res.redirect('/docs')
+		res.redirect('/docs/api-features')
 
 	} catch (err) {
 		const payload = {

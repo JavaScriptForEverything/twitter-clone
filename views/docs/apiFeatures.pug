@@ -1,0 +1,119 @@
+extends ../layout/docLayout
+//- block append script
+	//- script(defer src="/js/docs/home.js")
+
+block left-panel-content
+	include ../others/data
+	include ../others/api/users
+
+	- 
+		const listItems = [
+			{ label: 'API Features', path: '#api-features' },
+			{ label: 'Pagination', path: '#pagination' },
+			{ label: 'Sorting', path: '#sorting' },
+			{ label: 'Filtering', path: '#filtering' },
+			{ label: 'Searching', path: '#searching' },
+		]
+	ul#left-panel-list(class='text-slate-800')
+		each list of listItems
+			li(class='w-full bg-slate-50 px-2 py-1 border-b border-slate-200 hover:bg-slate-100/80') 
+				a(href=list.path class='block') #{list.label}
+
+
+block main-section-content
+	h2#api-features(class=' font-medium mb-4 text-blue-600 border-b pb-1 border-slate-200') API Features
+
+	p(class='text-slate-700 font-light mb-4') 
+			| We have some end points and they support 
+			a(href='#pagination' class='hover:text-slate-900 underline decoration-dotted decoration-blue-600') pagination
+			|, 
+			a(href='#sorting' class='hover:text-slate-900 underline decoration-dotted decoration-blue-600') sorting
+			|, 
+			a(href='#filtering' class='hover:text-slate-900 underline decoration-dotted decoration-blue-600') filtering
+			|  and 
+			a(href='#searching' class='hover:text-slate-900 underline decoration-dotted decoration-blue-600') searching
+
+	p(class='text-slate-900 font-light mb-4 bg-blue-50 mx-6 px-4 py-2 rounded').
+		here I shows only one route `/api/users` but same applies on every api end points.
+
+	- 
+		const listOfRoutes = [
+			'/api/tweets',
+			'/api/users',
+			'/api/notifications',
+			'/api/messages',
+			'/api/chats',
+		]
+	ul(class='list-[square] list-inside ml-6 px-4 py-2 text-slate-800')
+		each route of listOfRoutes
+			li(class='hover:marker:text-blue-500 hover:text-slate-950') #{route}
+
+	h3(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') /api/users
+
+	div#user-routes(class='mb-4 overflow-scroll')
+		- const getAllUsers = { method: 'GET', route: '/api/users', role: '' }
+		+RouteTableSingleRow(getAllUsers)
+		
+
+	pre(class='whitespace-pre-wrap')
+		code(class='language-json').
+			Browser: #{process.env.ORIGIN}/api/users
+
+			#{JSON.stringify( users, null, 2 )}
+			<!-- users comes from: include ../others/api/users -->
+
+
+	h3#pagination(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') Pagination
+
+	div#user-routes(class='mt-8 mb-4')
+		- const pagination = { method: 'GET', route: '/api/users?_page=1&_limit=3', role: '' }
+		+RouteTableSingleRow(pagination)
+		
+	pre(class='whitespace-pre-wrap')
+		code(class='language-json').
+			Browser: #{process.env.ORIGIN}/api/users
+
+			#{JSON.stringify( users, null, 2 )}
+			<!-- users comes from: include ../others/api/users -->
+
+
+	h3#filtering(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') Filter fileds
+	p(
+		class='text-sm text-slate-600'
+	) We can get only some specific fields by `_fields` property with given comma seperated field name.
+
+	div#sorting(class='mt-8 mb-4')
+		- const getFilteredFields = { method: 'GET', route: '/api/users?_sort=_createdAt&_fields=username,email,avatar', role: '' }
+		+RouteTableSingleRow(getFilteredFields)
+		
+	pre(class='whitespace-pre-wrap')
+		code.
+			Browser: #{process.env.ORIGIN}/api/users
+				?_page=1
+				&_limit=3
+				&_sort=_createdAt
+				&_fields=username,email,avatar
+
+			#{JSON.stringify( usersFilter, null, 2 )}
+			<!-- users comes from: include ../others/api/users -->
+				
+
+
+	h3#searching(class='font-medium mt-8 mb-2 text-blue-600 underline decoration-dotted') Searching
+	p(
+		class='text-sm text-slate-600'
+	) We can search by any fields by `_search` property
+
+	div#sorting(class='mt-8 mb-4')
+		- const searchByField = { method: 'GET', route: '/api/users?_search=search value,field-name', role: '' }
+		+RouteTableSingleRow(searchByField)
+		
+	pre(class='whitespace-pre-wrap')
+		code.
+			Browser: #{process.env.ORIGIN}/api/users
+				?_fields=username,firstName,lastName
+				&_search=riajul,firstName
+
+			#{JSON.stringify( userSearch, null, 2 )}
+			<!-- users comes from: include ../others/api/users -->
+				

@@ -1,0 +1,26 @@
+//- comes from ../others/data.pug
+//- const route = { method: 'GET', route: '/api/users', role: '' }
+//- +RouteTableSingleRow( route )
+
+mixin RouteTableSingleRow(route={})
+	table(class='w-full sm:w-4/5 md:w-2/3 my-2 border border-blue-500 shadow-xs')
+		thead
+			tr(class=`
+				bg-blue-200
+				[&>th]:px-2
+				[&>th]:py-1
+				[&>th]:border
+				[&>th]:border-slate-300
+				[&>th]:font-normal
+				[&>th]:text-left
+				[&>th]:uppercase
+			`)
+				th Method
+				th(class='w-1/2') Route
+				th Role
+
+		tbody
+			tr(class='bg-slate-50 group font-light [&:nth-child(2n)]:bg-slate-100')
+				td(class='px-2 py-1 border border-slate-200 group-hover:bg-blue-100/80') #{route.method}
+				td(class='px-2 py-1 border border-slate-200 group-hover:bg-blue-100/80') #{route.route}
+				td(class='px-2 py-1 border border-slate-200 group-hover:bg-blue-100/80') #{route.role}
