@@ -81,8 +81,8 @@ exports.loginPageHandler = async (req, res) => {
 
 		req.session.user = user
 
-		// res.redirect('/')
-		res.redirect('/profile')
+		res.redirect('/')
+		// res.redirect('/profile')
 
 		// res.redirect('/message/6574a7e7f18b5f7c5bc2cf1f') 		// Group Chat
 		// res.redirect('/message/655e019f890666a9ec090931') 		// private chat
