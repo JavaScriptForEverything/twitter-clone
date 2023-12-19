@@ -25,6 +25,7 @@ const publicDirectory = path.join(process.cwd(), 'public')
 
 const app = express()
 app.set('query parser', 'simple') 										// Disable req.query auto object parse for ?color[red]
+app.set('view engine', 'pug') 												// Setup pug as Templete 
 app.use((req, res, next) => {
 	res.locals.cspNonce = crypto.randomBytes(16).toString('hex')
 	next()
@@ -54,6 +55,7 @@ if(process.env.NODE_ENV !== 'development') {
 		}
 	})) 							// => Set request limit per hour for particular IP address
 }
+
 app.use(hpp()) 									// => _page=1&_page=3 => { _page: 3 }, instead of { _page: [1,3] }
 app.use(rateLimit({ 						// => 
 	windowMs: 10 * 60 * 1000,    	// 10 minutes
@@ -75,13 +77,13 @@ app.use(session({
 	resave: true,
 	saveUninitialized: false,
 	cookie: {
-		secure: process.env.NODE_ENV === 'production',
+		httpOnly: true,
+		// secure: process.env.NODE_ENV === 'production', // true === https 	not http 
 		sameSite: 'strict',
 		maxAge: 1000*60*60*24*30 													// One month
 	}
 }))
 
-app.set('view engine', 'pug') 												// Setup pug as Templete 
 
 // -----[ routes ]-----
 app.use('/docs', docRouter)

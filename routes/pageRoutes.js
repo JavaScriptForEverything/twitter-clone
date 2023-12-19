@@ -5,13 +5,6 @@ const authController = require('../controllers/authController')
 const router = Router()
 
 //=> / 	(root route)
-router
-	.get('/testing', 
-		authController.protect, 
-		pageController.testing
-	)
-
-router.get('/', authController.protect, pageController.homePage)
 
 router.route('/register')
 	.get(pageController.registerPage)
@@ -24,6 +17,8 @@ router.route('/login')
 router.route('/logout')
 	.get(pageController.logout)
 
+router.get('/testing', authController.protect, pageController.testing)
+router.get('/', authController.protect, pageController.homePage)
 
 router
 	.use(authController.protect)

@@ -7,6 +7,7 @@ import $, { axios } from '/js/module/utils.js'
 		. Cropper 		from cropper CDN
 */
 
+
 const tabContainer = $('[name=tab-container]')
 const tweetTab = tabContainer.children[0]
 const repliesTab = tabContainer.children[1]
@@ -264,7 +265,7 @@ $('[name=edit-cover-photo-container]')?.addEventListener('click', (evt) => {
 
 				const data = await res.json()
 				const user = data.data
-				coverPhoto.src = user.coverPhoto
+				coverPhoto.src = user.coverPhoto || blob 	
 
 				closeHandler()
 
@@ -365,7 +366,5 @@ const fetchAllTweets = async () => {
 		}
 	})
 }
-setTimeout(() => {
 fetchAllTweets()
-}, 1000);
 

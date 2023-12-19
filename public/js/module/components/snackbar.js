@@ -105,7 +105,7 @@ export const Snackbar = (props={}) => {
 
 	const errorHtmlString = `
 				<div class="
-					flex items-start gap-4 text-red-600 px-4 py-3 rounded border 
+					flex items-start gap-4 px-4 py-3 rounded border 
 					${ variant === 'text' ? 'bg-red-100/50 border-red-100' : ''}
 					${ variant === 'outlined' ? 'border-red-600' : ''}
 					${ variant === 'filled' ? 'bg-red-500 text-white' : ''}
@@ -115,7 +115,7 @@ export const Snackbar = (props={}) => {
 					` : ''}
 					<div>
 						${title ? ` <h1 class='${variant === 'filled' ? 'text-white' : 'text-red-900 '} font-semibold'> ${title} </h1> ` : ''} 
-						<p class="${variant==='filled' ? '' : 'text-red-900'}"> ${message} </p>
+						<p class="${variant==='filled' ? 'text-white' : 'text-red-900'}"> ${message} </p>
 					</div>
 
 					${action ? `

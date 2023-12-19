@@ -87,7 +87,7 @@ block main-section-content
 		+RouteTableSingleRow(getFilteredFields)
 		
 	pre(class='whitespace-pre-wrap')
-		code.
+		code(class='language-json').
 			Browser: #{process.env.ORIGIN}/api/users
 				?_page=1
 				&_limit=3
@@ -109,7 +109,7 @@ block main-section-content
 		+RouteTableSingleRow(searchByField)
 		
 	pre(class='whitespace-pre-wrap')
-		code.
+		code(class='language-json').
 			Browser: #{process.env.ORIGIN}/api/users
 				?_fields=username,firstName,lastName
 				&_search=riajul,firstName

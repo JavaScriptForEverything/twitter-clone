@@ -10,25 +10,28 @@ block middle-block
 			const logedInUser = !{logedInUserJs}
 
 		div(class='col-span-10 md:col-span-7 flex flex-col')
-				p(class='p-2 border-b border-slate-200') #{pageTitle}
-				div(class='p-2 text-slate-700 flex gap-4 pb-8 border-b border-slate-200')
-					+Avatar({ src: user.avatar })
-					div(id='send-tweet-form' class='[&>button]:mt-2 flex-1')
-						+Textarea({ name: 'tween' })
-						+Button({ value: 'Tween', disabled: false })
+			div(class='flex justify-between p-2 border-b border-slate-200')
+				h1 #{pageTitle}
+				a(href='/docs') Documentation
+
+			div(class='p-2 text-slate-700 flex gap-4 pb-8 border-b border-slate-200')
+				+Avatar({ src: user.avatar })
+				div(id='send-tweet-form' class='[&>button]:mt-2 flex-1')
+					+Textarea({ name: 'tween' })
+					+Button({ value: 'Tween', disabled: false })
 
 
-				section#reply-dialog-container
-					+RetweetModal({
-						fullName: 'Riajul Islam',
-						username: 'riajulislam',
-						createdAt: timeSince( new Date( ) ),
-						avatar: '/images/users/default.jpg',
-						replyAvatar: user.avatar,
-						tweet: 'hi there, it way an awesome tweets',
-						numberOfHeart: 1,
-						numberOfRetweet: 1,
-					})
+			section#reply-dialog-container
+				+RetweetModal({
+					fullName: 'Riajul Islam',
+					username: 'riajulislam',
+					createdAt: timeSince( new Date( ) ),
+					avatar: '/images/users/default.jpg',
+					replyAvatar: user.avatar,
+					tweet: 'hi there, it way an awesome tweets',
+					numberOfHeart: 1,
+					numberOfRetweet: 1,
+				})
 
 
 				section#tweets-container(class='flex-1')
@@ -40,7 +43,7 @@ block middle-block
 							<svg class='w-12 h-12' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="2" r="0" fill="currentColor"><animate attributeName="r" begin="0" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(45 12 12)"><animate attributeName="r" begin="0.125s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(90 12 12)"><animate attributeName="r" begin="0.25s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(135 12 12)"><animate attributeName="r" begin="0.375s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(180 12 12)"><animate attributeName="r" begin="0.5s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(225 12 12)"><animate attributeName="r" begin="0.625s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(270 12 12)"><animate attributeName="r" begin="0.75s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="currentColor" transform="rotate(315 12 12)"><animate attributeName="r" begin="0.875s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle></svg>
 
 
-		block right-block
+block right-block
 
 block prepend script
 	if logedInUserJs
