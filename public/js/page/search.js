@@ -1,4 +1,4 @@
-import { Snackbar, List, getTweetHTML } from '../module/components/index.js'
+import { Snackbar, List, getTweetHTML, getUserHTML } from '../module/components/index.js'
 import { $, axios } from '../module/utils.js'
 
 
@@ -50,7 +50,7 @@ const tweetsContentContainer = tabContentContainer.children[0]
 const usersContentContainer = tabContentContainer.children[1]
 
 let timer
-const searchInput = $('[name=search]')
+const searchInput = $('[name=search-bar]')
 searchInput.value = '' // empty value on page refresh
 
 
@@ -85,9 +85,9 @@ const fetchInitialData = async (tab = 'tweets') => {
 				primary: `${user.firstName} ${user.lastName}`,
 				secondary: user.username,
 				avatar: user.avatar,
-		icon: `
-			<svg class='w-3 h-3 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6l-5.6 5.6Z"/></svg>
-		`
+		// icon: `
+		// 	<svg class='w-3 h-3 pointer-events-none' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6l-5.6 5.6Z"/></svg>
+		// `
 			})
 
 			const linkWrapper = `
@@ -101,6 +101,10 @@ const fetchInitialData = async (tab = 'tweets') => {
 		}
 	})
 }
+fetchInitialData('tweets')
+fetchInitialData('users')
+
+
 const fetchBySearchData = async ({ searchValue='', searchFor='' }) => {
 	const url = searchFor === 'users' ? '/api/users' : '/api/tweets'
 	const searchOnFields = searchFor === 'users' ? 'firstName,lastName,username' : 'tweet'
@@ -122,8 +126,6 @@ const fetchBySearchData = async ({ searchValue='', searchFor='' }) => {
 
 	return data
 }
-fetchInitialData('tweets')
-fetchInitialData('users')
 
 
 searchInput.addEventListener('input', (evt) => {
@@ -131,18 +133,6 @@ searchInput.addEventListener('input', (evt) => {
 
 	let searchValue = searchInput.value.trim()
 	let searchFor = location.hash === '#users-tab' ? 'users' : 'tweets'
-
-	// if(!searchValue) {
-	// 	if(searchFor === 'tweets') {
-	// 		tweetsContentContainer.innerHTML = ''
-	// 		fetchInitialData('tweets')
-	// 	}
-
-	// 	if(searchFor === 'users') {
-	// 		usersContentContainer.innerHTML = ''
-	// 		fetchInitialData('users')
-	// 	}
-	// }
 
 	timer = setTimeout( async () => { 	
 		const { data } = await fetchBySearchData({ searchValue, searchFor })
@@ -158,7 +148,21 @@ searchInput.addEventListener('input', (evt) => {
 			}
 
 			if(searchFor === 'users') {
-				usersContentContainer.insertAdjacentHTML('beforeend', getUserHTML( doc, logedInUser))
+				// usersContentContainer.insertAdjacentHTML('beforeend', getUserHTML( doc, logedInUser))
+				const user = doc
+				const listHtmlString = List({
+					primary: `${user.firstName} ${user.lastName}`,
+					secondary: user.username,
+					avatar: user.avatar,
+				})
+
+				const linkWrapper = `
+					<a href='/profile/${user.username}'>
+						${listHtmlString}
+					</a>
+				`
+				usersContentContainer.insertAdjacentHTML('beforeend', linkWrapper)
+
 			}
 		})
 
