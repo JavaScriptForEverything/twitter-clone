@@ -144,7 +144,7 @@ searchInput.addEventListener('input', (evt) => {
 
 		tabs?.forEach( doc => {
 			if(searchFor === 'tweets') {
-				tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML( doc, logedInUser))
+				tweetsContentContainer.insertAdjacentHTML('beforeend', getTweetHTML( doc, logedInUser, { showIcons: false }))
 			}
 
 			if(searchFor === 'users') {

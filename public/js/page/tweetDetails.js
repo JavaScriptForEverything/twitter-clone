@@ -135,8 +135,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 		}
 
 		const updatedTweet = data.data
-		// tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(updatedTweet))
-		pinnedTweetContainer.insertAdjacentHTML('afterend', getTweetHTML(updatedTweet))
+		pinnedTweetContainer.insertAdjacentHTML('afterend', getTweetHTML(updatedTweet, logedInUser))
 		closeModal()
 
 	}) // end submit button click
@@ -176,7 +175,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	retweetEl.textContent = updatedTweet?.retweetUsers.length || ''
 	retweetButton.style.color = color
 
-	tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(retweet))
+	tweetsContainer.insertAdjacentHTML('afterbegin', getTweetHTML(retweet, logedInUser))
 
 	updateNotificationBadge()
 })
@@ -253,7 +252,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 		pinnedTweetEl.remove()
 
 		// pinnedTweetContainer.insertAdjacentElement('afterend', pinnedTweetEl)
-		const currentTweetEl = stringToElement( getTweetHTML(tweet) )
+		const currentTweetEl = stringToElement( getTweetHTML(tweet, logedInUser) )
 		pinnedTweetContainer.insertAdjacentElement('afterend', currentTweetEl)
 
 		return
@@ -287,7 +286,7 @@ tweetsContainer.addEventListener('click', async (evt) => {
 	pinnedTweetEl?.remove()
 	container.remove()
 
-	const currentTweetEl = stringToElement( getTweetHTML(tweet) )
+	const currentTweetEl = stringToElement( getTweetHTML(tweet, logedInUser) )
 	pinnedTweetContainer.insertAdjacentElement('afterbegin', currentTweetEl)
 	if(pinnedTweetEl) pinnedTweetContainer.insertAdjacentElement('afterend', pinnedTweetEl)
 
